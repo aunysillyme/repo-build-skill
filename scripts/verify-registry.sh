@@ -50,7 +50,9 @@ function view(spec, fields) {
   const output = execFileSync(call.command, call.args, {
     ...call.options, cwd: root, encoding: 'utf8', timeout: 30000, stdio: ['ignore', 'pipe', 'pipe'],
   });
-  return JSON.parse(output);
+  const parsed = JSON.parse(output);
+  // npm 12 wraps `npm view --json` output in a one-element array; npm 10 does not.
+  return Array.isArray(parsed) && parsed.length === 1 ? parsed[0] : parsed;
 }
 function sorted(value) {
   if (Array.isArray(value)) return value.map(sorted);
