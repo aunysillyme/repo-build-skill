@@ -1,5 +1,15 @@
 export const fail=(file,message,line=1,extra={})=>({status:'FAIL',file,line,message,...extra});
 export const skip=message=>({status:'SKIPPED',file:null,line:null,message});
+/**
+ * @param {string} id
+ * @param {string} reader
+ * @param {string} stage
+ * @param {string} title
+ * @param {string} why
+ * @param {string} pass
+ * @param {(context:any)=>any} run
+ * @param {{house?:boolean,severity?:string,mode?:string,applies?:(context:any)=>boolean,learn?:string}} [options]
+ */
 export function rule(id,reader,stage,title,why,pass,run,{house=false,severity='error',mode='offline',applies=()=>true,learn}={}) {
   return {id,reader,stage,severity:house?'warn':severity,house,mode,title,why,pass,learn:learn||`references/stages/${stage}.md#gate`,applies:id.startsWith('W_')?c=>c.workflows.length>0&&applies(c):applies,run};
 }

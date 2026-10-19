@@ -1,4 +1,5 @@
 {
-  "compilerOptions": { "allowJs": true, "checkJs": true, "noEmit": true, "module": "nodenext", "moduleResolution": "nodenext", "target": "es2023", "strict": false },
-  "include": ["bin", "src", "scripts", "evals"]
+  "compilerOptions": { "allowJs": true, "checkJs": true, "noEmit": true, "module": "nodenext", "moduleResolution": "nodenext", "target": "es2023", "strict": false, "types": ["node"] },
+  "include": ["bin", "src", "scripts", "evals"],
+  "exclude": ["evals/fixtures/**", "evals/controls/**"]
 }

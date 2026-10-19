@@ -160,9 +160,11 @@ export function externalProbes(root, { run = spawnSync } = {}) {
       const valid = meta && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(meta.name || '') && meta.name.length <= 64 && meta.name === path.basename(path.dirname(file)) && meta.description?.length > 0 && meta.description.length <= 1024 && (!meta.compatibility || meta.compatibility.length <= 500);
       rows.push(result('skill-spec', valid ? 'PASS' : 'FAIL', 'Skill metadata follows the public shape.', { file: path.relative(root, file) }));
     }
-    for (const [command, args] of [['publint', []], ['actionlint', workflows], ['zizmor', workflows]]) {
+    /** @type {[string, string[]][]} */
+    const probes = [['publint', []], ['actionlint', workflows], ['zizmor', workflows]];
+    for (const [command, args] of probes) {
       const available = run(command, ['--version'], { encoding: 'utf8', timeout: 15000 });
-      if (available.error?.code === 'ENOENT') { rows.push(result(command, 'NOT APPLICABLE', 'Optional independent probe is not installed.')); continue; }
+      if (/** @type {NodeJS.ErrnoException} */ (available.error)?.code === 'ENOENT') { rows.push(result(command, 'NOT APPLICABLE', 'Optional independent probe is not installed.')); continue; }
       if (available.error || available.status !== 0) { rows.push(result(command, 'FAIL', 'Independent probe version check failed.')); continue; }
       if (command !== 'publint' && !workflows.length) { rows.push(result(command, 'NOT APPLICABLE', 'The workflow list is empty.')); continue; }
       const probe = exec(command, args, root, run);

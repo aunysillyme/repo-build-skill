@@ -45,6 +45,7 @@ function planInstall(options, ctx) {
   const sourceRoot = canonical(options.sourceRoot ?? path.join(ROOT, 'skills', NAME));
   const prior = stat(path.join(ctx.root, ctx.receipt)) ? readReceipt(ctx.root, ctx.receipt, ctx) : null;
   const owned = new Map((prior?.receipt.files ?? []).map(entry => [entry.path, entry]));
+  /** @type {Array<{path:string,bytes:Buffer,before:Buffer|null,sha256:string,action:string,block?:string,separator?:string,created?:boolean,carried?:boolean}>} */
   const entries = sourceFiles(sourceRoot).map(file => {
     const rel = `${ctx.destination}/${file.rel}`, before = readBytes(ctx.root, rel);
     if (rel === ctx.receipt) throw Error('Receipt collides with skill content');
