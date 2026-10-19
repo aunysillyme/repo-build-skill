@@ -12,6 +12,11 @@
       "line": "Model router for AI coding agents: routes routine work to cheaper models with routing rules, 8 subagents, hooks and a CLI runner"
     },
     {
+      "name": "repo-build-skill",
+      "url": "https://github.com/aunysillyme/repo-build-skill",
+      "line": "Skill pack that teaches your AI to build, release and launch a GitHub repo: stack pick, README, AGENTS.md, llms.txt, repo SEO and AEO, trusted publishing."
+    },
+    {
       "name": "website-build-skill",
       "url": "https://github.com/aunysillyme/website-build-skill",
       "line": "A skill pack that turns your AI into an expert website builder: current research, design, code, accessibility, speed, SEO and security, alone or as a team."

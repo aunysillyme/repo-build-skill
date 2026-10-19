@@ -1,7 +1,7 @@
 # Repository settings
 
-These are the target values set and read back in the public flip pass.
-Live GitHub and npm read-back: **UNVERIFIED**. This file records the intended configuration until that pass supplies dated evidence.
+These values were set and read back with `gh api` in the public flip pass on 2026-10-19.
+The npm row is read back after the first registry publish.
 
 ## Metadata
 
@@ -18,21 +18,21 @@ Use GitHub's default repository link preview.
 
 ## Settings at the public flip
 
-| Setting | Target | Read-back |
+| Setting | Target | Read-back (2026-10-19) |
 |---|---|---|
-| Visibility | Public, after owner authorization and privacy checks | UNVERIFIED |
-| Private vulnerability reporting | Enabled | UNVERIFIED |
-| Secret scanning | Enabled | UNVERIFIED |
-| Secret scanning push protection | Enabled | UNVERIFIED |
-| Dependabot alerts and security updates | Enabled | UNVERIFIED |
-| CodeQL default setup | Enabled for the supported language | UNVERIFIED |
-| Main branch protection | Force pushes and branch deletion disabled | UNVERIFIED |
-| Required check | Repository checks | UNVERIFIED |
-| Administrator enforcement | Disabled for maintainer-reviewed automation PRs | UNVERIFIED |
-| Sponsorships | Enabled with account-default funding links | UNVERIFIED |
-| npm listing | Version, description, README, bin, funding and homepage match the tag | UNVERIFIED |
+| Visibility | Public, after owner authorization and privacy checks | `public` |
+| Private vulnerability reporting | Enabled | `{"enabled": true}` |
+| Secret scanning | Enabled | `enabled` |
+| Secret scanning push protection | Enabled | `enabled` |
+| Dependabot alerts and security updates | Enabled | alerts `204`, security updates `enabled` |
+| CodeQL default setup | Enabled for the supported language | `configured`; languages fill in after the first analysis run |
+| Main branch protection | Force pushes and branch deletion disabled | force pushes `false`, deletions `false` |
+| Required check | Repository checks | `["Repository checks"]` |
+| Administrator enforcement | Disabled for maintainer-reviewed automation PRs | `false` |
+| Sponsorships | Enabled with account-default funding links | `hasSponsorshipsEnabled: true` |
+| Description and topics | Match package.json and facts.json | description equal, 20 topics |
+| npm listing | Version, description, README, bin, funding and homepage match the tag | read back after the first publish |
 
 The [Scaffold settings instructions](skills/repo-build-skill/references/stages/03-scaffold.md#settings-at-the-public-flip) provide the exact API commands.
 Run `npx repo-build-skill check . --online` after setting the public values.
-Record the access date and sanitized response for each read-back here.
 Community files and workflow settings are declared in the repository and checked by the suite.
