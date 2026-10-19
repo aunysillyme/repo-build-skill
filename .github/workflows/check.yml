@@ -67,8 +67,10 @@ jobs:
           printf '%s  %s\n' "$ACTIONLINT_SHA256" "$work/actionlint.tar.gz" | sha256sum --check --status
           tar -xzf "$work/actionlint.tar.gz" -C "$work" actionlint
           find .github/workflows skills -type f \( -name '*.yml' -o -name '*.yaml' \) -path '*/workflows/*' -print0 | xargs -0 "$work/actionlint"
+      # Medium and high findings fail the job. Two low adhoc-packages notes stay visible on purpose:
+      # release.yml smoke-installs the tarball it just packed, and installs one pinned npm version.
       - name: Inspect workflow security
-        run: pipx run zizmor==1.31.1 .github/workflows skills/*/assets/workflows
+        run: pipx run zizmor==1.31.1 --min-severity medium .github/workflows skills/*/assets/workflows
 
   required-check:
     name: Repository checks
