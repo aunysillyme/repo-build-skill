@@ -10,7 +10,7 @@ description: "Teaches you to frame, pick a stack for, scaffold, write, release a
 license: MIT
 compatibility: "Web access for each stage's live re-check; without it the work proceeds and marks those facts UNVERIFIED."
 metadata:
-  version: "0.1.1"
+  version: "0.1.2"
 ---
 
 # Repository build skill
@@ -1274,7 +1274,7 @@ Rows begin BLOCKED. Attach actual output or a dated manual receipt before assign
 |---|---|---|
 | F_PROOF | Unmet requirement: Each row records value, unit, command, measured, expires, package_version and subject package. | F_PROOF: checker receipt, initially BLOCKED |
 | C_CREDITS | Unmet requirement: Credits rows contain project, link, licence and use, and README links CREDITS.md. | C_CREDITS: checker receipt, initially BLOCKED |
-| S_DRIFT | Unmet requirement: README, llms.txt and renderer hash equal the vendored contract. | S_DRIFT: checker receipt, initially BLOCKED |
+| S_DRIFT | Unmet requirement: README, llms.txt, renderer and check wrapper hashes equal the vendored contract. | S_DRIFT: checker receipt, initially BLOCKED |
 | S_STALE | Unmet requirement: The fetched source hash equals the lock hash. | S_STALE: checker receipt, initially BLOCKED |
 <!-- gate:end -->
 

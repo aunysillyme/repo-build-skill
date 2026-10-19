@@ -6,48 +6,48 @@ Install: `npx repo-build-skill`
 
 ## Docs
 
-- [repo-build-skill](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/README.md): repo-build-skill
-- [Documentation](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/docs/README.md): Documentation
-- [Installer contract](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/docs/INSTALLER.md): Installer contract
-- [Repository checker](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/docs/CHECKER.md): Repository checker
-- [Evaluation and package proof](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/docs/EVALUATION.md): Evaluation and package proof
-- [Repository checks](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/docs/RULES.md): Repository checks
-- [Stack card](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/docs/STACK.md): Stack card
+- [repo-build-skill](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/README.md): repo-build-skill
+- [Documentation](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/docs/README.md): Documentation
+- [Installer contract](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/docs/INSTALLER.md): Installer contract
+- [Repository checker](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/docs/CHECKER.md): Repository checker
+- [Evaluation and package proof](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/docs/EVALUATION.md): Evaluation and package proof
+- [Repository checks](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/docs/RULES.md): Repository checks
+- [Stack card](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/docs/STACK.md): Stack card
 
 ## Reference
 
-- [Repository build skill](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/SKILL.md): Repository build skill
-- [Acceptance checks](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/acceptance-checks.md): Acceptance checks
-- [Ask date](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/ask-date.md): Ask date
-- [Discoverability](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/discoverability.md): Discoverability
-- [Installer](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/installer.md): Installer
-- [Launch venues](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/launch-venues.md): Launch venues
-- [Coding agents](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/readers/agents.md): Coding agents
-- [Answer engines](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/readers/answer-engines.md): Answer engines
-- [People](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/readers/people.md): People
-- [Registries](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/readers/registries.md): Registries
-- [Binary releases](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/release/binaries.md): Binary releases
-- [Release contract](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/release/contract.md): Release contract
-- [npm release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/release/npm.md): npm release
-- [PyPI release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/release/pypi.md): PyPI release
-- [Skills and plugins release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/release/skills-and-plugins.md): Skills and plugins release
-- [Cloudflare Workers release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/release/workers.md): Cloudflare Workers release
-- [Frame](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/stages/01-frame.md): Frame
-- [Stack card](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/stages/02-stack.md): Stack card
-- [Scaffold](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/stages/03-scaffold.md): Scaffold
-- [README / AGENTS.md / llms.txt](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/stages/04-write.md): README / AGENTS.md / llms.txt
-- [SEO and AEO for repos](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/stages/05-discover.md): SEO and AEO for repos
-- [Release with trusted publishing](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/stages/06-release.md): Release with trusted publishing
-- [Product site](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/stages/07-site.md): Product site
-- [Launch venues](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/stages/08-launch.md): Launch venues
-- [Maintenance](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/skills/repo-build-skill/references/stages/09-maintain.md): Maintenance
+- [Repository build skill](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/SKILL.md): Repository build skill
+- [Acceptance checks](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/acceptance-checks.md): Acceptance checks
+- [Ask date](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/ask-date.md): Ask date
+- [Discoverability](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/discoverability.md): Discoverability
+- [Installer](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/installer.md): Installer
+- [Launch venues](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/launch-venues.md): Launch venues
+- [Coding agents](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/readers/agents.md): Coding agents
+- [Answer engines](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/readers/answer-engines.md): Answer engines
+- [People](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/readers/people.md): People
+- [Registries](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/readers/registries.md): Registries
+- [Binary releases](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/release/binaries.md): Binary releases
+- [Release contract](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/release/contract.md): Release contract
+- [npm release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/release/npm.md): npm release
+- [PyPI release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/release/pypi.md): PyPI release
+- [Skills and plugins release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/release/skills-and-plugins.md): Skills and plugins release
+- [Cloudflare Workers release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/release/workers.md): Cloudflare Workers release
+- [Frame](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/01-frame.md): Frame
+- [Stack card](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/02-stack.md): Stack card
+- [Scaffold](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/03-scaffold.md): Scaffold
+- [README / AGENTS.md / llms.txt](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/04-write.md): README / AGENTS.md / llms.txt
+- [SEO and AEO for repos](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/05-discover.md): SEO and AEO for repos
+- [Release with trusted publishing](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/06-release.md): Release with trusted publishing
+- [Product site](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/07-site.md): Product site
+- [Launch venues](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/08-launch.md): Launch venues
+- [Maintenance](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/09-maintain.md): Maintenance
 
 ## Optional
 
-- [Credits](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/CREDITS.md): Credits
-- [Contributing](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/CONTRIBUTING.md): Contributing
-- [Provenance](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/docs/PROVENANCE.md): Provenance
-- [repo-build-skill chat bundle](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.1/docs/bundles/chat-upload.md): repo-build-skill chat bundle
+- [Credits](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/CREDITS.md): Credits
+- [Contributing](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/CONTRIBUTING.md): Contributing
+- [Provenance](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/docs/PROVENANCE.md): Provenance
+- [repo-build-skill chat bundle](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/docs/bundles/chat-upload.md): repo-build-skill chat bundle
 
 <!-- set:start -->
 ## Part of a set

@@ -8,6 +8,10 @@ export { validateSet, renderSet, renderBlocks, replaceBlock, currentName, plainL
 export const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const rendererPath = fileURLToPath(new URL('./render-set.mjs', import.meta.url));
 export const rendererBytes = () => fs.readFileSync(rendererPath);
+export const WRAPPER = 'scripts/check-set.mjs';
+const wrapperPath = fileURLToPath(new URL('./check-set.mjs', import.meta.url));
+export const wrapperBytes = () => fs.readFileSync(wrapperPath);
+const UPGRADE = `Set lock predates check_sha256; run set sync (maintainer-run, outside CI) to vendor ${WRAPPER} and pin its hash.`;
 export function checkSet(root = process.cwd()) {
   try {
     const rendered = renderSet({ root, check: true });
@@ -15,6 +19,8 @@ export function checkSet(root = process.cwd()) {
     const renderer = readRegular(root, '.repo-build/render-set.mjs');
     if (sha256(renderer) !== lock.renderer_sha256) return { code: 1, message: 'Vendored set renderer differs from lock.', changed: [...rendered.changed, '.repo-build/render-set.mjs'] };
     if (lock.vendored_sha256 && sha256(readRegular(root, '.repo-build/set.json')) !== lock.vendored_sha256) return { code: 1, message: 'Vendored set data differs from lock.', changed: [...rendered.changed, '.repo-build/set.json'] };
+    if (!Object.hasOwn(lock, 'check_sha256')) return rendered.code ? rendered : { ...rendered, message: `${rendered.message} ${UPGRADE}`, notice: UPGRADE };
+    if (sha256(readRegular(root, WRAPPER)) !== lock.check_sha256) return { code: 1, message: 'Set check wrapper differs from lock.', changed: [...rendered.changed, WRAPPER] };
     return rendered;
   } catch (error) { return { code: 1, message: error.message, changed: [] }; }
 }
@@ -76,15 +82,16 @@ export async function syncSet({ root = process.cwd(), fetchImpl = globalThis.fet
       commit = Array.isArray(commits) ? commits[0]?.sha ?? null : commits.sha ?? null;
       if (commit !== null && !/^[a-f0-9]{40,64}$/i.test(commit)) throw Error('GitHub returned an invalid set commit');
     }
-    const bytes = Buffer.from(JSON.stringify(set, null, 2) + '\n'), renderer = rendererBytes();
-    const lock = { source, commit, sha256: sha256(sourceBytes), vendored_sha256: sha256(bytes), renderer_sha256: sha256(renderer), fetched: new Date(now).toISOString().slice(0, 10) };
+    const bytes = Buffer.from(JSON.stringify(set, null, 2) + '\n'), renderer = rendererBytes(), wrapper = wrapperBytes();
+    const lock = { source, commit, sha256: sha256(sourceBytes), vendored_sha256: sha256(bytes), renderer_sha256: sha256(renderer), check_sha256: sha256(wrapper), fetched: new Date(now).toISOString().slice(0, 10) };
     const blocks = renderBlocks(set, currentName(root));
+    // The wrapper is written before the lock that pins it.
     const outputs = [
-      ['.repo-build/set.json', bytes], ['.repo-build/render-set.mjs', renderer], ['.repo-build/set.lock.json', JSON.stringify(lock, null, 2) + '\n'],
+      ['.repo-build/set.json', bytes], ['.repo-build/render-set.mjs', renderer], [WRAPPER, wrapper], ['.repo-build/set.lock.json', JSON.stringify(lock, null, 2) + '\n'],
       ...[['README.md', blocks.readme], ['llms.txt', blocks.llms]].map(([rel, block]) => [rel, replaceBlock(fs.readFileSync(safeOutput(root, rel), 'utf8'), block)]),
     ];
     for (const [rel] of outputs) safeOutput(root, rel);
-    fs.mkdirSync(safeOutput(root, '.repo-build'), { recursive: true });
+    for (const dir of ['.repo-build', 'scripts']) fs.mkdirSync(safeOutput(root, dir), { recursive: true });
     for (const [rel, output] of outputs) fs.writeFileSync(safeOutput(root, rel), output);
     return { code: 0, message: 'Set synchronized and rendered.', lock };
   } catch (error) { return { code: error.code === 'ENOENT' || error instanceof SyntaxError ? 2 : 3, message: error.message }; }

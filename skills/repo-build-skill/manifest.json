@@ -1,6 +1,6 @@
 {
   "name": "repo-build-skill",
-  "packageVersion": "0.1.1",
+  "packageVersion": "0.1.2",
   "budgets": {
     "skillMd": 6144,
     "skillMdLines": 120,
@@ -195,7 +195,7 @@
   "assets": [
     {
       "path": "SKILL.md",
-      "sha256": "d42be2bca85303770f1ae751d5bd3c9d01735950894090fb982ff7362c1a0505",
+      "sha256": "b59d29c638ac2a0852c1777cb175e08523419825bddcf2bbdd288f4fb0fddb65",
       "kind": "asset"
     },
     {
@@ -425,7 +425,7 @@
     },
     {
       "path": "references/stages/09-maintain.md",
-      "sha256": "affa18a5dcef0a9c7666ffc872a263b6ba1fb4cc71aeb1b1fbf5e8f71a1fd35d",
+      "sha256": "71e81f4b7d1e814e6d09edfe24e2afce7a12d321d5e8eb0705402ed382d3cfb8",
       "kind": "stage"
     }
   ]
