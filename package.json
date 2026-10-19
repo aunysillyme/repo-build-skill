@@ -1,6 +1,6 @@
 {
   "name": "repo-build-skill",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "bin": {
     "repo-build-skill": "bin/repo-build-skill.mjs"

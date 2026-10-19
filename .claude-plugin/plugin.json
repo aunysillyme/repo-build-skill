@@ -1,6 +1,6 @@
 {
   "name": "repo-build-skill",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Skill pack that teaches your AI to build, release and launch a GitHub repo: stack pick, README, AGENTS.md, llms.txt, repo SEO and AEO, trusted publishing.",
   "author": {
     "name": "Auny LLC"
