@@ -1,7 +1,7 @@
 # Repository settings
 
 These values were set and read back with `gh api` in the public flip pass on 2026-10-19.
-The npm row was read back after 0.1.1 published from GitHub Actions on 2026-10-19.
+The npm row was read back after 0.1.2 published from GitHub Actions on 2026-10-19.
 
 ## Metadata
 
@@ -31,7 +31,7 @@ Use GitHub's default repository link preview.
 | Administrator enforcement | Disabled for maintainer-reviewed automation PRs | `false` |
 | Sponsorships | Enabled with account-default funding links | `hasSponsorshipsEnabled: true` |
 | Description and topics | Match package.json and facts.json | description equal, 20 topics |
-| npm listing | Version, description, README, bin, funding and homepage match the tag | `0.1.1` equals tag `v0.1.1` (`scripts/verify-registry.sh` PASS), provenance attested |
+| npm listing | Version, description, README, bin, funding and homepage match the tag | `0.1.2` equals tag `v0.1.2` (`scripts/verify-registry.sh` PASS), provenance and publish attestations present |
 
 The [Scaffold settings instructions](skills/repo-build-skill/references/stages/03-scaffold.md#settings-at-the-public-flip) provide the exact API commands.
 Run `npx repo-build-skill check . --online` after setting the public values.
