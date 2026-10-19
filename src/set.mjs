@@ -88,9 +88,15 @@ export async function syncSet({ root = process.cwd(), fetchImpl = globalThis.fet
     // The wrapper is written before the lock that pins it.
     const outputs = [
       ['.repo-build/set.json', bytes], ['.repo-build/render-set.mjs', renderer], [WRAPPER, wrapper], ['.repo-build/set.lock.json', JSON.stringify(lock, null, 2) + '\n'],
-      ...[['README.md', blocks.readme], ['llms.txt', blocks.llms]].map(([rel, block]) => [rel, replaceBlock(fs.readFileSync(safeOutput(root, rel), 'utf8'), block)]),
     ];
-    for (const [rel] of outputs) safeOutput(root, rel);
+    const blocksByFile = [['README.md', blocks.readme], ['llms.txt', blocks.llms]];
+    for (const [rel] of [...outputs, ...blocksByFile]) {
+      const full = safeOutput(root, rel);
+      let info;
+      try { info = fs.lstatSync(full); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+      if (info && !info.isFile()) throw Error(`Expected regular file: ${rel}`);
+    }
+    outputs.push(...blocksByFile.map(([rel, block]) => [rel, replaceBlock(fs.readFileSync(safeOutput(root, rel), 'utf8'), block)]));
     for (const dir of ['.repo-build', 'scripts']) fs.mkdirSync(safeOutput(root, dir), { recursive: true });
     for (const [rel, output] of outputs) fs.writeFileSync(safeOutput(root, rel), output);
     return { code: 0, message: 'Set synchronized and rendered.', lock };

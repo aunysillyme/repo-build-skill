@@ -9,7 +9,8 @@ const fix = 'run npx repo-build-skill set sync (maintainer-run, outside CI)';
 const renderer = '.repo-build/render-set.mjs';
 const vendored = '.repo-build/set.json';
 const lockFile = '.repo-build/set.lock.json';
-const inputs = [renderer, vendored, lockFile, 'README.md', 'llms.txt', 'package.json'];
+const inputs = [renderer, vendored, lockFile, 'README.md', 'llms.txt'];
+const identities = ['.repo-build/facts.json', 'package.json'];
 /** @param {Uint8Array} bytes */
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 
@@ -17,15 +18,17 @@ const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
  * Read one input as bytes. Every component below the root must be a real entry (no symlink) and the file regular.
  * @param {string} root
  * @param {string} file
+ * @param {boolean} [optional]
  */
-function readInput(root, file) {
+function readInput(root, file, optional = false) {
   let path = root;
   let stat;
   for (const part of file.split('/')) {
     path = join(path, part);
     try {
       stat = lstatSync(path);
-    } catch {
+    } catch (error) {
+      if (optional && error.code === 'ENOENT') return null;
       throw Error(`${file}: missing or unreadable`);
     }
     if (stat.isSymbolicLink()) throw Error(`${file}: symlinks are not allowed`);
@@ -39,6 +42,11 @@ try {
   if (args.length && (args.length !== 2 || args[0] !== '--root' || !args[1] || args[1].startsWith('--'))) throw Error(usage);
   const root = args.length ? resolve(args[1]) : resolve(dirname(fileURLToPath(import.meta.url)), '..');
   const bytes = new Map(inputs.map(file => [file, readInput(root, file)]));
+  for (const file of identities) {
+    const input = readInput(root, file, true);
+    if (input !== null) bytes.set(file, input);
+  }
+  if (!identities.some(file => bytes.has(file))) throw Error('Set checking needs facts.json or package.json');
   const lock = JSON.parse(bytes.get(lockFile).toString('utf8'));
   for (const key of ['renderer_sha256', 'vendored_sha256']) {
     if (!lock || typeof lock[key] !== 'string' || !/^[a-f0-9]{64}$/.test(lock[key])) throw Error(`Invalid ${lockFile}: ${key}`);

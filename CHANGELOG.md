@@ -15,6 +15,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - `S_DRIFT` fails when the vendored wrapper differs from its pin, is missing or is a symlink. A lock written before 0.1.2 still passes and names the `set sync` upgrade.
+- `set sync` checks that every destination is absent or a regular file before its first write, so a refused path leaves the tree untouched.
 
 ## [0.1.1] - 2026-10-19
 
