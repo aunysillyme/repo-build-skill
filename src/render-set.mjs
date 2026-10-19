@@ -4,14 +4,39 @@ import { fileURLToPath } from 'node:url';
 
 export const START = '<!-- set:start -->';
 export const END = '<!-- set:end -->';
+const unsafeUrl = /[\s)<>"'`]/;
+// A registry or source description reaches README and llms.txt as plain text only.
+export function plainLine(text) {
+  return String(text ?? '').replace(/<!--[\s\S]*?(?:-->|$)/g, ' ').replace(/[<>[\]()`]/g, ' ').replace(/[\u0000-\u001f\u007f-\u009f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200).trim();
+}
+// github.com/<owner>/<repo>, lower-cased, from https, git+https and .git spellings; null for anything else.
+export function repoKey(value) {
+  const raw = typeof value === 'string' ? value : value?.url;
+  const m = typeof raw === 'string' ? raw.trim().match(/^(?:git\+)?https:\/\/github\.com\/([^/\s]+)\/([^/\s#?]+?)(?:\.git)?\/?(?:[#?].*)?$/i) : null;
+  return m ? `${m[1]}/${m[2]}`.toLowerCase() : null;
+}
+// Read a vendored file only when no path component is a symlink; the error names the relative path alone.
+export function readRegular(root, rel) {
+  let current = root, info;
+  for (const part of rel.split('/')) {
+    current = path.join(current, part);
+    try { info = fs.lstatSync(current); }
+    catch (error) { if (error.code !== 'ENOENT') throw error; throw Object.assign(Error(`Missing file: ${rel}`), { code: 'ENOENT' }); }
+    if (info.isSymbolicLink()) throw Error(`Symlink refused: ${rel}`);
+  }
+  if (!info.isFile()) throw Error(`Expected regular file: ${rel}`);
+  return fs.readFileSync(current);
+}
 export function validateSet(value) {
   if (!value || value.version !== 1 || !Array.isArray(value.rows)) throw Error('set.json needs version 1 and rows');
   const names = new Set();
   for (const row of value.rows) {
     if (!row || !['name', 'url', 'line'].every(key => typeof row[key] === 'string' && row[key].trim() && !/[\r\n]/.test(row[key]))) throw Error('Each set row needs name, url and line strings');
     if (names.has(row.name)) throw Error(`Duplicate set row: ${row.name}`);
+    if (unsafeUrl.test(row.url)) throw Error(`Invalid set URL: ${row.name}`);
     const url = new URL(row.url);
-    if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw Error(`Invalid set URL: ${row.name}`);
+    if (url.protocol !== 'https:' || url.username || url.password) throw Error(`Invalid set URL: ${row.name}`);
+    if (row.line.includes('<!--')) throw Error(`Set line must not open an HTML comment: ${row.name}`);
     names.add(row.name);
   }
   return value;
@@ -42,7 +67,7 @@ export function currentName(root) {
   throw Error('Set rendering needs a name in facts.json or package.json');
 }
 export function renderSet({ root = process.cwd(), check = false } = {}) {
-  const set = JSON.parse(fs.readFileSync(path.join(root, '.repo-build/set.json'), 'utf8'));
+  const set = JSON.parse(readRegular(root, '.repo-build/set.json').toString('utf8'));
   const blocks = renderBlocks(set, currentName(root)), changed = [];
   const outputs = [];
   for (const [file, block] of [['README.md', blocks.readme], ['llms.txt', blocks.llms]]) {

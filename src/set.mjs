@@ -2,19 +2,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { validateSet, renderSet, renderBlocks, replaceBlock, currentName } from './render-set.mjs';
+import { validateSet, renderSet, renderBlocks, replaceBlock, currentName, plainLine, repoKey, readRegular } from './render-set.mjs';
 
-export { validateSet, renderSet, renderBlocks, replaceBlock, currentName };
+export { validateSet, renderSet, renderBlocks, replaceBlock, currentName, plainLine, repoKey };
 export const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const rendererPath = fileURLToPath(new URL('./render-set.mjs', import.meta.url));
 export const rendererBytes = () => fs.readFileSync(rendererPath);
 export function checkSet(root = process.cwd()) {
   try {
     const rendered = renderSet({ root, check: true });
-    const lock = JSON.parse(fs.readFileSync(path.join(root, '.repo-build/set.lock.json'), 'utf8'));
-    const renderer = fs.readFileSync(path.join(root, '.repo-build/render-set.mjs'));
+    const lock = JSON.parse(readRegular(root, '.repo-build/set.lock.json').toString('utf8'));
+    const renderer = readRegular(root, '.repo-build/render-set.mjs');
     if (sha256(renderer) !== lock.renderer_sha256) return { code: 1, message: 'Vendored set renderer differs from lock.', changed: [...rendered.changed, '.repo-build/render-set.mjs'] };
-    if (lock.vendored_sha256 && sha256(fs.readFileSync(path.join(root, '.repo-build/set.json'))) !== lock.vendored_sha256) return { code: 1, message: 'Vendored set data differs from lock.', changed: [...rendered.changed, '.repo-build/set.json'] };
+    if (lock.vendored_sha256 && sha256(readRegular(root, '.repo-build/set.json')) !== lock.vendored_sha256) return { code: 1, message: 'Vendored set data differs from lock.', changed: [...rendered.changed, '.repo-build/set.json'] };
     return rendered;
   } catch (error) { return { code: 1, message: error.message, changed: [] }; }
 }
@@ -64,7 +64,8 @@ export async function syncSet({ root = process.cwd(), fetchImpl = globalThis.fet
       catch (error) { if (error.status === 404) continue; throw error; }
       const metadata = await registry.json();
       const latest = metadata.versions?.[metadata['dist-tags']?.latest] ?? metadata;
-      if (typeof latest.description === 'string' && latest.description.trim()) row.line = latest.description;
+      const description = plainLine(latest.description), key = repoKey(row.url);
+      if (description && key && key === repoKey(latest.repository ?? metadata.repository)) row.line = description;
     }
     validateSet(set);
     let commit = null;

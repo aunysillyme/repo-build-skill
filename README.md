@@ -127,10 +127,10 @@ Each row carries its command, measurement date, expiry and package version.
 
 | Measurement | Value | Measured | Expires |
 |---|---|---|---|
-| packed-size | 131535 bytes | 2026-10-19 | 2027-01-17 |
-| unpacked-size | 421372 bytes | 2026-10-19 | 2027-01-17 |
-| help-time | 36.71033299999999 ms | 2026-10-19 | 2027-01-17 |
-| checker-time | 43.36758299999997 ms | 2026-10-19 | 2027-01-17 |
+| packed-size | 137713 bytes | 2026-10-19 | 2027-01-17 |
+| unpacked-size | 439259 bytes | 2026-10-19 | 2027-01-17 |
+| help-time | 31.6 ms | 2026-10-19 | 2027-01-17 |
+| checker-time | 30.3 ms | 2026-10-19 | 2027-01-17 |
 
 Run `npm run proof` to refresh deterministic package measurements.
 Show current rows here; expired rows warn while work and releases continue.
@@ -162,7 +162,7 @@ Run `npx repo-build-skill check .` after your AI prepares that card and the repo
 ### Where do I launch an open-source developer tool?
 
 Ask your AI to use Launch venues, check each venue's current rules and give every submission a follow-up date.
-Run `npx repo-build-skill check . --strict` before the owner submits the finished listing.
+Run `npx repo-build-skill check .` before the owner submits the finished listing, and add `--strict` once a private list is in place.
 
 ### How is it different from website-build-skill?
 

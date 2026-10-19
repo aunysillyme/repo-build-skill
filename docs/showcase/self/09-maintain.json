@@ -4,7 +4,7 @@
   "package_version": "0.1.0",
   "command": "check . --json",
   "entrypoint": "package bin declared in package.json",
-  "checked": "2026-10-19T03:03:55.016Z",
+  "checked": "2026-10-19T04:01:51.921Z",
   "checker_exit": 1,
   "automated": [
     {
@@ -36,12 +36,12 @@
       "reader": "registries",
       "stage": "09-maintain",
       "severity": "error",
-      "file": ".repo-build/set.json",
-      "line": 1,
+      "file": null,
+      "line": null,
       "why": "One renderer keeps related repository descriptions aligned.",
       "learn": "references/stages/09-maintain.md#gate",
-      "status": "FAIL",
-      "message": "Vendored set renderer differs from lock."
+      "status": "PASS",
+      "message": "README, llms.txt and renderer hash equal the vendored contract."
     }
   ],
   "manual": []

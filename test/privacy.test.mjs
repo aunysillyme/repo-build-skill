@@ -30,5 +30,43 @@ test('privacy lists are excluded under a symlinked parent directory',async t=>{
 });
 test('a tracked privacy list fails while no list is counted as skipped',async t=>{const root=temporary(t);let r=await check(root,{env:{}});assert.equal(by(r,'P_LIST')[0].status,'SKIPPED');write(root,'.repo-build/private.local.txt','synthetic-marker\n');execFileSync('git',['init',root],{stdio:'pipe'});execFileSync('git',['-C',root,'add','.repo-build/private.local.txt'],{stdio:'pipe'});r=await check(root,{env:{}});assert.equal(by(r,'P_LIST')[0].status,'FAIL');});
 
-test('reserved email domains and file references pass while public contact needs approval',async t=>{const root=temporary(t);write(root,'references.md','person@private.invalid person@private.test person@private.example person@private.localhost '+String.raw`"\n@AGENTS.md"`+' '+['md','txt','json','js','mjs','cjs','ts','yml','yaml','toml','py','sh'].map(ext=>'n@FILE.'+ext).join(' '));assert.equal(by(await check(root,{env:{}}),'P_EMAIL')[0].status,'PASS');write(root,'references.md',['person','@','private.company'].join(''));assert.equal(by(await check(root,{env:{}}),'P_EMAIL')[0].status,'FAIL');});
+test('reserved email domains and file references pass while public contact needs approval',async t=>{const root=temporary(t);write(root,'references.md','person@private.invalid person@private.test person@private.example person@private.localhost '+String.raw`"\n@AGENTS.md"`+' '+['md','txt','json','js','mjs','cjs','ts','yml','yaml','toml','py','sh'].map(ext=>String.raw`\n`+'@FILE.'+ext).join(' '));assert.equal(by(await check(root,{env:{}}),'P_EMAIL')[0].status,'PASS');write(root,'references.md',['person','@','private.company'].join(''));assert.equal(by(await check(root,{env:{}}),'P_EMAIL')[0].status,'FAIL');});
 test('gitignored files and nested work trees stay outside the public scan',async t=>{const root=temporary(t);execFileSync('git',['init',root],{stdio:'pipe'});write(root,'.gitignore','notes/\n');write(root,'notes/private.md',home('private-person')+'\n'+token());write(root,'nested/README.md','Public tool.');const r=await check(root,{env:{}});for(const id of ['P_PATH','P_TOKEN'])assert.equal(by(r,id)[0].status,'PASS',id);const nested=await check(join(root,'notes'),{env:{}});assert.equal(by(nested,'P_PATH')[0].status,'PASS');});
+
+const gitIn=(root,...args)=>execFileSync('git',['-C',root,...args],{stdio:'pipe',env:{...process.env,GIT_CONFIG_GLOBAL:'/dev/null',GIT_AUTHOR_NAME:'t',GIT_AUTHOR_EMAIL:'t@example.com',GIT_COMMITTER_NAME:'t',GIT_COMMITTER_EMAIL:'t@example.com'}});
+test('an unreadable tracked path becomes its own failure and the other files are still scanned',async t=>{
+  const root=temporary(t);gitIn(root,'init','-q','.');
+  write(root,'leak.txt',token()+'\n');
+  const sub=join(root,'sub');mkdirSync(sub);
+  gitIn(root,'update-index','--add','--cacheinfo','160000,'+'1'.repeat(40)+',sub');
+  gitIn(root,'add','leak.txt');
+  const r=await check(root,{env:{}});
+  assert.ok(by(r,'P_TOKEN').some(x=>x.status==='FAIL'&&x.file==='leak.txt'),JSON.stringify(by(r,'P_TOKEN')));
+  for(const id of ['P_PATH','P_EMAIL','P_TOKEN'])assert.ok(by(r,id).every(x=>x.status!=='SKIPPED'),id);
+});
+test('a tracked path the reader cannot open is named in a failure and does not hide a token elsewhere',async t=>{
+  const root=temporary(t);gitIn(root,'init','-q','.');
+  write(root,'leak.txt',token()+'\n');
+  write(root,'odd\\name.txt','x\n');
+  gitIn(root,'add','.');
+  const r=await check(root,{env:{}}),rows=by(r,'P_TOKEN');
+  assert.ok(rows.some(x=>x.status==='FAIL'&&x.file==='leak.txt'),JSON.stringify(rows));
+  assert.ok(rows.some(x=>x.status==='FAIL'&&x.file==='odd\\name.txt'&&/unreadable/i.test(x.message)),JSON.stringify(rows));
+  assert.ok(rows.every(x=>x.status!=='SKIPPED'));
+});
+const posix=(top,name,tail='')=>['',top,name].join('/')+tail;
+test('home paths fail with or without a trailing separator, and with doubled backslashes',()=>{
+  for(const text of ['export HOME='+posix('Users','jdoe'),'cd '+posix('home','jdoe'),'"'+posix('Users','jdoe')+'"',posix('Users','jdoe')+'.',posix('home','jdoe',','),'C:'+String.raw`\\Users\\jdoe\\x`,'C:'+String.raw`\Users\jdoe`,'{"path":"C:'+String.raw`\\Users\\jdoe\\x`+'"}'])assert.equal(pathHits(text).length,1,text);
+  for(const name of ['you','user','<user>','me','example','runner','name']){for(const text of ['export HOME='+posix('Users',name),'cd '+posix('home',name),posix('Users',name)+'.','C:'+String.raw`\\Users\\`+name])assert.equal(pathHits(text).length,0,text);}
+  assert.equal(pathHits('Claude Code').length,0);assert.equal(pathHits('Users home').length,0);
+});
+test('email file references pass only as the backslash-n source form while real addresses on file-like domains fail',async t=>{
+  const root=temporary(t),mail=(local,domain)=>[local,'@',domain].join('');
+  const escaped='\\n';
+  write(root,'refs.md','Use the line `@AGENTS.md` or (@README.md) or "@CLAUDE.md" '+['"',escaped,'@AGENTS.md" '].join('')+['md','txt','json','js','mjs','cjs','ts','yml','yaml','toml','py','sh'].map(ext=>escaped+'@FILE.'+ext).join(' '));
+  assert.equal(by(await check(root,{env:{}}),'P_EMAIL')[0].status,'PASS');
+  for(const address of [mail('maintainer','acme.sh'),mail('dev','startup.py'),mail('dev','site.md'),mail('team','tools.ts'),mail('n','FILE.md')]){
+    write(root,'refs.md','Contact '+address+' for help\n');
+    assert.equal(by(await check(root,{env:{}}),'P_EMAIL')[0].status,'FAIL',address);
+  }
+});

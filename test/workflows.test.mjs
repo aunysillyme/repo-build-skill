@@ -197,3 +197,79 @@ test('an issue API HTTP failure returns the complete error', async () => {
     fetchImpl: async () => new Response('fixture service unavailable', { status: 503 }),
   }), /503 fixture service unavailable/);
 });
+
+const sha=ch=>ch.repeat(40);
+const ruleById=Object.fromEntries(workflowRules.map(rule=>[rule.id,rule]));
+const run=async(id,text)=>ruleById[id].run({workflows:[readWorkflow('w.yml',text)]});
+const wf=(body,head='permissions:\n  contents: read\n')=>`name: t\non: push\n${head}jobs:\n${body}`;
+const job=(steps,name='check',extra='')=>`  ${name}:\n    runs-on: ubuntu-latest\n${extra}    steps:\n${steps}`;
+const pinned=(tail=' # v4.1.2')=>`      - uses: actions/checkout@${sha('a')}${tail}\n        with:\n          persist-credentials: false\n`;
+
+const upload='actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9';
+const download='actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333';
+const releaseFiles=[['.github/workflows/release.yml'],['skills',NAME,'assets/workflows/release-npm.yml'],['skills',NAME,'assets/workflows/release-pypi.yml']].map(parts=>path.join(ROOT,...parts));
+const forbiddenInPublish=/\b(?:npm\s+(?:ci|run|pack|test|build)\b|pip3?\s+install|python3?\s+-m\s+(?:build|pip)\b)/;
+for(const file of releaseFiles){
+  test(`${path.relative(ROOT,file)} builds and smoke-tests in verify, uploads one artifact, and publishes only the downloaded file`,async()=>{
+    const text=await fs.readFile(file,'utf8'),parsed=parseWorkflow(text),jobs=parsed.data.jobs;
+    assert.equal(parsed.unreadable,false);
+    assert.ok(jobs.verify&&jobs.publish);assert.deepEqual(jobs.publish.needs,'verify');
+    assert.equal(jobs.verify.permissions?.['id-token'],undefined,'verify holds no identity permission');
+    assert.equal(jobs.publish.permissions['id-token'],'write');
+    const uses=job=>(job.steps||[]).map(step=>step.uses||'');
+    assert.ok(uses(jobs.verify).some(value=>value===upload),'verify uploads the artifact with the pinned action');
+    assert.ok(uses(jobs.publish).some(value=>value===download),'publish downloads it with the pinned action');
+    assert.ok(!uses(jobs.publish).some(value=>/^actions\/checkout@/.test(value)),'publish needs no source checkout');
+    for(const step of jobs.publish.steps)assert.ok(!forbiddenInPublish.test(step.run||''),`publish runs ${step.run}`);
+    assert.deepEqual(await ruleById.W_OIDC.run({workflows:[readWorkflow('w.yml',text)]}),[]);
+    assert.ok(jobs.verify.steps.some(step=>/GITHUB_REF_NAME/.test(step.run||'')),'verify compares the tag with the version');
+  });
+}
+test('W_OIDC fails a publish job that installs, builds, packs or runs a package script, and allows the pinned CLI install',async()=>{
+  const publish=command=>wf(job(pinned()+`      - run: ${command}\n`,'publish','    permissions:\n      contents: read\n      id-token: write\n'));
+  for(const command of ['npm ci','npm run build','npm pack','pip install build','python -m build','python3 -m build'])assert.equal((await run('W_OIDC',publish(command))).length,1,command);
+  assert.deepEqual(await run('W_OIDC',publish('npm install -g npm@12.2.0 --ignore-scripts')),[]);
+  assert.deepEqual(await run('W_OIDC',publish('npm publish "$PWD"/dist/*.tgz --provenance --access public')),[]);
+  const verify=wf(job(pinned()+'      - run: npm ci\n      - run: npm run build\n','verify'));
+  assert.deepEqual(await run('W_OIDC',verify),[]);
+});
+test('W_INJECT flags event, head_ref and input values in run lines and github-script bodies, and accepts environment indirection',async()=>{
+  const step=line=>wf(job(`      - run: ${line}\n`));
+  for(const expr of ['github.head_ref','github.event.issue.title','github.event.pull_request.head.ref','inputs.target','github.event.inputs.target','github.event_path'])assert.equal((await run('W_INJECT',step(`echo "\${{ ${expr} }}"`))).length,1,expr);
+  const script=wf(job(`      - uses: actions/github-script@${sha('b')} # v8.0.0\n        with:\n          script: |\n            console.log("\${{ github.event.comment.body }}")\n`));
+  assert.equal((await run('W_INJECT',script)).length,1);
+  const indirect=wf(job('      - env:\n          TITLE: ${{ github.event.issue.title }}\n        run: echo "$TITLE"\n'));
+  assert.deepEqual(await run('W_INJECT',indirect),[]);
+  assert.deepEqual(await run('W_INJECT',step('echo "${{ github.sha }} ${{ runner.os }}"')),[]);
+});
+test('W_PERMS accepts read-only mappings, read-all and an empty mapping, and rejects write access',async()=>{
+  for(const head of ['permissions: read-all\n','permissions: {}\n','permissions:\n  contents: read\n  id-token: none\n'])assert.deepEqual(await run('W_PERMS',wf(job('      - run: true\n'),head)),[],head);
+  for(const head of ['permissions: write-all\n','permissions:\n  contents: write\n',''])assert.equal((await run('W_PERMS',wf(job('      - run: true\n'),head))).length,1,head);
+});
+test('W_PIN accepts vN, vN.N and vN.N.N comments and checks the comment on each uses line',async()=>{
+  for(const tail of [' # v4',' # v4.1',' # v4.1.2'])assert.deepEqual(await run('W_PIN',wf(job(pinned(tail)))),[],tail);
+  assert.equal((await run('W_PIN',wf(job(pinned(''))))).length,1);
+  const second=wf(job(pinned()+pinned('')));
+  const found=await run('W_PIN',second);
+  assert.equal(found.length,1);assert.equal(second.split('\n')[found[0].line-1].includes('#'),false,'the finding points at the uncommented line');
+});
+
+test('a checker that cannot run is reported as an unhealthy finding',async t=>{
+  const root=await healthFixture(t);
+  await fs.writeFile(path.join(root,'.repo-build','config.json'),'{ not json');
+  const result=await measureHealth(root,{fetchImpl:async()=>new Response('ready',{status:200})});
+  assert.equal(result.healthy,false);
+  assert.ok(result.findings.some(row=>row.id==='CHECK'&&row.status==='FAIL'&&row.message.length>0),JSON.stringify(result.findings));
+  const stub=await measureHealth(root,{checkImpl:async()=>({version:'1.0.0',exitCode:2,results:[]}),fetchImpl:async()=>new Response('ready',{status:200})});
+  assert.equal(stub.healthy,false);
+});
+
+test('the PyPI template publishes with the pinned official action and runs no install or build command',async()=>{
+  const parsed=parseWorkflow(await fs.readFile(path.join(ROOT,'skills',NAME,'assets/workflows/release-pypi.yml'),'utf8')),steps=parsed.data.jobs.publish.steps;
+  assert.equal(steps.length,2);
+  assert.equal(steps[0].uses,download);
+  assert.equal(steps[1].uses,'pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33');
+  assert.equal(steps[1].with['packages-dir'],'dist/');
+  assert.ok(steps.every(step=>step.run===undefined),'the publish job has no run step');
+  assert.equal(parsed.data.jobs.publish.permissions['id-token'],'write');
+});

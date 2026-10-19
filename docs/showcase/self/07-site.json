@@ -4,7 +4,7 @@
   "package_version": "0.1.0",
   "command": "check . --json",
   "entrypoint": "package bin declared in package.json",
-  "checked": "2026-10-19T03:03:55.016Z",
+  "checked": "2026-10-19T04:01:51.921Z",
   "checker_exit": 1,
   "automated": [],
   "manual": []

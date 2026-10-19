@@ -20,7 +20,7 @@ At the project's Publishing settings, the owner names the exact GitHub owner, re
 
 ## Workflow asset
 
-Adapt `assets/workflows/release-pypi.yml`. It checks tag/version equality, runs tests, builds distributions, runs `twine check`, installs the wheel in an isolated environment and exchanges CI identity for upload. Add the package's real entrypoint smoke test to the artifact check.
+Adapt `assets/workflows/release-pypi.yml`. The verify job (read-only token) checks tag/version equality, runs tests, builds distributions, runs `twine check`, installs the wheel in an isolated environment and uploads the distributions as an artifact. The publish job holds `id-token: write`, installs and builds nothing, downloads the artifact into `dist/` and runs only PyPA's official trusted-publishing action, pinned to a full SHA, with `packages-dir: dist/`. Add the package's real entrypoint smoke test to the artifact check.
 
 ## Verify command
 

@@ -295,12 +295,12 @@
     },
     {
       "path": "assets/workflows/release-npm.yml",
-      "sha256": "86b89c7e67b4d64f71956d2bb07ebcbc6ca486e801d02b77acf148f879450be7",
+      "sha256": "812ce730865ac88c04f9beda66481242a380969cb51a2bd0ef5a57ec795b894a",
       "kind": "asset"
     },
     {
       "path": "assets/workflows/release-pypi.yml",
-      "sha256": "102d1e6561bb202b0d58a9a4ea706373e46e90fa4a4fac09b02271fa48e9baa3",
+      "sha256": "6cb6c0a310d2b55483f266d59910b2bdabf891efc9f462b692412791e7ae96a8",
       "kind": "asset"
     },
     {
@@ -365,12 +365,12 @@
     },
     {
       "path": "references/release/npm.md",
-      "sha256": "bcb2f77a87081f8dc682cd7631935cb296057320fe173db507112ce16da847b7",
+      "sha256": "96ad6f6476712f4b3b24ad4956810f151f92416523ad59672e378430af4343f8",
       "kind": "card"
     },
     {
       "path": "references/release/pypi.md",
-      "sha256": "df27669d7f4fd168e49c1b16726322f5f9bd60e15922040e971507b0bc01cea7",
+      "sha256": "36e62eeb4b833ea8ceb866ae5d80a617cc8e4bc5c0d83b370cb44c5d088dbc7b",
       "kind": "card"
     },
     {
@@ -395,7 +395,7 @@
     },
     {
       "path": "references/stages/03-scaffold.md",
-      "sha256": "061995392fb5f5434ae22677c9bfd8fb6e74e0eacc57c24fd9ffe4f830a9dae5",
+      "sha256": "73820aa8461aec0bf0b999244fbcacb1e7777cb0fa93ef64e2dd4162c397013e",
       "kind": "stage"
     },
     {
@@ -410,7 +410,7 @@
     },
     {
       "path": "references/stages/06-release.md",
-      "sha256": "485f7375cfa07241a84b12cd56ba2d97623f56c22daf57ba85f0fbb31fed7d4c",
+      "sha256": "613e699706cf2fd8143d241bc3635e965f6fcd3fb134251adb7c195de814ece0",
       "kind": "stage"
     },
     {

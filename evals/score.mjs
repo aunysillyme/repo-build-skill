@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, readdirSync, mkdtempSync, rmSync, realpathSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, mkdtempSync, mkdirSync, cpSync, lstatSync, rmSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -122,22 +122,28 @@ export function scoreHonesty(input) {
   return { status: rows.every(row => row.status === 'PASS') ? 'PASS' : 'FAIL', value: rows.filter(row => row.status === 'PASS').length / Math.max(rows.length, 1), rows };
 }
 
-function exec(command, args, cwd, run = spawnSync) {
-  const call = run(command, args, { cwd, encoding: 'utf8', input: '', timeout: 120000, maxBuffer: 16 * 1024 * 1024, env: { ...process.env, npm_config_update_notifier: 'false' } });
+// Produced code runs with PATH, a temporary HOME and LANG only, in a temporary copy of the tree.
+function execIn(command, args, cwd, run = spawnSync, env = {}) {
+  const call = run(command, args, { cwd, encoding: 'utf8', input: '', timeout: 120000, maxBuffer: 16 * 1024 * 1024, env });
   return { command: [command, ...args].join(' '), exitCode: call.status ?? 1, stdout: call.stdout || '', stderr: call.stderr || '', error: call.error?.message || null };
 }
 
-export function externalProbes(root, { run = spawnSync } = {}) {
+export function externalProbes(source, { run = spawnSync } = {}) {
   const rows = [];
   const temp = mkdtempSync(path.join(tmpdir(), 'repo-eval-probe-'));
   try {
-    const packed = exec('npm', ['pack', '--json', '--ignore-scripts', '--offline', '--pack-destination', temp], root, run);
+    const home = path.join(temp, 'home'), root = path.join(temp, 'work');
+    mkdirSync(home);
+    cpSync(realpathSync(source), root, { recursive: true, filter: file => !['.git', 'node_modules'].includes(path.basename(file)) && !lstatSync(file).isSymbolicLink() });
+    const env = { PATH: process.env.PATH ?? '', HOME: home, LANG: process.env.LANG ?? 'C.UTF-8' };
+    const exec = (command, args, cwd, runner) => execIn(command, args, cwd, runner, env);
+    const packed = exec('npm', ['pack', '--json', '--ignore-scripts', '--offline', '--no-update-notifier', '--pack-destination', temp], root, run);
     let packRows = [];
     try { const data = JSON.parse(packed.stdout); packRows = Array.isArray(data) ? data : Object.values(data); } catch {}
     const pack = packRows[0];
     rows.push(result('npm-pack', packed.exitCode === 0 && pack?.filename ? 'PASS' : 'FAIL', packed.exitCode === 0 ? 'Package packed offline.' : 'Package pack failed.', { probe: packed }));
     if (packed.exitCode === 0 && pack?.filename) {
-      const installed = exec('npm', ['install', '--prefix', path.join(temp, 'project'), '--ignore-scripts', '--no-audit', '--no-fund', '--offline', path.join(temp, path.basename(pack.filename))], root, run);
+      const installed = exec('npm', ['install', '--prefix', path.join(temp, 'project'), '--ignore-scripts', '--no-audit', '--no-fund', '--offline', '--no-update-notifier', path.join(temp, path.basename(pack.filename))], root, run);
       rows.push(result('tarball-install', installed.exitCode === 0 ? 'PASS' : 'FAIL', 'Install the packed artifact in a clean project.', { probe: installed }));
       /** @type {any} */
       let manifest = {};
@@ -163,7 +169,7 @@ export function externalProbes(root, { run = spawnSync } = {}) {
     /** @type {[string, string[]][]} */
     const probes = [['publint', []], ['actionlint', workflows], ['zizmor', workflows]];
     for (const [command, args] of probes) {
-      const available = run(command, ['--version'], { encoding: 'utf8', timeout: 15000 });
+      const available = run(command, ['--version'], { encoding: 'utf8', timeout: 15000, env });
       if (/** @type {NodeJS.ErrnoException} */ (available.error)?.code === 'ENOENT') { rows.push(result(command, 'NOT APPLICABLE', 'Optional independent probe is not installed.')); continue; }
       if (available.error || available.status !== 0) { rows.push(result(command, 'FAIL', 'Independent probe version check failed.')); continue; }
       if (command !== 'publint' && !workflows.length) { rows.push(result(command, 'NOT APPLICABLE', 'The workflow list is empty.')); continue; }

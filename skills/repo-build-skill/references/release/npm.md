@@ -20,7 +20,7 @@ The owner opens `https://www.npmjs.com/package/NAME/access` and adds the GitHub 
 
 ## Workflow asset
 
-Adapt `assets/workflows/release-npm.yml`. It checks tag/version equality, runs tests, builds, packs once, installs the tarball in a temporary project and publishes that same tarball with `npm publish PACKAGE.tgz --provenance --access public`. Keep `id-token: write` confined to the publish job.
+Adapt `assets/workflows/release-npm.yml`. The verify job (read-only token) checks tag/version equality, installs, tests, builds, packs once, installs that tarball in a temporary project and uploads it as an artifact. The publish job holds `id-token: write`, runs no install, build or package script, downloads the artifact and publishes that exact file with `npm publish ./release/PACKAGE.tgz --provenance --access public`.
 
 ## Verify command
 

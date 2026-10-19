@@ -57,7 +57,7 @@ Rows begin BLOCKED. Attach actual output or a dated manual receipt before assign
 |---|---|---|
 | R_VERSION | Unmet requirement: Manifest, lock and plugin versions equal package version. | R_VERSION: checker receipt, initially BLOCKED |
 | R_FILES | Unmet requirement: A files allowlist covers binary targets and lifecycle install scripts are absent. | R_FILES: checker receipt, initially BLOCKED |
-| W_OIDC | Unmet requirement: Only a job named publish declares id-token: write. | W_OIDC: checker receipt, initially BLOCKED |
+| W_OIDC | Unmet requirement: Only a job named publish declares id-token: write, and it runs no install, build or package script. | W_OIDC: checker receipt, initially BLOCKED |
 | W_TAG | Unmet requirement: A version comparison precedes the publish job or publish command. | W_TAG: checker receipt, initially BLOCKED |
 | O_REGISTRY | Unmet requirement: Version, description, tagged README and attestation agree. | O_REGISTRY: checker receipt, initially BLOCKED |
 | RL_FIRST (HANDS) | The first registry publish awaits owner action. | Registry version response. |

@@ -4,7 +4,7 @@ import os from 'node:os';
 import { createInterface } from 'node:readline/promises';
 import { NAME, VERSION, ROOT } from './constants.mjs';
 import { hosts } from './catalog.mjs';
-import { receiptName, digest, stat, canonical, safePath, readBytes, readReceipt, writeNew, replaceExact } from './receipt.mjs';
+import { receiptName, digest, stat, canonical, safePath, readBytes, readReceipt, receiptHosts, writeNew, replaceExact } from './receipt.mjs';
 
 const result = (code, message, extra = {}) => ({ code, message, ...extra });
 function context(options) {
@@ -31,7 +31,7 @@ function sourceFiles(root) {
       const full = path.join(root, child), info = stat(full);
       if (info?.isSymbolicLink()) throw Error(`Symlink refused in package: ${child}`);
       if (info?.isDirectory()) { safePath(root, child, 'dir'); visit(child); }
-      else if (info?.isFile()) output.push({ rel: child, bytes: readBytes(root, child) });
+      else if (info?.isFile()) output.push({ rel: child, bytes: readBytes(root, child, { linked: true }) });
       else throw Error(`Expected package file: ${child}`);
     }
   };
@@ -43,14 +43,15 @@ function blockFor(destination) {
 }
 function planInstall(options, ctx) {
   const sourceRoot = canonical(options.sourceRoot ?? path.join(ROOT, 'skills', NAME));
-  const prior = stat(path.join(ctx.root, ctx.receipt)) ? readReceipt(ctx.root, ctx.receipt, ctx) : null;
+  const prior = stat(path.join(ctx.root, ctx.receipt)) ? readReceipt(ctx.root, ctx.receipt, { ...ctx, share: true }) : null;
   const owned = new Map((prior?.receipt.files ?? []).map(entry => [entry.path, entry]));
   /** @type {Array<{path:string,bytes:Buffer,before:Buffer|null,sha256:string,action:string,block?:string,separator?:string,created?:boolean,carried?:boolean}>} */
   const entries = sourceFiles(sourceRoot).map(file => {
-    const rel = `${ctx.destination}/${file.rel}`, before = readBytes(ctx.root, rel);
+    const rel = `${ctx.destination}/${file.rel}`, before = readBytes(ctx.root, rel), previous = owned.get(rel);
     if (rel === ctx.receipt) throw Error('Receipt collides with skill content');
-    if (before && !before.equals(file.bytes)) throw Error(`Install conflict: ${rel}`);
-    return { path: rel, bytes: file.bytes, before, sha256: digest(file.bytes), action: before ? (owned.get(rel)?.action ?? 'identical') : 'written' };
+    // An owned file still holding its install-time bytes is upgraded; a user edit is a conflict.
+    if (before && !before.equals(file.bytes) && !(previous && digest(before) === previous.sha256)) throw Error(`Install conflict: ${rel}`);
+    return { path: rel, bytes: file.bytes, before, sha256: digest(file.bytes), action: before ? (previous?.action ?? 'identical') : 'written' };
   });
   if (!entries.length) throw Error('The skill folder is empty');
   if (ctx.host === 'agents-md') {
@@ -88,6 +89,8 @@ export function install(options = {}) {
   } catch (error) { return result(2, error.message); }
   const { entries, prior } = planned;
   const operations = entries.filter(e => !e.carried && !e.before?.equals(e.bytes)).map(e => `${e.before ? 'update' : 'write'}: ${e.path}`);
+  const priorHosts = prior ? receiptHosts(prior.receipt) : [], joined = priorHosts.length > 0 && !priorHosts.includes(ctx.host);
+  if (joined) operations.push(`record host: ${ctx.host}`);
   operations.push(`write receipt: ${ctx.receipt}`);
   if (options.dryRun ?? options.dry) return result(0, `Dry run; no files changed.\n${operations.join('\n')}`, { operations });
   const made = [...(prior?.receipt.directories ?? [])], landed = [];
@@ -102,7 +105,7 @@ export function install(options = {}) {
       if (!readBytes(ctx.root, entry.path)?.equals(entry.bytes)) throw Error(`Install read-back failed: ${entry.path}`);
     }
     const receipt = {
-      schemaVersion: 1, package: { name: NAME, version: VERSION }, host: ctx.host, scope: ctx.scope,
+      schemaVersion: 1, package: { name: NAME, version: VERSION }, host: prior?.receipt.host ?? ctx.host, ...(joined || priorHosts.length > 1 ? { hosts: [...new Set([...priorHosts, ctx.host])] } : {}), scope: ctx.scope,
       destination: ctx.destination, installed: new Date().toISOString(), activation: 'UNVERIFIED',
       files: entries.filter(e => e.bytes).map(({ path: rel, sha256, action, block, separator, created }) => ({ path: rel, sha256, action, ...(block ? { block, separator, created } : {}) })),
       directories: [...new Set(made)],
@@ -110,7 +113,8 @@ export function install(options = {}) {
     const bytes = Buffer.from(JSON.stringify(receipt, null, 2) + '\n');
     if (prior) replaceExact(ctx.root, ctx.receipt, prior.bytes, bytes);
     else writeNew(ctx.root, ctx.receipt, bytes, made);
-    return result(0, `Install complete. Host activation: UNVERIFIED.\n${operations.join('\n')}\nManual step: open the skill in your host and confirm it is available.`, { operations, receipt: ctx.receipt });
+    const head = joined ? `Already installed for ${priorHosts.join(', ')}; recorded ${ctx.host} in the receipt.` : 'Install complete.';
+    return result(0, `${head} Host activation: UNVERIFIED.\n${operations.join('\n')}\nManual step: open the skill in your host and confirm it is available.`, { operations, receipt: ctx.receipt });
   } catch (error) {
     const retained = [];
     for (const rel of [...landed].reverse()) {
@@ -128,6 +132,18 @@ export function install(options = {}) {
     return result(1, `Install interrupted: ${error.message}\nRetained paths: ${retained.join(', ') || 'none'}\nManual step: review retained paths before retrying.`, { operations });
   }
 }
+// Two hosts on one destination are one install: removing one host leaves the files for the other.
+function unregisterHost(options, ctx, saved, registered) {
+  const rest = registered.filter(host => host !== ctx.host);
+  const operations = [`unregister host: ${ctx.host}`, `keep files: still installed for ${rest.join(', ')}`];
+  if (options.dryRun ?? options.dry) return result(0, `Dry run; no files changed.\n${operations.join('\n')}`, { operations });
+  try {
+    const { hosts: _all, ...base } = saved.receipt;
+    const updated = { ...base, host: rest.includes(base.host) ? base.host : rest[0], ...(rest.length > 1 ? { hosts: rest } : {}) };
+    replaceExact(ctx.root, ctx.receipt, saved.bytes, Buffer.from(JSON.stringify(updated, null, 2) + '\n'));
+    return result(0, operations.join('\n'), { operations });
+  } catch (error) { return result(1, `Uninstall interrupted: ${error.message}\nManual step: review the retained receipt and paths.`, { operations }); }
+}
 /** @param {any} [options] */
 export function uninstall(options = {}) {
   let ctx, saved, plans;
@@ -135,6 +151,8 @@ export function uninstall(options = {}) {
     ctx = context(options);
     if (!ctx.destination) return result(0, 'Manual step: remove the uploaded bundle from your chat.');
     saved = readReceipt(ctx.root, ctx.receipt, ctx);
+    const registered = receiptHosts(saved.receipt);
+    if (registered.length > 1) return unregisterHost(options, ctx, saved, registered);
     plans = saved.receipt.files.map(entry => {
       const before = readBytes(ctx.root, entry.path);
       if (!before) return { entry, before, action: 'absent' };

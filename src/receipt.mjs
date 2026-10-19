@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
 import { NAME } from './constants.mjs';
+import { hosts } from './catalog.mjs';
 
 export const receiptName = `.${NAME}-receipt.json`;
 export const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -20,7 +21,11 @@ export function canonical(value) {
   if (!info?.isDirectory() && !info?.isSymbolicLink()) throw Error(`Select an existing directory: ${full}`);
   return fs.realpathSync(full);
 }
-export function safePath(root, rel, kind = 'file') {
+// Hosts that write the same destination and nothing else are one install; agents-md also owns a router block.
+export const receiptHosts = receipt => Array.isArray(receipt.hosts) ? receipt.hosts : [receipt.host];
+export const sharesDestination = (a, b) => a !== b && a !== 'agents-md' && b !== 'agents-md' && !!hosts[a]?.target && hosts[a].target === hosts[b]?.target;
+// A package source may be hard-linked by its package manager; installed files may not.
+export function safePath(root, rel, kind = 'file', { linked = false } = {}) {
   relativePath(rel);
   const base = stat(root);
   if (!base?.isDirectory() || base.isSymbolicLink()) throw Error(`Root changed or is a symlink: ${root}`);
@@ -32,17 +37,17 @@ export function safePath(root, rel, kind = 'file') {
     if (!info) continue;
     if (info.isSymbolicLink()) throw Error(`Symlink refused: ${rel}`);
     if ((index < parts.length - 1 || kind === 'dir') && !info.isDirectory()) throw Error(`Expected directory: ${rel}`);
-    if (index === parts.length - 1 && kind === 'file' && (!info.isFile() || info.nlink !== 1)) throw Error(`Expected unshared regular file: ${rel}`);
+    if (index === parts.length - 1 && kind === 'file' && (!info.isFile() || (!linked && info.nlink !== 1))) throw Error(`Expected unshared regular file: ${rel}`);
   }
   return current;
 }
-export function readBytes(root, rel) {
-  const full = safePath(root, rel);
+export function readBytes(root, rel, { linked = false } = {}) {
+  const full = safePath(root, rel, 'file', { linked });
   if (!stat(full)) return null;
   const fd = fs.openSync(full, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
   try {
     const before = fs.lstatSync(full), opened = fs.fstatSync(fd);
-    if (before.dev !== opened.dev || before.ino !== opened.ino || !opened.isFile() || opened.nlink !== 1) throw Error(`File changed during read: ${rel}`);
+    if (before.dev !== opened.dev || before.ino !== opened.ino || !opened.isFile() || (!linked && opened.nlink !== 1)) throw Error(`File changed during read: ${rel}`);
     return fs.readFileSync(fd);
   } finally { fs.closeSync(fd); }
 }
@@ -50,7 +55,9 @@ export function readReceipt(root, rel, expected) {
   const bytes = readBytes(root, rel);
   if (!bytes) throw Error(`Missing receipt: ${path.join(root, rel)}`);
   const receipt = JSON.parse(bytes.toString('utf8'));
-  if (receipt.schemaVersion !== 1 || receipt.package?.name !== NAME || receipt.host !== expected.host || receipt.scope !== expected.scope || receipt.destination !== expected.destination || !Array.isArray(receipt.files) || !Array.isArray(receipt.directories)) throw Error('Invalid receipt ownership');
+  const registered = receiptHosts(receipt), joins = expected.share && !registered.includes(expected.host) && registered.every(host => sharesDestination(host, expected.host));
+  if (receipt.hosts !== undefined && (!Array.isArray(receipt.hosts) || !receipt.hosts.includes(receipt.host) || receipt.hosts.some(host => host !== receipt.host && !sharesDestination(host, receipt.host)))) throw Error('Invalid receipt ownership');
+  if (receipt.schemaVersion !== 1 || receipt.package?.name !== NAME || !(registered.includes(expected.host) || joins) || receipt.scope !== expected.scope || receipt.destination !== expected.destination || !Array.isArray(receipt.files) || !Array.isArray(receipt.directories)) throw Error('Invalid receipt ownership');
   const seen = new Set();
   for (const entry of receipt.files) {
     relativePath(entry.path);

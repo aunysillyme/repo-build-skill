@@ -62,11 +62,11 @@ Keep those lists gitignored and out of release artifacts.
 **Trigger:** a pushed tag matching `v*`.
 A push to main runs repository checks; the tag is the publication trigger.
 
-**Invocation chain:** GitHub checks out the tag, compares it with `package.json`, runs tests, checks generated files, self-checks and type-checks.
-The publish job waits for verification, selects the publishing CLI, repeats tag equality, packs once and installs that tarball in a temporary consumer project.
-It runs help, dry-run install, install and uninstall against the installed binary.
-It checks the installed target was removed, then publishes the same tarball with provenance.
-Only the publish job has `id-token: write`; checkout keeps persisted credentials disabled.
+**Invocation chain:** the verify job (read-only token) checks out the tag, compares it with `package.json`, runs tests, checks generated files, self-checks and type-checks.
+It then packs once and installs that tarball in a temporary consumer project, runs help, dry-run install, install and uninstall against the installed binary and checks the installed target was removed.
+It uploads that tarball as an artifact.
+The publish job waits for verification, downloads the artifact, selects the publishing CLI and publishes that exact file with provenance.
+Only the publish job has `id-token: write`, and it runs no install, build or package script; checkout keeps persisted credentials disabled.
 
 **Reads:** tagged source, package and lockfile, skill manifests, tests and the npm trust identity.
 **Writes:** the npm version, tarball, dist-tag and provenance; GitHub run logs.

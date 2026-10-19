@@ -187,3 +187,43 @@ test('one host question and one confirmation, headless flags skip both', async t
   assert.equal(got.code, 0); assert.equal(prompts.length, 2); assert.deepEqual(fs.readdirSync(f.dir), []);
   const bad = await runInstaller(['--host']); assert.equal(bad.code, 2);
 });
+
+test('a hard-linked package source installs, while destination hard links are still refused', t => {
+  const f = fixture(t);
+  fs.linkSync(path.join(f.sourceRoot, 'SKILL.md'), path.join(f.temp, 'store-copy.md'));
+  assert.equal(fs.statSync(path.join(f.sourceRoot, 'SKILL.md')).nlink, 2);
+  const got = install(f.options); assert.equal(got.code, 0, got.message);
+  assert.equal(fs.readFileSync(path.join(f.target, 'SKILL.md'), 'utf8'), '# Sample skill\n');
+  assert.equal(fs.statSync(path.join(f.target, 'SKILL.md')).nlink, 1);
+  fs.linkSync(path.join(f.target, 'references/card.md'), path.join(f.temp, 'dest-link.md'));
+  assert.equal(install(f.options).code, 2);
+});
+test('a reinstall replaces owned files that still hold their install-time bytes and refuses user-edited ones', t => {
+  const f = fixture(t); mustInstall(f);
+  fs.writeFileSync(path.join(f.sourceRoot, 'SKILL.md'), '# Sample skill v2\n');
+  fs.writeFileSync(path.join(f.sourceRoot, 'references/extra.md'), '# Extra\n');
+  const upgraded = install(f.options); assert.equal(upgraded.code, 0, upgraded.message);
+  assert.equal(fs.readFileSync(path.join(f.target, 'SKILL.md'), 'utf8'), '# Sample skill v2\n');
+  const receipt = JSON.parse(fs.readFileSync(f.receipt, 'utf8'));
+  assert.equal(receipt.files.find(entry => entry.path.endsWith('/SKILL.md')).sha256, digest(Buffer.from('# Sample skill v2\n')));
+  assert.equal(uninstall(f.options).code, 0); assert.deepEqual(fs.readdirSync(f.dir), []);
+  mustInstall(f);
+  fs.writeFileSync(path.join(f.target, 'SKILL.md'), '# Owner edit\n');
+  fs.writeFileSync(path.join(f.sourceRoot, 'SKILL.md'), '# Sample skill v3\n');
+  const refused = install(f.options); assert.equal(refused.code, 2); assert.match(refused.message, /Install conflict/);
+  assert.equal(fs.readFileSync(path.join(f.target, 'SKILL.md'), 'utf8'), '# Owner edit\n');
+});
+test('codex and gemini-antigravity share one destination as one install', t => {
+  const codex = fixture(t, 'codex'), gemini = { ...codex, options: { ...codex.options, host: 'gemini-antigravity' } };
+  assert.equal(hosts.codex.target, hosts['gemini-antigravity'].target);
+  mustInstall(codex);
+  const again = install(gemini.options); assert.equal(again.code, 0, again.message);
+  assert.match(again.message, /already installed for codex/i);
+  const receipt = JSON.parse(fs.readFileSync(codex.receipt, 'utf8'));
+  assert.deepEqual([...receipt.hosts].sort(), ['codex', 'gemini-antigravity']);
+  assert.equal(install(codex.options).code, 0); assert.equal(install(gemini.options).code, 0);
+  const first = uninstall(gemini.options); assert.equal(first.code, 0, first.message);
+  assert.ok(fs.existsSync(path.join(codex.target, 'SKILL.md')), 'files stay while another host is registered');
+  assert.match(first.message, /codex/);
+  assert.equal(uninstall(codex.options).code, 0); assert.deepEqual(fs.readdirSync(codex.dir), []);
+});

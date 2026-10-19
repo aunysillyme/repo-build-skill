@@ -4,7 +4,7 @@
   "package_version": "0.1.0",
   "command": "check . --json",
   "entrypoint": "package bin declared in package.json",
-  "checked": "2026-10-19T03:03:55.016Z",
+  "checked": "2026-10-19T04:01:51.921Z",
   "checker_exit": 1,
   "automated": [
     {
@@ -89,7 +89,7 @@
       "why": "Untrusted event text must not become shell code.",
       "learn": "references/stages/03-scaffold.md#gate",
       "status": "PASS",
-      "message": "No github.event interpolation appears in run values."
+      "message": "No event, head_ref or input interpolation appears in run values or github-script bodies."
     },
     {
       "id": "P_PATH",
@@ -132,8 +132,8 @@
       "reader": "registries",
       "stage": "03-scaffold",
       "severity": "error",
-      "file": "CREDITS.md",
-      "line": 18,
+      "file": "src/readers/markdown.mjs",
+      "line": 2,
       "why": "Private names are supplied locally by the maintainer.",
       "learn": "references/stages/03-scaffold.md#gate",
       "status": "FAIL",
@@ -144,8 +144,44 @@
       "reader": "registries",
       "stage": "03-scaffold",
       "severity": "error",
-      "file": "docs/PROVENANCE.md",
+      "file": "src/readers/markdown.mjs",
       "line": 21,
+      "why": "Private names are supplied locally by the maintainer.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "FAIL",
+      "message": "Remove the private-list match."
+    },
+    {
+      "id": "P_LIST",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": "src/readers/workflow.mjs",
+      "line": 1,
+      "why": "Private names are supplied locally by the maintainer.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "FAIL",
+      "message": "Remove the private-list match."
+    },
+    {
+      "id": "P_LIST",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": "test/readers.test.mjs",
+      "line": 12,
+      "why": "Private names are supplied locally by the maintainer.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "FAIL",
+      "message": "Remove the private-list match."
+    },
+    {
+      "id": "P_LIST",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": "test/readers.test.mjs",
+      "line": 67,
       "why": "Private names are supplied locally by the maintainer.",
       "learn": "references/stages/03-scaffold.md#gate",
       "status": "FAIL",

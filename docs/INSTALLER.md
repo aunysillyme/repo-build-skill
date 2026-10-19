@@ -38,6 +38,16 @@ Preflight examines the whole intended file set before writing.
 Conflicting bytes stop the operation; identical bytes are a no-op.
 The package does not run vendor logins, install companion tools or write global vendor configuration.
 
+## Upgrade and shared destinations
+
+Running the installer again upgrades the package: an owned file whose bytes still equal the install-time digest in the receipt is replaced by the new version, and the receipt records the new digest.
+A file you edited is a conflict; the installer stops before writing and names it.
+Package files may be hard-linked by a package manager; installed files may not be.
+Codex and Gemini (via Antigravity CLI) both read `.agents/skills/repo-build-skill/`, so they are one install.
+The second host reports "already installed for" the first and records itself in the receipt's `hosts` list.
+Uninstalling one of two registered hosts removes it from the list and keeps the files; the last host removes them.
+The generic AGENTS.md route writes a router block as well, so it keeps its own receipt ownership.
+
 ## Receipts
 
 The receipt sits inside the installed target as `.repo-build-skill-receipt.json`.

@@ -8,13 +8,13 @@ Use `--json` for structured findings and `npx repo-build-skill explain CODE` for
 
 ```sh
 npx repo-build-skill check . --json
-npx repo-build-skill check . --strict --house
+npx repo-build-skill check . --house
 npx repo-build-skill check . --history
 npx repo-build-skill check . --online
 npx repo-build-skill explain H_LEAD
 ```
 
-`--strict` exits with failure on any counted skip.
+`--strict` exits with failure on any counted skip; the private-list check counts as a skip until you supply a list, so add `--strict` once a private list is in place.
 `--house` raises marked house conventions to errors.
 `--history` extends privacy checks to committed blobs, filenames, messages and tags.
 `--online` requests live About, registry, security-reporting and set-source observations.
@@ -39,6 +39,10 @@ Expired proof stays warn under house mode.
 UNREADABLE input is reported as a counted SKIPPED observation.
 The workflow reader parses JSON-form YAML first, then its supported block-YAML patterns.
 A construct the reader cannot resolve stays visible as UNREADABLE.
+Each unreadable workflow is its own counted skip; the workflow rules still run on every readable workflow.
+An unparseable `pyproject.toml` value skips the manifest rules with that reason instead of ending the run.
+A tracked path the scan cannot open is a failure naming that path, and scanning continues.
+Every git call the checker makes switches off the config keys that run programs (fsmonitor, hooks, untracked cache), so a checked repository cannot execute code through its own `.git/config`.
 
 ## Codes by reader
 

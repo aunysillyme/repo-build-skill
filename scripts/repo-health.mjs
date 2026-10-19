@@ -22,6 +22,7 @@ export async function measureHealth(root, options = {}) {
   });
   const findings = report.results.filter(row => HEALTH_CODES.has(row.id)
     && ['FAIL', 'WARN', 'SKIPPED', 'UNREADABLE'].includes(String(row.status).toUpperCase()));
+  if (report.exitCode === 2 || report.error) findings.push({ id: 'CHECK', status: 'FAIL', message: `The checker could not run: ${report.error || 'configuration error'}` });
   if (report.exitCode === 3) findings.push({ id: 'ONLINE', status: 'UNVERIFIED', message: 'The online checker could not reach a required service.' });
   const facts = await readJson(path.join(root, '.repo-build', 'facts.json'));
   const metadata = await readJson(path.join(root, 'package.json'));

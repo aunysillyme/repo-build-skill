@@ -434,7 +434,7 @@ Rows begin BLOCKED. Attach actual output or a dated manual receipt before assign
 | W_PERMS | Unmet requirement: Every workflow declares read-only or empty default permissions. | W_PERMS: checker receipt, initially BLOCKED |
 | W_PIN | Unmet requirement: Every remote action uses forty hex characters and a version comment. | W_PIN: checker receipt, initially BLOCKED |
 | W_CREDS | Unmet requirement: Each checkout step sets persist-credentials: false. | W_CREDS: checker receipt, initially BLOCKED |
-| W_INJECT | Unmet requirement: No github.event interpolation appears in run values. | W_INJECT: checker receipt, initially BLOCKED |
+| W_INJECT | Unmet requirement: No event, head_ref or input interpolation appears in run values or github-script bodies. | W_INJECT: checker receipt, initially BLOCKED |
 | P_PATH | Unmet requirement: Home paths use placeholder usernames in contents and filenames. | P_PATH: checker receipt, initially BLOCKED |
 | P_EMAIL | Unmet requirement: Email addresses are in the allowlist or a standard example or noreply domain. | P_EMAIL: checker receipt, initially BLOCKED |
 | P_TOKEN | Unmet requirement: Token-shaped strings and private key headers are absent. | P_TOKEN: checker receipt, initially BLOCKED |
@@ -786,7 +786,7 @@ Rows begin BLOCKED. Attach actual output or a dated manual receipt before assign
 |---|---|---|
 | R_VERSION | Unmet requirement: Manifest, lock and plugin versions equal package version. | R_VERSION: checker receipt, initially BLOCKED |
 | R_FILES | Unmet requirement: A files allowlist covers binary targets and lifecycle install scripts are absent. | R_FILES: checker receipt, initially BLOCKED |
-| W_OIDC | Unmet requirement: Only a job named publish declares id-token: write. | W_OIDC: checker receipt, initially BLOCKED |
+| W_OIDC | Unmet requirement: Only a job named publish declares id-token: write, and it runs no install, build or package script. | W_OIDC: checker receipt, initially BLOCKED |
 | W_TAG | Unmet requirement: A version comparison precedes the publish job or publish command. | W_TAG: checker receipt, initially BLOCKED |
 | O_REGISTRY | Unmet requirement: Version, description, tagged README and attestation agree. | O_REGISTRY: checker receipt, initially BLOCKED |
 | RL_FIRST (HANDS) | The first registry publish awaits owner action. | Registry version response. |
@@ -848,7 +848,7 @@ The owner opens `https://www.npmjs.com/package/NAME/access` and adds the GitHub 
 
 ## Workflow asset
 
-Adapt `assets/workflows/release-npm.yml`. It checks tag/version equality, runs tests, builds, packs once, installs the tarball in a temporary project and publishes that same tarball with `npm publish PACKAGE.tgz --provenance --access public`. Keep `id-token: write` confined to the publish job.
+Adapt `assets/workflows/release-npm.yml`. The verify job (read-only token) checks tag/version equality, installs, tests, builds, packs once, installs that tarball in a temporary project and uploads it as an artifact. The publish job holds `id-token: write`, runs no install, build or package script, downloads the artifact and publishes that exact file with `npm publish ./release/PACKAGE.tgz --provenance --access public`.
 
 ## Verify command
 
@@ -936,7 +936,7 @@ At the project's Publishing settings, the owner names the exact GitHub owner, re
 
 ## Workflow asset
 
-Adapt `assets/workflows/release-pypi.yml`. It checks tag/version equality, runs tests, builds distributions, runs `twine check`, installs the wheel in an isolated environment and exchanges CI identity for upload. Add the package's real entrypoint smoke test to the artifact check.
+Adapt `assets/workflows/release-pypi.yml`. The verify job (read-only token) checks tag/version equality, runs tests, builds distributions, runs `twine check`, installs the wheel in an isolated environment and uploads the distributions as an artifact. The publish job holds `id-token: write`, installs and builds nothing, downloads the artifact into `dist/` and runs only PyPA's official trusted-publishing action, pinned to a full SHA, with `packages-dir: dist/`. Add the package's real entrypoint smoke test to the artifact check.
 
 ## Verify command
 

@@ -28,7 +28,12 @@ export function walk(root, dir = '') {
   }
   return files;
 }
-export function git(root, args) { return execFileSync('git', ['-C', root, ...args], {encoding:'utf8', maxBuffer:64*1024*1024,stdio:['ignore','pipe','pipe']}); }
+// A checked repository controls its own .git/config, so every git call switches off the keys that run programs.
+const GIT_SAFE = ['-c', 'core.fsmonitor=false', '-c', 'core.hooksPath=/dev/null', '-c', 'core.untrackedCache=false'];
+/** @param {string} root @param {string[]} args @param {{input?:string|Buffer, encoding?:any, maxBuffer?:number}} [options] @returns {any} */
+export function git(root, args, {input, encoding = 'utf8', maxBuffer = 64*1024*1024} = {}) {
+  return execFileSync('git', [...GIT_SAFE, '-C', root, ...args], {encoding, input, maxBuffer, stdio:[input === undefined ? 'ignore' : 'pipe','pipe','pipe'], env:{...process.env, GIT_CONFIG_NOSYSTEM:'1', GIT_TERMINAL_PROMPT:'0'}});
+}
 export function publicFiles(root) {
   let current = resolve(root);
   while (!existsSync(join(current,'.git'))) {
@@ -36,7 +41,8 @@ export function publicFiles(root) {
     if (parent === current) return walk(root);
     current = parent;
   }
-  return [...new Set(git(root,['ls-files','-z','--cached','--others','--exclude-standard']).split('\0').filter(Boolean))];
+  const gitlinks = new Set(git(root,['ls-files','-s','-z']).split('\0').flatMap(record => { const m = record.match(/^(\d+) [0-9a-f]+ \d\t([\s\S]*)$/); return m?.[1] === '160000' ? [m[2]] : []; }));
+  return [...new Set(git(root,['ls-files','-z','--cached','--others','--exclude-standard']).split('\0').filter(file => file && !file.endsWith('/') && !gitlinks.has(file)))];
 }
 export function textFile(root,file) {
   const full = join(root,file), st = lstatSync(full);

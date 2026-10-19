@@ -17,6 +17,7 @@ import credits from './rules/credits.mjs';
 import set from './rules/set.mjs';
 import online,{ OfflineError } from './online.mjs';
 import { summarize } from './report.mjs';
+const manifestRules=new Set(['A_CMD','R_DESC','R_META','R_VERSION','R_FILES','O_REGISTRY']);
 export const rules=[...people,...agents,...engines,...registries,...workflows,...privacy,...proof,...credits,...set,...online];
 export function createContext(root,options={}) {
   root=resolve(root);if(!existsSync(root)||!statSync(root).isDirectory())throw Error('Check path must be a directory.');
@@ -37,8 +38,14 @@ export async function check(root='.',options={}) {
     if(c.config.disable?.[r.id]){results.push({...base,status:'OFF',message:c.config.disable[r.id]});continue;}
     if(r.id==='S_STALE'&&c.env.CI){results.push({...base,status:'NOT APPLICABLE',message:'maintainer-run only'});continue;}
     if(!r.applies(c)){results.push({...base,status:'NOT APPLICABLE',message:'This artifact is outside the selected profile.'});continue;}
-    if(r.id.startsWith('W_')&&c.workflows.some(w=>w.unreadable)){for(const w of c.workflows.filter(w=>w.unreadable))results.push({...base,status:'SKIPPED',file:w.file,message:`UNREADABLE: ${w.error}`});continue;}
-    try{const findings=await r.run(c);if(!findings.length)results.push({...base,status:'PASS',message:r.pass});else for(const f of findings){const row={...base,...f};if(row.status==='FAIL'&&row.severity==='warn')row.status='WARN';results.push(row);}}
+    if(manifestRules.has(r.id)&&c.pyprojectError&&!c.pkg){results.push({...base,status:'SKIPPED',file:'pyproject.toml',message:`UNREADABLE: pyproject.toml: ${c.pyprojectError}`});continue;}
+    let view=c;
+    if(r.id.startsWith('W_')){
+      for(const w of c.workflows.filter(w=>w.unreadable))results.push({...base,status:'SKIPPED',file:w.file,message:`UNREADABLE: ${w.error}`});
+      view={...c,workflows:c.workflows.filter(w=>!w.unreadable)};
+      if(!view.workflows.length)continue;
+    }
+    try{const findings=await r.run(view);if(!findings.length)results.push({...base,status:'PASS',message:r.pass});else for(const f of findings){const row={...base,...f};if(row.status==='FAIL'&&row.severity==='warn')row.status='WARN';results.push(row);}}
     catch(e){if(e instanceof OfflineError){unreachable=true;results.push({...base,status:'SKIPPED',message:e.message});}else results.push({...base,status:'SKIPPED',message:`UNREADABLE: ${e.message}`});}
   }
   const summary=summarize(results);return {version:VERSION,profile:c.pkg?'npm':c.pyproject?'pypi':'repository',results,summary,exitCode:unreachable?3:summary.fail||options.strict&&summary.skipped?1:0};

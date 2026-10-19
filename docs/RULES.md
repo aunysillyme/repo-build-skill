@@ -216,7 +216,7 @@ Reader: registries. Stage: 06-release. Severity: error.
 
 Why: Identity permission belongs to the release step that needs it.
 
-Pass: Only a job named publish declares id-token: write.
+Pass: Only a job named publish declares id-token: write, and it runs no install, build or package script.
 
 Learn: [Stage reference](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/06-release.md#gate)
 
@@ -246,7 +246,7 @@ Reader: registries. Stage: 03-scaffold. Severity: error.
 
 Why: Untrusted event text must not become shell code.
 
-Pass: No github.event interpolation appears in run values.
+Pass: No event, head_ref or input interpolation appears in run values or github-script bodies.
 
 Learn: [Stage reference](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/03-scaffold.md#gate)
 
