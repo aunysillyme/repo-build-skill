@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import { VERSION } from '../src/constants.mjs';
 import { parseWorkflow } from '../src/readers/workflow.mjs';
 import { frontmatter } from '../src/readers/markdown.mjs';
+import { npmCall } from '../src/npm.mjs';
 
 export const SCORER_VERSION = '1.0.0';
 export const QUESTION_KEYS = ['install', 'problem', 'audience', 'uninstall', 'test'];
@@ -122,9 +123,12 @@ export function scoreHonesty(input) {
   return { status: rows.every(row => row.status === 'PASS') ? 'PASS' : 'FAIL', value: rows.filter(row => row.status === 'PASS').length / Math.max(rows.length, 1), rows };
 }
 
+// Windows cannot start a process or find a profile directory without these four.
+export const platformEnv = (home, platform = process.platform, source = process.env) => platform === 'win32' ? { SystemRoot: source.SystemRoot ?? '', ComSpec: source.ComSpec ?? '', PATHEXT: source.PATHEXT ?? '', USERPROFILE: home } : {};
 // Produced code runs with PATH, a temporary HOME and LANG only, in a temporary copy of the tree.
 function execIn(command, args, cwd, run = spawnSync, env = {}) {
-  const call = run(command, args, { cwd, encoding: 'utf8', input: '', timeout: 120000, maxBuffer: 16 * 1024 * 1024, env });
+  const target = command === 'npm' ? npmCall(args) : { command, args, options: {} };
+  const call = run(target.command, target.args, { ...target.options, cwd, encoding: 'utf8', input: '', timeout: 120000, maxBuffer: 16 * 1024 * 1024, env });
   return { command: [command, ...args].join(' '), exitCode: call.status ?? 1, stdout: call.stdout || '', stderr: call.stderr || '', error: call.error?.message || null };
 }
 
@@ -135,7 +139,7 @@ export function externalProbes(source, { run = spawnSync } = {}) {
     const home = path.join(temp, 'home'), root = path.join(temp, 'work');
     mkdirSync(home);
     cpSync(realpathSync(source), root, { recursive: true, filter: file => !['.git', 'node_modules'].includes(path.basename(file)) && !lstatSync(file).isSymbolicLink() });
-    const env = { PATH: process.env.PATH ?? '', HOME: home, LANG: process.env.LANG ?? 'C.UTF-8' };
+    const env = { PATH: process.env.PATH ?? '', HOME: home, LANG: process.env.LANG ?? 'C.UTF-8', ...platformEnv(home) };
     const exec = (command, args, cwd, runner) => execIn(command, args, cwd, runner, env);
     const packed = exec('npm', ['pack', '--json', '--ignore-scripts', '--offline', '--no-update-notifier', '--pack-destination', temp], root, run);
     let packRows = [];

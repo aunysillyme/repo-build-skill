@@ -4,8 +4,8 @@
   "package_version": "0.1.0",
   "command": "check . --json",
   "entrypoint": "package bin declared in package.json",
-  "checked": "2026-10-19T04:01:51.921Z",
-  "checker_exit": 1,
+  "checked": "2026-10-19T04:08:45.547Z",
+  "checker_exit": 0,
   "automated": [
     {
       "id": "H_FLOOR",
@@ -74,10 +74,10 @@
       "severity": "error",
       "file": null,
       "line": null,
-      "why": "Later commands need only their explicit permissions.",
+      "why": "Later commands need only their explicit permissions, and a tag release must not restore a cache an earlier run could have poisoned.",
       "learn": "references/stages/03-scaffold.md#gate",
       "status": "PASS",
-      "message": "Each checkout step sets persist-credentials: false."
+      "message": "Each checkout step sets persist-credentials: false, and a tag-triggered workflow turns package-manager caching off."
     },
     {
       "id": "W_INJECT",
@@ -132,60 +132,12 @@
       "reader": "registries",
       "stage": "03-scaffold",
       "severity": "error",
-      "file": "src/readers/markdown.mjs",
-      "line": 2,
+      "file": null,
+      "line": null,
       "why": "Private names are supplied locally by the maintainer.",
       "learn": "references/stages/03-scaffold.md#gate",
-      "status": "FAIL",
-      "message": "Remove the private-list match."
-    },
-    {
-      "id": "P_LIST",
-      "reader": "registries",
-      "stage": "03-scaffold",
-      "severity": "error",
-      "file": "src/readers/markdown.mjs",
-      "line": 21,
-      "why": "Private names are supplied locally by the maintainer.",
-      "learn": "references/stages/03-scaffold.md#gate",
-      "status": "FAIL",
-      "message": "Remove the private-list match."
-    },
-    {
-      "id": "P_LIST",
-      "reader": "registries",
-      "stage": "03-scaffold",
-      "severity": "error",
-      "file": "src/readers/workflow.mjs",
-      "line": 1,
-      "why": "Private names are supplied locally by the maintainer.",
-      "learn": "references/stages/03-scaffold.md#gate",
-      "status": "FAIL",
-      "message": "Remove the private-list match."
-    },
-    {
-      "id": "P_LIST",
-      "reader": "registries",
-      "stage": "03-scaffold",
-      "severity": "error",
-      "file": "test/readers.test.mjs",
-      "line": 12,
-      "why": "Private names are supplied locally by the maintainer.",
-      "learn": "references/stages/03-scaffold.md#gate",
-      "status": "FAIL",
-      "message": "Remove the private-list match."
-    },
-    {
-      "id": "P_LIST",
-      "reader": "registries",
-      "stage": "03-scaffold",
-      "severity": "error",
-      "file": "test/readers.test.mjs",
-      "line": 67,
-      "why": "Private names are supplied locally by the maintainer.",
-      "learn": "references/stages/03-scaffold.md#gate",
-      "status": "FAIL",
-      "message": "Remove the private-list match."
+      "status": "PASS",
+      "message": "Untracked list files contain no matches in the public tree or history."
     }
   ],
   "manual": [

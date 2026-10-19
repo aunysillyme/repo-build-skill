@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdirSync,writeFileSync,realpathSync } from 'node:fs';
 import { join } from 'node:path';
-import { externalProbes } from '../evals/score.mjs';
+import { externalProbes,platformEnv } from '../evals/score.mjs';
 import { temporary } from './support.mjs';
 const canaries=['SCRUB_PROBE_ONE','SCRUB_PROBE_TWO'];
 test('scorer executions of produced code see only PATH, a temporary HOME and LANG, from a temporary copy',t=>{
@@ -15,8 +15,13 @@ test('scorer executions of produced code see only PATH, a temporary HOME and LAN
   const help=rows.find(row=>row.id==='binary-help'&&row.probe?.stdout);
   assert.ok(help,JSON.stringify(rows.map(r=>[r.id,r.status,r.message])));
   const seen=JSON.parse(help.probe.stdout.trim().split('\n').at(-1));
-  assert.deepEqual(seen.keys.filter(key=>!['PATH','HOME','LANG','__CF_USER_TEXT_ENCODING'].includes(key)),[],'no variable beyond PATH, HOME and LANG (macOS adds one platform variable itself)');
+  assert.deepEqual(seen.keys.filter(key=>!['PATH','HOME','LANG','__CF_USER_TEXT_ENCODING',...Object.keys(platformEnv('home'))].includes(key)),[],'no variable beyond PATH, HOME and LANG (macOS adds one platform variable itself)');
   for(const key of canaries)assert.ok(!seen.keys.includes(key),key);
   assert.ok(seen.keys.includes('PATH'));assert.notEqual(seen.home,process.env.HOME);
   assert.ok(!seen.cwd.startsWith(root),`cwd ${seen.cwd} is not the checked tree`);
+});
+test('Windows adds only the four variables a process needs, and other platforms add none',()=>{
+  const source={SystemRoot:'C:\\Windows',ComSpec:'cmd.exe',PATHEXT:'.EXE',TOKEN_LIKE:'leaks'};
+  assert.deepEqual(platformEnv('H','win32',source),{SystemRoot:'C:\\Windows',ComSpec:'cmd.exe',PATHEXT:'.EXE',USERPROFILE:'H'});
+  assert.deepEqual(platformEnv('H','linux',source),{});
 });

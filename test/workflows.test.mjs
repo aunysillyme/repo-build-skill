@@ -273,3 +273,16 @@ test('the PyPI template publishes with the pinned official action and runs no in
   assert.ok(steps.every(step=>step.run===undefined),'the publish job has no run step');
   assert.equal(parsed.data.jobs.publish.permissions['id-token'],'write');
 });
+
+const setupStep = (action, key, lines = '') => `      - uses: actions/${action}@${sha('c')} # v7.1.0\n        with:\n          ${key}: 24\n${lines}`;
+const tagged = (step, trigger = "  push:\n    tags: ['v*']\n") => `name: t\non:\n${trigger}permissions:\n  contents: read\njobs:\n${job(pinned() + step)}`;
+test('W_CREDS fails a tag workflow whose setup step leaves package caching on, and passes with it off', async () => {
+  const off = '          package-manager-cache: false\n';
+  assert.equal((await run('W_CREDS', tagged(setupStep('setup-node', 'node-version')))).length, 1, 'omitted key');
+  assert.equal((await run('W_CREDS', tagged(setupStep('setup-node', 'node-version', off + '          cache: npm\n')))).length, 1, 'explicit cache input');
+  assert.deepEqual(await run('W_CREDS', tagged(setupStep('setup-node', 'node-version', off))), []);
+  assert.equal((await run('W_CREDS', tagged(setupStep('setup-python', 'python-version', '          cache: pip\n')))).length, 1);
+  assert.deepEqual(await run('W_CREDS', tagged(setupStep('setup-python', 'python-version'))), []);
+  const branchOnly = tagged(setupStep('setup-node', 'node-version'), "  push:\n    branches: [main]\n");
+  assert.deepEqual(await run('W_CREDS', branchOnly), [], 'a workflow without a tag trigger is outside this check');
+});

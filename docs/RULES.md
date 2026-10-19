@@ -230,13 +230,13 @@ Pass: Every remote action uses forty hex characters and a version comment.
 
 Learn: [Stage reference](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/03-scaffold.md#gate)
 
-## W_CREDS: Checkout leaves credentials out of git
+## W_CREDS: Keep credentials and caches out of release runs
 
 Reader: registries. Stage: 03-scaffold. Severity: error.
 
-Why: Later commands need only their explicit permissions.
+Why: Later commands need only their explicit permissions, and a tag release must not restore a cache an earlier run could have poisoned.
 
-Pass: Each checkout step sets persist-credentials: false.
+Pass: Each checkout step sets persist-credentials: false, and a tag-triggered workflow turns package-manager caching off.
 
 Learn: [Stage reference](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/03-scaffold.md#gate)
 

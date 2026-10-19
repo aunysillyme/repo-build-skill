@@ -290,12 +290,12 @@
     },
     {
       "path": "assets/workflows/check-minimal.yml",
-      "sha256": "0de2d4e25b3244164a04d0a44b78ec8d18d3b85bee5458019ebbc07524b39524",
+      "sha256": "cf3c6906d4efc525e7102f7bab0df0d59cce520dfe216d405b761285f631a6f0",
       "kind": "asset"
     },
     {
       "path": "assets/workflows/release-npm.yml",
-      "sha256": "812ce730865ac88c04f9beda66481242a380969cb51a2bd0ef5a57ec795b894a",
+      "sha256": "bd1caf46bf386d299b9648f1151ab38b0f64165b5a7254fe8a9c8d377c7fdbf2",
       "kind": "asset"
     },
     {
@@ -305,7 +305,7 @@
     },
     {
       "path": "assets/workflows/repo-health.yml",
-      "sha256": "86c95f10a68b81593b4cd9b3169e0c4d2c8c255b9b56b0b55998636eb40f33d8",
+      "sha256": "404bc181eb174f1277fe6d5aded964fecc6349b7290da4632725ad0e879c8382",
       "kind": "asset"
     },
     {
@@ -395,7 +395,7 @@
     },
     {
       "path": "references/stages/03-scaffold.md",
-      "sha256": "73820aa8461aec0bf0b999244fbcacb1e7777cb0fa93ef64e2dd4162c397013e",
+      "sha256": "00e5f342ab228a9299ad75fe8329e356168c740396817e47f2ca7cf930fdfc2b",
       "kind": "stage"
     },
     {
