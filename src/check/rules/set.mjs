@@ -1,0 +1,7 @@
+import { rule,fail } from '../rule.mjs';
+import { readOptional,jsonOptional,digest } from '../../io.mjs';
+import { request } from '../online.mjs';
+export default [
+rule('S_DRIFT','registries','09-maintain','Rendered set blocks match the vendor files','One renderer keeps related repository descriptions aligned.','README, llms.txt and renderer hash equal the vendored contract.',async c=>{const {checkSet}=await import('../../set.mjs');const r=checkSet(c.root);return r.code===0?[]:[fail('.repo-build/set.json',r.message||'Set blocks or renderer differ from their lock.')];},{applies:c=>c.exists('.repo-build/set.json')}),
+rule('S_STALE','registries','09-maintain','The set lock matches its source','A maintainer can refresh an adopted set when its source changes.','The fetched source hash equals the lock hash.',async c=>{if(c.env.CI)return [{status:'NOT APPLICABLE',message:'maintainer-run only'}];const lock=jsonOptional(c.root,'.repo-build/set.lock.json');if(!lock?.source)return [fail('.repo-build/set.lock.json','Record the set source.')];const text=await request(c,lock.source,{raw:true});return text!==null&&digest(text)===lock.sha256?[]:[fail('.repo-build/set.lock.json','The source set changed; run set sync.')];},{mode:'online',applies:c=>c.exists('.repo-build/set.json')})
+];

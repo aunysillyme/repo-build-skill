@@ -1,0 +1,12 @@
+{
+  "id": "A_SKILL_SPEC",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": "skills/sample-skill/SKILL.md",
+      "find": "name: sample-skill",
+      "value": "name: OtherSkill"
+    }
+  ]
+}

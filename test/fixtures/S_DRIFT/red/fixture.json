@@ -1,0 +1,12 @@
+{
+  "id": "S_DRIFT",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": "README.md",
+      "find": "Peer package.",
+      "value": "Changed peer copy."
+    }
+  ]
+}

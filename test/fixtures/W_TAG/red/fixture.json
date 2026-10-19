@@ -1,0 +1,12 @@
+{
+  "id": "W_TAG",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": ".github/workflows/release.yml",
+      "find": "test \"$GITHUB_REF_NAME\"",
+      "value": "echo \"$GITHUB_REF_NAME\""
+    }
+  ]
+}

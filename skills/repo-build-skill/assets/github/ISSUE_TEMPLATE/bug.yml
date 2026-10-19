@@ -1,0 +1,26 @@
+name: Bug report
+description: Report a reproducible failure.
+title: 'Bug: '
+labels:
+  - bug
+body:
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+      description: Include the command, full error and runtime version. Remove private data.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Share a small public or synthetic example.
+    validations:
+      required: true

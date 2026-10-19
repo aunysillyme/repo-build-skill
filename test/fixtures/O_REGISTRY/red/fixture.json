@@ -1,0 +1,8 @@
+{
+  "id": "O_REGISTRY",
+  "state": "red",
+  "operations": [],
+  "online": {
+    "registryDescription": "A different registry description."
+  }
+}

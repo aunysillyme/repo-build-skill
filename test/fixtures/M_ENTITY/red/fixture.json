@@ -1,0 +1,12 @@
+{
+  "id": "M_ENTITY",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": "README.md",
+      "find": "# sample-tool",
+      "value": "# other-tool"
+    }
+  ]
+}

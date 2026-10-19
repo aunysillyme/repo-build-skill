@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "rows": [
+    {
+      "name": "NAME",
+      "url": "https://github.com/OWNER/NAME",
+      "line": "DESCRIPTION"
+    }
+  ]
+}

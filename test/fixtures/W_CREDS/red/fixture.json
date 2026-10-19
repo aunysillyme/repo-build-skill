@@ -1,0 +1,12 @@
+{
+  "id": "W_CREDS",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": ".github/workflows/release.yml",
+      "find": "persist-credentials: false",
+      "value": "persist-credentials: true"
+    }
+  ]
+}

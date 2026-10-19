@@ -1,0 +1,12 @@
+{
+  "id": "M_LLMS_LEAD",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": "llms.txt",
+      "find": "> Sample tool turns a label into a greeting.",
+      "value": "> A different product definition."
+    }
+  ]
+}

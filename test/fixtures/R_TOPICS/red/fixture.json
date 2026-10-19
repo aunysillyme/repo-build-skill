@@ -1,0 +1,16 @@
+{
+  "id": "R_TOPICS",
+  "state": "red",
+  "operations": [
+    {
+      "op": "json",
+      "file": ".repo-build/facts.json",
+      "keys": [
+        "topics"
+      ],
+      "value": [
+        "Bad topic"
+      ]
+    }
+  ]
+}

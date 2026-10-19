@@ -1,0 +1,432 @@
+{
+  "name": "repo-build-skill",
+  "packageVersion": "0.1.0",
+  "budgets": {
+    "skillMd": 6144,
+    "skillMdLines": 120,
+    "askDate": 2048,
+    "stage": 8192,
+    "card": 5120,
+    "largestRoute": 26624,
+    "folder": 204800
+  },
+  "routes": [
+    {
+      "id": "01-frame",
+      "name": "Frame",
+      "file": "references/stages/01-frame.md",
+      "cards": [
+        "references/readers/people.md",
+        "references/acceptance-checks.md"
+      ],
+      "gate": "FR"
+    },
+    {
+      "id": "02-stack",
+      "name": "Stack card",
+      "file": "references/stages/02-stack.md",
+      "cards": [
+        "assets/stack-card.md",
+        "references/installer.md"
+      ],
+      "gate": "ST"
+    },
+    {
+      "id": "03-scaffold",
+      "name": "Scaffold",
+      "file": "references/stages/03-scaffold.md",
+      "cards": [
+        "assets/github/SECURITY.md",
+        "assets/github/CONTRIBUTING.md"
+      ],
+      "gate": "SC"
+    },
+    {
+      "id": "04-write",
+      "name": "README / AGENTS.md / llms.txt",
+      "file": "references/stages/04-write.md",
+      "cards": [
+        "references/readers/agents.md",
+        "references/readers/answer-engines.md"
+      ],
+      "gate": "WR"
+    },
+    {
+      "id": "05-discover",
+      "name": "SEO and AEO for repos",
+      "file": "references/stages/05-discover.md",
+      "cards": [
+        "references/discoverability.md"
+      ],
+      "gate": "DI"
+    },
+    {
+      "id": "06-release",
+      "name": "Release with trusted publishing",
+      "file": "references/stages/06-release.md",
+      "cards": [
+        "references/release/contract.md",
+        "references/release/npm.md"
+      ],
+      "gate": "RL"
+    },
+    {
+      "id": "07-site",
+      "name": "Product site",
+      "file": "references/stages/07-site.md",
+      "cards": [
+        "references/readers/answer-engines.md"
+      ],
+      "gate": "PS"
+    },
+    {
+      "id": "08-launch",
+      "name": "Launch venues",
+      "file": "references/stages/08-launch.md",
+      "cards": [
+        "references/launch-venues.md"
+      ],
+      "gate": "LA"
+    },
+    {
+      "id": "09-maintain",
+      "name": "Maintenance",
+      "file": "references/stages/09-maintain.md",
+      "cards": [
+        "references/readers/registries.md"
+      ],
+      "gate": "MA"
+    }
+  ],
+  "gates": {
+    "01-frame": {
+      "manual": [
+        {
+          "check": "FR_ACCEPTANCE",
+          "reject": "Acceptance checks lack verifiers.",
+          "evidence": "Owner quotes and command output.",
+          "hands": false,
+          "waivable": false
+        }
+      ]
+    },
+    "02-stack": {
+      "manual": []
+    },
+    "03-scaffold": {
+      "manual": [
+        {
+          "check": "SC_PUBLIC",
+          "reject": "The public flip settings await owner action.",
+          "evidence": "Dated public settings read-back.",
+          "hands": true,
+          "waivable": false
+        }
+      ]
+    },
+    "04-write": {
+      "manual": []
+    },
+    "05-discover": {
+      "manual": []
+    },
+    "06-release": {
+      "manual": [
+        {
+          "check": "RL_FIRST",
+          "reject": "The first registry publish awaits owner action.",
+          "evidence": "Registry version response.",
+          "hands": true,
+          "waivable": false
+        },
+        {
+          "check": "RL_TRUST",
+          "reject": "Trusted publisher setup awaits owner action.",
+          "evidence": "Exact workflow identity and trust read-back.",
+          "hands": true,
+          "waivable": false
+        },
+        {
+          "check": "RL_REVIEW",
+          "reject": "Independent review is unresolved.",
+          "evidence": "Review result or owner, reason and date for WAIVED.",
+          "hands": false,
+          "waivable": true
+        }
+      ]
+    },
+    "07-site": {
+      "manual": []
+    },
+    "08-launch": {
+      "manual": [
+        {
+          "check": "LA_VENUE",
+          "reject": "Venue submissions await owner action.",
+          "evidence": "Submission URL or owner, reason and date for WAIVED.",
+          "hands": true,
+          "waivable": true
+        },
+        {
+          "check": "LA_LISTING",
+          "reject": "Marketplace listing awaits owner submission.",
+          "evidence": "Complete listing and submission receipt.",
+          "hands": true,
+          "waivable": false
+        }
+      ]
+    },
+    "09-maintain": {
+      "manual": []
+    }
+  },
+  "topics": {
+    "floor": "references/stages/03-scaffold.md#do",
+    "stack-card": "assets/stack-card.md#stack-card",
+    "settings-at-flip": "references/stages/03-scaffold.md#owners-hands",
+    "installer": "references/installer.md#installer",
+    "acceptance-checks": "references/acceptance-checks.md#acceptance-checks",
+    "trailer": "references/stages/04-write.md#do",
+    "discoverability": "references/discoverability.md#discoverability",
+    "release-contract": "references/release/contract.md#release-contract",
+    "launch": "references/launch-venues.md#launch-venues",
+    "maintenance": "references/stages/09-maintain.md#do"
+  },
+  "assets": [
+    {
+      "path": "SKILL.md",
+      "sha256": "f475e76487ff7ca851e14eeb4fde56e0a69d08e483ba8fa5d8ff8411c1b92f4e",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/agents-md-skeleton.md",
+      "sha256": "788b4efdf7b00c9deb685363fcdfa86da9aeec86f1a19fc111becba0c20a9371",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/facts.template.json",
+      "sha256": "6f7bca4b64f014b3d2a04e3e1d39cf292f8c47bee6f2d5c4e73ab61dfaa90fa5",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/github/CONTRIBUTING.md",
+      "sha256": "b1279ed8b1cf2c663a850557019b1d10a0456216378354433843170704d2916a",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/github/ISSUE_TEMPLATE/bug.yml",
+      "sha256": "3424cdfffb49a3ab5fcc8ef0223ac1e7c5882f2d503a220ea5b6b32c2d47d5aa",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/github/ISSUE_TEMPLATE/config.yml",
+      "sha256": "6dffce6746652114e2044a826aab29119b0bc0f417a2d832db5107476bf127ba",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/github/ISSUE_TEMPLATE/false-positive.yml",
+      "sha256": "67fe7e0fe5e94926fea8e8beb1a37e86acc840c116028a6d82be5651bf5e769f",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/github/ISSUE_TEMPLATE/feature.yml",
+      "sha256": "c310c601acda6d3913297cdb3b2aeaf12c0fc28aa97ef3bfd1245058e03268ca",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/github/ISSUE_TEMPLATE/rule-request.yml",
+      "sha256": "b5559a85a13f8fb048d0f4d49a7f77e298a24f29369741df8fe66e9aa73bf705",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/github/SECURITY.md",
+      "sha256": "7684bdb95835df0be25656c488cd13b89c173bd19817ae18a81039546b71727f",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/github/pull_request_template.md",
+      "sha256": "db9f91374dbedbb5c04c18ff7db1c44f8d7b3a54648a6a2fcef44e57b4c6fc7b",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/launch-ledger.md",
+      "sha256": "3abea159f93daecac23aa152e6e2260adb4d19d5b76f855bd1f75eb2d40b46f0",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/llms-txt-skeleton.txt",
+      "sha256": "ca63bb9d6ac6146b421848aade677fe804841a17e6e297ab27b3383446eed5d3",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/proof-results.template.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/readme-skeleton.md",
+      "sha256": "517418f281f2bea8c2ddac49f7592cb167c831c559ad57d06706e6745500c4af",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/receipt-template.json",
+      "sha256": "080ec77da5cbf8ee6a1a1990d520eecdb257ac7a937c3a5f88fd1eb8444851da",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/set.template.json",
+      "sha256": "097ff6121426ff849e3c0b9d1012feff696de1b57a769713c8b07423d2ddab3e",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/sources.template.md",
+      "sha256": "cb9a87437d36d0d9826dc093e326093436e7cce2b198f44853e3105c58ca0f9d",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/stack-card.md",
+      "sha256": "82dcdf4bbbc1bb98ca655f0b33da089264106ba8c083f99234a0a640141b7c0f",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/workflows/check-minimal.yml",
+      "sha256": "0de2d4e25b3244164a04d0a44b78ec8d18d3b85bee5458019ebbc07524b39524",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/workflows/release-npm.yml",
+      "sha256": "86b89c7e67b4d64f71956d2bb07ebcbc6ca486e801d02b77acf148f879450be7",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/workflows/release-pypi.yml",
+      "sha256": "102d1e6561bb202b0d58a9a4ea706373e46e90fa4a4fac09b02271fa48e9baa3",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/workflows/repo-health.yml",
+      "sha256": "86c95f10a68b81593b4cd9b3169e0c4d2c8c255b9b56b0b55998636eb40f33d8",
+      "kind": "asset"
+    },
+    {
+      "path": "references/acceptance-checks.md",
+      "sha256": "e8e09e03be54fc997860744f043cc9ea4d506214ae741c2e14b09c2e6aceca8a",
+      "kind": "card"
+    },
+    {
+      "path": "references/ask-date.md",
+      "sha256": "8dcc89c4f9e3007564d2341174545d8976fca7ff3f4d97282b6cbe53307da90b",
+      "kind": "card"
+    },
+    {
+      "path": "references/discoverability.md",
+      "sha256": "1d0e9693752a271eea022d47b976e7c69d5c94e8fb05703f76966226d6258a31",
+      "kind": "card"
+    },
+    {
+      "path": "references/installer.md",
+      "sha256": "b7646d076b1fcec0fa8559fedeb56e46302d569206830babb0f7b3b057373f55",
+      "kind": "card"
+    },
+    {
+      "path": "references/launch-venues.md",
+      "sha256": "49ba97ef35939469dddaa779068a969721eaf4f712919193d3c99fa8ac668711",
+      "kind": "card"
+    },
+    {
+      "path": "references/readers/agents.md",
+      "sha256": "b49bb2ee083d04047f43d9426f38ab8e6f7218e6e65138b0109871aa0b879e20",
+      "kind": "card"
+    },
+    {
+      "path": "references/readers/answer-engines.md",
+      "sha256": "9aee09ce117c97b37593b1435a6485f6a8c385adf3d7b1c8385f885c0fc37ce2",
+      "kind": "card"
+    },
+    {
+      "path": "references/readers/people.md",
+      "sha256": "7f3cc113f0c05603ab853df659bd9f08e7210b42799c5b5b5a33e2a0b1044f8d",
+      "kind": "card"
+    },
+    {
+      "path": "references/readers/registries.md",
+      "sha256": "d2166f0532d55c7ead88fd31da4aad3335891f46b855296d0df487053e91c66d",
+      "kind": "card"
+    },
+    {
+      "path": "references/release/binaries.md",
+      "sha256": "56a753b3ba26c9e9f89e7a99d485476ef4666c670e04764953aab4f3caaba2a4",
+      "kind": "card"
+    },
+    {
+      "path": "references/release/contract.md",
+      "sha256": "6f7ce70441e78049aac79899155521d8a57a2e21715816747ebbc728c399449e",
+      "kind": "card"
+    },
+    {
+      "path": "references/release/npm.md",
+      "sha256": "3d0fdec61d86b18c983b7cb5b4a41b69479f042336a8be70c639876bf57bc3a1",
+      "kind": "card"
+    },
+    {
+      "path": "references/release/pypi.md",
+      "sha256": "7e3e8559e73277ee2b0cc0524478b18e54c18a6fa64fa19106bc4b8ad3508db6",
+      "kind": "card"
+    },
+    {
+      "path": "references/release/skills-and-plugins.md",
+      "sha256": "f979872fbe8019c494875d681511bb6e405a8a94e084c0262e9b55944ebb57f4",
+      "kind": "card"
+    },
+    {
+      "path": "references/release/workers.md",
+      "sha256": "2426c63406505a07dc82bce7755c685f28fa0aebeed4d11b6d756b76bd3fac7d",
+      "kind": "card"
+    },
+    {
+      "path": "references/stages/01-frame.md",
+      "sha256": "8dcf69d154ecc74018bb877964288138c4cdbcd33f845b74e3c6912911303224",
+      "kind": "stage"
+    },
+    {
+      "path": "references/stages/02-stack.md",
+      "sha256": "c0b740064352213f26974d8a481df1a1960013c394e6548472c02b54f4acad3b",
+      "kind": "stage"
+    },
+    {
+      "path": "references/stages/03-scaffold.md",
+      "sha256": "6aa543ee6240f1183d9cdc59cca441992f3c1c5b29732ff4b9054a091064ca7c",
+      "kind": "stage"
+    },
+    {
+      "path": "references/stages/04-write.md",
+      "sha256": "bd09a73ff43e3eb4cd208d180f2045f070daac88f5f1ff042e43ec3935136e7f",
+      "kind": "stage"
+    },
+    {
+      "path": "references/stages/05-discover.md",
+      "sha256": "1b4d165c39acb7683adee3d26a114a268e252e3cf2c6d18c3512f6542d319b27",
+      "kind": "stage"
+    },
+    {
+      "path": "references/stages/06-release.md",
+      "sha256": "c0e23ea193d1f207f5f8e5d10812c40392896b3dfc612f3b5422e609c500d421",
+      "kind": "stage"
+    },
+    {
+      "path": "references/stages/07-site.md",
+      "sha256": "51c492d40aaa6577e279377da46f11560220877b5a82a510893e72f9bfcf0870",
+      "kind": "stage"
+    },
+    {
+      "path": "references/stages/08-launch.md",
+      "sha256": "6112f128fafda905c3af1cd41e5f2adfb1d038b09718ac086f82f71f4b1f290a",
+      "kind": "stage"
+    },
+    {
+      "path": "references/stages/09-maintain.md",
+      "sha256": "06001567ac130da28bb9cd7ac515fe820b8d2bd93a9e124a49a256f1f348868c",
+      "kind": "stage"
+    }
+  ]
+}

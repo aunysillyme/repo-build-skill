@@ -1,0 +1,93 @@
+# OWNER is the maintainer. NAME is the installed checker package and command.
+# Pin CHECKER_VERSION to the version reviewed for this repository.
+name: Repository health
+
+on:
+  schedule:
+    - cron: '47 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repo-health
+  cancel-in-progress: false
+
+env:
+  CHECKER_OWNER: OWNER
+  CHECKER_PACKAGE: NAME
+  CHECKER_VERSION: '0.1.0'
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: Read public parity and the vendored set lock
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CI: 'true'
+        run: |
+          set +e
+          npm exec --yes --package="$CHECKER_PACKAGE@$CHECKER_VERSION" -- "$CHECKER_PACKAGE" check . --online --json > "$RUNNER_TEMP/repo-health.json"
+          result=$?
+          set -e
+          if [ "$result" -eq 2 ]; then exit 2; fi
+          test -s "$RUNNER_TEMP/repo-health.json"
+      - name: Maintain one health issue
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs/promises';
+          import path from 'node:path';
+          const report = JSON.parse(await fs.readFile(path.join(process.env.RUNNER_TEMP, 'repo-health.json'), 'utf8'));
+          const codes = new Set(['O_ABOUT', 'O_REGISTRY', 'O_PVR', 'M_LLMS_SHAPE', 'M_LLMS_LEAD', 'M_ENTITY', 'R_DESC', 'R_META', 'R_VERSION', 'S_DRIFT']);
+          const problems = report.results.filter(row => codes.has(row.id) && ['FAIL', 'WARN', 'SKIPPED', 'UNREADABLE'].includes(row.status));
+          let facts;
+          try { facts = JSON.parse(await fs.readFile('.repo-build/facts.json', 'utf8')); }
+          catch (error) { if (error.code !== 'ENOENT') throw error; }
+          if (!facts?.homepage) problems.push({ id: 'HOMEPAGE', status: 'UNVERIFIED', message: 'Set facts.homepage.' });
+          else {
+            try {
+              const url = new URL(facts.homepage);
+              if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error('Use an HTTP URL with no embedded credentials.');
+              const response = await fetch(url.href, { signal: AbortSignal.timeout(15000) });
+              if (!response.ok) problems.push({ id: 'HOMEPAGE', status: 'FAIL', message: `HTTP ${response.status}` });
+              await response.body?.cancel();
+            } catch (error) { problems.push({ id: 'HOMEPAGE', status: 'UNVERIFIED', message: error.message }); }
+          }
+          const base = `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}`;
+          async function api(endpoint, method = 'GET', body) {
+            const response = await fetch(base + endpoint, {
+              method, headers: { authorization: `Bearer ${process.env.GITHUB_TOKEN}`, accept: 'application/vnd.github+json', 'x-github-api-version': '2022-11-28', 'content-type': 'application/json' },
+              body: body === undefined ? undefined : JSON.stringify(body), signal: AbortSignal.timeout(30000),
+            });
+            if (!response.ok) throw new Error(`GitHub ${method} ${endpoint}: ${response.status} ${await response.text()}`);
+            return response.status === 204 ? null : response.json();
+          }
+          const issues = (await api('/issues?labels=repo-health&state=open&per_page=100')).filter(issue => !issue.pull_request);
+          if (!problems.length) {
+            for (const issue of issues) await api(`/issues/${issue.number}`, 'PATCH', { state: 'closed', state_reason: 'completed' });
+          } else {
+            const body = ['Public listing and repository parity need review.', '', ...problems.map(row => `- ${row.status} ${row.id}: ${row.message}`), '', `Measured: ${new Date().toISOString()}`].join('\n');
+            if (!issues.length) {
+              const labels = await api('/labels?per_page=100');
+              if (!labels.some(label => label.name === 'repo-health')) await api('/labels', 'POST', { name: 'repo-health', color: 'd4c5f9' });
+              await api('/issues', 'POST', { title: 'Repository health needs review', body, labels: ['repo-health'] });
+            } else {
+              await api(`/issues/${issues[0].number}`, 'PATCH', { title: 'Repository health needs review', body });
+              for (const issue of issues.slice(1)) await api(`/issues/${issue.number}`, 'PATCH', { state: 'closed', state_reason: 'not_planned' });
+            }
+          }
+          NODE

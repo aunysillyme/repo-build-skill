@@ -1,0 +1,12 @@
+{
+  "id": "W_OIDC",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": ".github/workflows/release.yml",
+      "find": "  publish:\n",
+      "value": "  distribute:\n"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "A_AGENTS",
+  "state": "red",
+  "operations": [
+    {
+      "op": "write",
+      "file": "AGENTS.md",
+      "value": "# Agent guidance\n\n## Use\n\nRun npm test.\n"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P_PATH",
+  "state": "red",
+  "operations": [
+    {
+      "op": "append",
+      "file": "README.md",
+      "value": {
+        "parts": [
+          "\n",
+          "/",
+          "Users",
+          "/",
+          "private-person",
+          "/",
+          "project",
+          "\n"
+        ]
+      }
+    }
+  ]
+}

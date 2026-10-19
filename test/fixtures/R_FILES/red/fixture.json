@@ -1,0 +1,14 @@
+{
+  "id": "R_FILES",
+  "state": "red",
+  "operations": [
+    {
+      "op": "json",
+      "file": "package.json",
+      "keys": [
+        "files"
+      ],
+      "remove": true
+    }
+  ]
+}

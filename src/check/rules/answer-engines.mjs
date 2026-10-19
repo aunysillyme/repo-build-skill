@@ -1,0 +1,7 @@
+import { rule,fail,need } from '../rule.mjs';
+import { headings } from '../../readers/markdown.mjs';
+export default [
+rule('M_LLMS_SHAPE','answer-engines','04-write','A readable llms.txt index','Agents and search readers get a labelled map.','An H1, blockquote and sections with labelled absolute links exist.',c=>{const t=c.read('llms.txt'),hits=[];if(!/^#\s+\S/m.test(t)||!/^>\s+\S/m.test(t))hits.push(fail('llms.txt','Include an H1 and blockquote.'));const sections=t.split(/^##\s+/m).slice(1);if(!sections.length)hits.push(fail('llms.txt','Add linked sections.'));for(const s of sections)if(!/^- \[[^\]]+\]\(https?:\/\/[^)]+\)/m.test(s))hits.push(fail('llms.txt','Each section needs a labelled absolute link.'));return hits;}),
+rule('M_LLMS_LEAD','answer-engines','04-write','One lead across readers','A shared definition keeps summaries accurate.','The llms.txt blockquote equals facts.lead.',c=>need(c,['lead'],()=>c.read('llms.txt').split('\n').find(l=>/^>\s/.test(l))?.replace(/^>\s*/,'')===c.facts.lead?[]:[fail('llms.txt','Use the facts lead as the blockquote.')])),
+rule('M_ENTITY','answer-engines','05-discover','One product name','One entity name keeps registry and repository answers aligned.','README and llms.txt H1 headings equal the manifest product name.',c=>need(c,['name'],()=>['README.md','llms.txt'].flatMap(file=>headings(c.read(file)).find(h=>h.level===1)?.text===c.facts.name?[]:[fail(file,'Use the product name as the H1.')])))
+];

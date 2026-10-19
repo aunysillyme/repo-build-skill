@@ -1,0 +1,68 @@
+# Configure the npm trusted publisher for OWNER/NAME and this workflow filename.
+name: Release npm package
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Require tag equals version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(node -p "require('./package.json').version")"
+          test "$tag" = "$version"
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm test
+      - run: npm run build --if-present
+
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@12.2.0
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run build --if-present
+      - name: Pack once, test the tarball, publish the same tarball
+        run: |
+          set -eu
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(node -p "require('./package.json').version")"
+          test "$tag" = "$version"
+          tarball="$PWD/$(npm pack --silent)"
+          binary="$(node -p "const b=require('./package.json').bin; typeof b==='string' ? require('./package.json').name.split('/').pop() : Object.keys(b||{})[0] || ''")"
+          trial="$(mktemp -d)"
+          trap 'rm -rf "$trial"' EXIT
+          cd "$trial"
+          npm init -y > /dev/null
+          npm install --ignore-scripts --no-audit --no-fund "$tarball"
+          if [ -n "$binary" ]; then "./node_modules/.bin/$binary" --help; fi
+          cd "$GITHUB_WORKSPACE"
+          npm publish "$tarball" --provenance --access public

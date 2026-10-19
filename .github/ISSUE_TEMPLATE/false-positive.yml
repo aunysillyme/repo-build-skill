@@ -1,0 +1,27 @@
+name: Checker false positive
+description: Show a valid repository that a rule reports as failing.
+title: 'False positive: '
+labels:
+  - checker
+body:
+  - type: input
+    id: code
+    attributes:
+      label: Rule code
+      placeholder: W_PIN
+    validations:
+      required: true
+  - type: textarea
+    id: receipt
+    attributes:
+      label: Checker output
+      description: Include the JSON receipt and command. Remove private data.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Valid control
+      description: Share a small public or synthetic file and explain why it should pass.
+    validations:
+      required: true

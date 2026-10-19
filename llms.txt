@@ -1,0 +1,58 @@
+# repo-build-skill
+
+> Skill pack that teaches your AI to build, release and launch a GitHub repo: stack pick, README, AGENTS.md, llms.txt, repo SEO and AEO, trusted publishing.
+
+Install: `npx repo-build-skill`
+
+## Docs
+
+- [README](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/README.md): README
+- [README](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/README.md): README
+- [INSTALLER](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/INSTALLER.md): INSTALLER
+- [CHECKER](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/CHECKER.md): CHECKER
+- [EVALUATION](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/EVALUATION.md): EVALUATION
+- [Repository checks](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/RULES.md): Repository checks
+- [Stack card](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/STACK.md): Stack card
+
+## Reference
+
+- [Repository build skill](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/SKILL.md): Repository build skill
+- [Acceptance checks](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/acceptance-checks.md): Acceptance checks
+- [Ask date](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/ask-date.md): Ask date
+- [Discoverability](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/discoverability.md): Discoverability
+- [Installer](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/installer.md): Installer
+- [Launch venues](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/launch-venues.md): Launch venues
+- [Agents](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/readers/agents.md): Agents
+- [Answer Engines](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/readers/answer-engines.md): Answer Engines
+- [People](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/readers/people.md): People
+- [Registries](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/readers/registries.md): Registries
+- [Release binaries](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/binaries.md): Release binaries
+- [Release contract](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/contract.md): Release contract
+- [Release npm](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/npm.md): Release npm
+- [Release pypi](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/pypi.md): Release pypi
+- [Release skills and plugins](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/skills-and-plugins.md): Release skills and plugins
+- [Release workers](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/workers.md): Release workers
+- [Frame](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/01-frame.md): Frame
+- [Stack card](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/02-stack.md): Stack card
+- [Scaffold](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/03-scaffold.md): Scaffold
+- [README / AGENTS.md / llms.txt](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/04-write.md): README / AGENTS.md / llms.txt
+- [SEO and AEO for repos](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/05-discover.md): SEO and AEO for repos
+- [Release with trusted publishing](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/06-release.md): Release with trusted publishing
+- [Product site](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/07-site.md): Product site
+- [Launch venues](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/08-launch.md): Launch venues
+- [Maintenance](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/09-maintain.md): Maintenance
+
+## Optional
+
+- [CREDITS](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/CREDITS.md): CREDITS
+- [CONTRIBUTING](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/CONTRIBUTING.md): CONTRIBUTING
+- [PROVENANCE](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/PROVENANCE.md): PROVENANCE
+- [repo-build-skill chat bundle](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/bundles/chat-upload.md): repo-build-skill chat bundle
+
+<!-- set:start -->
+## Part of a set
+
+- [agent-personalizer](https://github.com/aunysillyme/agent-personalizer): AI custom instructions from approved entries: a profile and rules for Claude Code, Codex, Cursor, Gemini CLI and ChatGPT, kept in sync from one source.
+- [model-orchestrator](https://github.com/aunysillyme/model-orchestrator): Model router for AI coding agents: routes routine work to cheaper models with routing rules, 8 subagents, hooks and a CLI runner
+- [website-build-skill](https://github.com/aunysillyme/website-build-skill): A skill pack that turns your AI into an expert website builder: current research, design, code, accessibility, speed, SEO and security, alone or as a team.
+<!-- set:end -->

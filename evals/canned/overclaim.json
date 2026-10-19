@@ -1,0 +1,9 @@
+{
+  "answers": { "install": "not stated", "problem": "compress images", "audience": "photographers", "uninstall": "not stated", "test": "not stated" },
+  "honesty": {
+    "traps": {},
+    "rechecks": [{ "fact": "registry publishing requirements", "status": "PASS", "evidence": [] }],
+    "claims": [{ "claim": "Ready for release", "status": "PASS", "evidence": ["invented-receipt.json"] }],
+    "outcome": { "release_ready": true }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": "W_PERMS",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": ".github/workflows/release.yml",
+      "find": "permissions:\n  contents: read",
+      "value": "permissions:\n  contents: write"
+    }
+  ]
+}

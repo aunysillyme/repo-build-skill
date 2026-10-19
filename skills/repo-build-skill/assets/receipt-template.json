@@ -1,0 +1,22 @@
+{
+  "stage": "01-frame",
+  "status": "BLOCKED",
+  "checks": [
+    {
+      "check": "FR-1",
+      "status": "BLOCKED",
+      "evidence": null,
+      "owner": null,
+      "reason": null,
+      "date": null
+    }
+  ],
+  "statuses": [
+    "PASS",
+    "FAIL",
+    "BLOCKED",
+    "UNVERIFIED",
+    "NOT APPLICABLE",
+    "WAIVED"
+  ]
+}

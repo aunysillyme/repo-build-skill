@@ -1,0 +1,12 @@
+{
+  "id": "H_UNINSTALL",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": "README.md",
+      "find": "npm uninstall -g sample-tool",
+      "value": "Remove the global command."
+    }
+  ]
+}

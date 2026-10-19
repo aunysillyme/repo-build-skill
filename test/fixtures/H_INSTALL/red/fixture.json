@@ -1,0 +1,12 @@
+{
+  "id": "H_INSTALL",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": "README.md",
+      "find": "npx sample-tool",
+      "value": "node bin/sample.mjs"
+    }
+  ]
+}

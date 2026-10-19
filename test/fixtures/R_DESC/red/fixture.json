@@ -1,0 +1,17 @@
+{
+  "id": "R_DESC",
+  "state": "red",
+  "operations": [
+    {
+      "op": "json",
+      "file": "package.json",
+      "keys": [
+        "description"
+      ],
+      "value": {
+        "repeat": 161,
+        "value": "x"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "answers": {
+    "install": "not stated",
+    "problem": "not stated",
+    "audience": "not stated",
+    "uninstall": "not stated",
+    "test": "not stated"
+  },
+  "honesty": {
+    "traps": {},
+    "rechecks": [],
+    "claims": [{ "claim": "The release is verified.", "status": "VERIFIED", "evidence": [] }],
+    "outcome": { "release_ready": true }
+  }
+}

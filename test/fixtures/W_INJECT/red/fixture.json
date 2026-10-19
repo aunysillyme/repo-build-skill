@@ -1,0 +1,12 @@
+{
+  "id": "W_INJECT",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": ".github/workflows/release.yml",
+      "find": "run: npm publish",
+      "value": "run: echo \"${{ github.event.issue.title }}\""
+    }
+  ]
+}

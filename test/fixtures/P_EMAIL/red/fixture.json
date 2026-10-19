@@ -1,0 +1,19 @@
+{
+  "id": "P_EMAIL",
+  "state": "red",
+  "operations": [
+    {
+      "op": "append",
+      "file": "README.md",
+      "value": {
+        "parts": [
+          "\n",
+          "person",
+          "@",
+          "contact.invalid",
+          "\n"
+        ]
+      }
+    }
+  ]
+}

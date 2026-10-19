@@ -1,0 +1,15 @@
+{
+  "id": "F_PROOF",
+  "state": "red",
+  "operations": [
+    {
+      "op": "json",
+      "file": "proof/results.json",
+      "keys": [
+        "0",
+        "command"
+      ],
+      "remove": true
+    }
+  ]
+}

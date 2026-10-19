@@ -1,0 +1,11 @@
+{
+  "id": "A_CMD",
+  "state": "red",
+  "operations": [
+    {
+      "op": "append",
+      "file": "AGENTS.md",
+      "value": "\nRun `npm run lint`.\n"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "M_LLMS_SHAPE",
+  "state": "red",
+  "operations": [
+    {
+      "op": "write",
+      "file": "llms.txt",
+      "value": "# sample-tool\n\nRead the project guide.\n"
+    }
+  ]
+}

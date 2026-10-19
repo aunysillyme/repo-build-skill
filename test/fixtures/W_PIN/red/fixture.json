@@ -1,0 +1,12 @@
+{
+  "id": "W_PIN",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": ".github/workflows/release.yml",
+      "find": "@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "value": "@v7.0.1"
+    }
+  ]
+}

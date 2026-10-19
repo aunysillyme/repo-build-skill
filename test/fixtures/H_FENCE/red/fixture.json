@@ -1,0 +1,20 @@
+{
+  "id": "H_FENCE",
+  "state": "red",
+  "operations": [
+    {
+      "op": "append",
+      "file": "README.md",
+      "value": {
+        "parts": [
+          "\n```text\n",
+          {
+            "repeat": 9,
+            "value": "example\n"
+          },
+          "```\n"
+        ]
+      }
+    }
+  ]
+}

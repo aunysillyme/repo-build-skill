@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "commits": [
+    {
+      "message": "Start the calculation tool",
+      "files": [
+        { "path": "old-note.txt", "content_parts": ["// Local draft at ", "/", "Us", "ers", "/", "fixture-person", "/", "scratch", "\n"] },
+        { "path": "description-draft.txt", "repeat": { "text": "x", "count": 300 } }
+      ]
+    },
+    {
+      "message_parts": ["Draft for ", "cobalt", "-sparrow", "-secret"],
+      "files": [
+        { "path": "old-note.txt", "delete": true },
+        { "path": "description-draft.txt", "delete": true }
+      ]
+    }
+  ],
+  "tags": [
+    { "name": "draft-0", "message_parts": ["Synthetic ", "cobalt", "-sparrow", "-secret", " draft"] }
+  ]
+}

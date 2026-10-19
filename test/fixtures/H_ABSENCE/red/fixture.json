@@ -1,0 +1,11 @@
+{
+  "id": "H_ABSENCE",
+  "state": "red",
+  "operations": [
+    {
+      "op": "append",
+      "file": "README.md",
+      "value": "\n## Limits\n\nA section heading fixture.\n"
+    }
+  ]
+}

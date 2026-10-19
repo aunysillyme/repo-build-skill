@@ -1,0 +1,11 @@
+{
+  "id": "A_IMPORT",
+  "state": "red",
+  "operations": [
+    {
+      "op": "write",
+      "file": "CLAUDE.md",
+      "value": "# Host guidance\n\nRead AGENTS.md.\n"
+    }
+  ]
+}

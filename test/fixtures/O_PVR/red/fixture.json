@@ -1,0 +1,10 @@
+{
+  "id": "O_PVR",
+  "state": "red",
+  "operations": [],
+  "online": {
+    "pvr": {
+      "enabled": false
+    }
+  }
+}

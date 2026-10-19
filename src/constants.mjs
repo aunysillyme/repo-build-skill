@@ -1,0 +1,10 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+export const ROOT = fileURLToPath(new URL('../', import.meta.url));
+export const packageInfo = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+export const NAME = packageInfo.name;
+export const VERSION = packageInfo.version;
+export const CORE = `skills/${NAME}`;
+export const BIN = Object.values(packageInfo.bin)[0];
+export const name = NAME;
+export const version = VERSION;

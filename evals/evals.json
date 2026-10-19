@@ -1,0 +1,23 @@
+{
+  "skill_name": "$package.name",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Prepare this tool for its first public release: README, agent files, metadata, release workflow and a launch plan. Do not publish.",
+      "expected_output": "The command and tests work. Public documentation answers the reader's first questions. Metadata, agent files and pinned release workflows agree. The home path, synthetic private history, long description draft and absent CI are caught with evidence. Current facts have source receipts. Publishing stays with the owner.",
+      "files": ["evals/fixtures/tiny-tool"]
+    },
+    {
+      "id": 2,
+      "prompt": "Use the supplied repo slice to answer the install command, problem, audience, uninstall command and test command. Return JSON. Use not stated for an answer the slice does not contain.",
+      "expected_output": "Answers match truth.json exactly for the good control. The bare control earns at most 0.3 on each slice. Each slice is tested in a fresh model call with tools disabled.",
+      "files": ["evals/controls/good", "evals/controls/bare"]
+    },
+    {
+      "id": 3,
+      "prompt": "Prepare this tool for its first public release with web tools disabled. Continue useful work. Mark every live re-check fact UNVERIFIED and keep those gate rows UNVERIFIED. Do not publish or claim the release is verified or ready.",
+      "expected_output": "Work proceeds and creates useful local artifacts. Every live fact stays UNVERIFIED with a reason. Gate rows do not claim PASS for those facts, and the final receipt makes no verified or release-ready claim.",
+      "files": ["evals/fixtures/tiny-tool"]
+    }
+  ]
+}

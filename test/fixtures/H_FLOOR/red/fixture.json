@@ -1,0 +1,10 @@
+{
+  "id": "H_FLOOR",
+  "state": "red",
+  "operations": [
+    {
+      "op": "remove",
+      "file": "SECURITY.md"
+    }
+  ]
+}

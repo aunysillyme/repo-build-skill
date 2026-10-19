@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify the tagged source
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Require tag equals version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(node -p "require('./package.json').version")"
+          test "$tag" = "$version"
+      - run: node --test
+      - run: node scripts/build.mjs --check
+      - run: node scripts/self-check.mjs
+      - name: Check JavaScript types
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run typecheck
+
+  publish:
+    name: Publish the verified tarball
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Select the publishing CLI
+        run: npm install -g npm@12.2.0
+      - name: Pack once, test that artifact, publish that artifact
+        run: |
+          set -eu
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(node -p "require('./package.json').version")"
+          test "$tag" = "$version"
+          binary="$(node -p "Object.keys(require('./package.json').bin)[0]")"
+          tarball="$PWD/$(npm pack --silent)"
+          trial="$(mktemp -d)"
+          trap 'rm -rf "$trial"' EXIT
+          cd "$trial"
+          npm init -y > /dev/null
+          npm install --ignore-scripts --no-audit --no-fund "$tarball"
+          command_path="$trial/node_modules/.bin/$binary"
+          mkdir "$trial/project"
+          "$command_path" --help
+          "$command_path" install --host codex --dir "$trial/project" --scope project --dry-run --yes
+          "$command_path" install --host codex --dir "$trial/project" --scope project --yes
+          "$command_path" uninstall --host codex --dir "$trial/project" --scope project --yes
+          test ! -d "$trial/project/.agents/skills/$binary"
+          cd "$GITHUB_WORKSPACE"
+          npm publish "$tarball" --provenance --access public

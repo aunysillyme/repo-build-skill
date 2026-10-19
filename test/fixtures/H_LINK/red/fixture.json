@@ -1,0 +1,11 @@
+{
+  "id": "H_LINK",
+  "state": "red",
+  "operations": [
+    {
+      "op": "append",
+      "file": "README.md",
+      "value": "\n[Guide](guide-that-does-not-exist.md).\n"
+    }
+  ]
+}

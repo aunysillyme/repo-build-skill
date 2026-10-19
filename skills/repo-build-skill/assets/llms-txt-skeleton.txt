@@ -1,0 +1,7 @@
+# NAME
+
+> LEAD
+
+## Docs
+
+- [Documentation](https://example.org/docs): Guide

@@ -1,0 +1,12 @@
+{
+  "id": "H_FAQ",
+  "state": "red",
+  "operations": [
+    {
+      "op": "replace",
+      "file": "README.md",
+      "find": "## Common questions",
+      "value": "## Questions and answers"
+    }
+  ]
+}

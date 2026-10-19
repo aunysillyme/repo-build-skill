@@ -1,0 +1,8 @@
+{
+  "id": "S_STALE",
+  "state": "red",
+  "operations": [],
+  "online": {
+    "source": "{\"version\":1,\"rows\":[]}\n"
+  }
+}

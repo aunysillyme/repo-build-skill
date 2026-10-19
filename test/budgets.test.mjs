@@ -1,0 +1,12 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync,statSync } from 'node:fs';
+import { join } from 'node:path';
+import { performance } from 'node:perf_hooks';
+import { ROOT,CORE,json,temporary,write } from './support.mjs';
+import { walk } from '../src/io.mjs';
+import { packMetrics,helpMetrics } from '../scripts/proof.mjs';
+import { check } from '../src/check/index.mjs';
+test('dependency, package and cold-start budgets hold',()=>{const p=json('package.json');assert.equal(Object.keys(p.dependencies||{}).length,0);assert.deepEqual(p.devDependencies,{typescript:'7.0.2'});const sizes=packMetrics(ROOT);assert.ok(sizes.packed<=300000,`Packed: ${sizes.packed}`);assert.ok(sizes.unpacked<=1000000,`Unpacked: ${sizes.unpacked}`);assert.ok(helpMetrics(ROOT,5)<=300);});
+test('portable skill byte and route caps hold',()=>{const m=json(`${CORE}/manifest.json`),b=m.budgets;const size=f=>statSync(join(ROOT,CORE,f)).size;assert.ok(size('SKILL.md')<=b.skillMd);assert.ok(readFileSync(join(ROOT,CORE,'SKILL.md'),'utf8').split('\n').length<=b.skillMdLines);assert.ok(size('references/ask-date.md')<=b.askDate);for(const r of m.routes){assert.ok(size(r.file)<=b.stage);for(const f of r.cards)assert.ok(size(f)<=b.card);assert.ok(size('SKILL.md')+size('references/ask-date.md')+size(r.file)+r.cards.reduce((n,f)=>n+size(f),0)<=b.largestRoute);}for(const a of m.assets.filter(a=>a.kind==='card'))assert.ok(size(a.path)<=b.card,a.path);assert.ok(walk(join(ROOT,CORE)).reduce((n,f)=>n+size(f),0)<=b.folder);});
+test('offline check reads a two-thousand-file repository within its time budget',async t=>{const root=temporary(t);for(let i=0;i<2000;i++)write(root,`files/file-${i}.txt`,'Example content\n');const start=performance.now();await check(root,{env:{}});assert.ok(performance.now()-start<2000);});

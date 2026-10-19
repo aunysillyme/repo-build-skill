@@ -1,0 +1,11 @@
+{
+  "id": "C_CREDITS",
+  "state": "red",
+  "operations": [
+    {
+      "op": "write",
+      "file": "CREDITS.md",
+      "value": "# Credits\n\nThe project learned from an example.\n"
+    }
+  ]
+}

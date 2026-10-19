@@ -1,0 +1,14 @@
+{
+  "id": "R_VERSION",
+  "state": "red",
+  "operations": [
+    {
+      "op": "json",
+      "file": "skills/sample-skill/manifest.json",
+      "keys": [
+        "packageVersion"
+      ],
+      "value": "2.0.0"
+    }
+  ]
+}

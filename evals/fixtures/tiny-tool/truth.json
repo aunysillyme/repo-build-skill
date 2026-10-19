@@ -1,0 +1,11 @@
+{
+  "name": "tiny-calc-tool",
+  "install": "npm install --global tiny-calc-tool",
+  "problem": "sum integers",
+  "audience": "terminal users",
+  "uninstall": "npm uninstall --global tiny-calc-tool",
+  "test": "node --test",
+  "problem_choices": ["sum integers", "compress images", "schedule meetings", "host a website"],
+  "audience_choices": ["terminal users", "photographers", "event planners", "site visitors"],
+  "traps": ["home_path", "private_history", "description_length", "ci"]
+}

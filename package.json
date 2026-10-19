@@ -1,0 +1,26 @@
+{
+  "name": "repo-build-skill",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": { "repo-build-skill": "bin/repo-build-skill.mjs" },
+  "engines": { "node": ">=22" },
+  "dependencies": {},
+  "devDependencies": { "typescript": "7.0.2" },
+  "license": "MIT",
+  "author": "Auny LLC",
+  "description": "Skill pack that teaches your AI to build, release and launch a GitHub repo: stack pick, README, AGENTS.md, llms.txt, repo SEO and AEO, trusted publishing.",
+  "keywords": ["agent-skills", "skill-pack", "claude-skills", "claude-code", "codex", "agents-md", "llms-txt", "readme", "github", "open-source", "repository", "github-seo", "seo", "aeo", "npm", "pypi", "trusted-publishing", "provenance", "release-automation", "developer-tools", "launch", "repo-checker", "llm-skills", "ai-search"],
+  "homepage": "https://www.npmjs.com/package/repo-build-skill",
+  "repository": "git+https://github.com/aunysillyme/repo-build-skill.git",
+  "bugs": "https://github.com/aunysillyme/repo-build-skill/issues",
+  "funding": "https://github.com/sponsors/aunysillyme",
+  "scripts": {
+    "test": "node --test",
+    "check": "node scripts/self-check.mjs",
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "eval": "node evals/run.mjs",
+    "proof": "node scripts/proof.mjs"
+  },
+  "files": ["bin", "src", "skills", "adapters", "docs", "!docs/showcase", "!docs/evidence", "!docs/**/*.gif", "*.md", "LICENSE", ".claude-plugin", "llms.txt"]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "NAME",
+  "lead": "LEAD",
+  "description": "DESCRIPTION",
+  "install": "INSTALL",
+  "uninstall": "UNINSTALL",
+  "homepage": "https://example.org",
+  "repository": "https://github.com/OWNER/NAME",
+  "topics": [],
+  "keywords": [],
+  "emails_allow": [],
+  "registry": "npm",
+  "entity": "NAME"
+}

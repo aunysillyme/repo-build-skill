@@ -1,0 +1,26 @@
+name: Feature request
+description: Describe a useful result and a way to verify it.
+title: 'Feature: '
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe who needs this and the task they are doing.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: success
+    attributes:
+      label: Observable success check
+      description: Give a command, artifact or visible result that proves the feature works.
+    validations:
+      required: true

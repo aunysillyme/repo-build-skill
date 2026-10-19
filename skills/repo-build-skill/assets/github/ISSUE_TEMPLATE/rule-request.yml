@@ -1,0 +1,27 @@
+name: Checker rule request
+description: Propose an objective check with passing and failing examples.
+title: 'Rule: '
+labels:
+  - checker
+body:
+  - type: textarea
+    id: reader
+    attributes:
+      label: Reader and defect
+      description: Name the reader affected and the concrete problem they encounter.
+    validations:
+      required: true
+  - type: textarea
+    id: controls
+    attributes:
+      label: Passing and failing controls
+      description: Include synthetic examples and the expected finding for each.
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Evidence and scope
+      description: Link the official rule and describe when this check applies.
+    validations:
+      required: true
