@@ -1,7 +1,23 @@
 # NAME
 
-> LEAD
+> LEAD: what the software gives, who it serves and its category.
 
-## Docs
+Install: INSTALL_COMMAND
+Uninstall: UNINSTALL_COMMAND
+Canonical repository: https://github.com/OWNER/NAME
+Published package: https://REGISTRY_HOST/NAME
 
-- [Documentation](https://example.org/docs): Guide
+## Start here
+
+- [README: purpose and first action](https://github.com/OWNER/NAME/blob/vVERSION/README.md)
+- [Install: requirements and cleanup](https://github.com/OWNER/NAME/blob/vVERSION/docs/install.md)
+- [Agent instructions: use and contribute](https://github.com/OWNER/NAME/blob/vVERSION/AGENTS.md)
+
+## Reference
+
+- [Documentation index: guides by task](https://github.com/OWNER/NAME/blob/vVERSION/docs/README.md)
+- [Release procedure: build, test, publish and verify](https://github.com/OWNER/NAME/blob/vVERSION/RELEASING.md)
+- [Security: private vulnerability reports](https://github.com/OWNER/NAME/blob/vVERSION/SECURITY.md)
+- [Credits: upstream licences and techniques](https://github.com/OWNER/NAME/blob/vVERSION/CREDITS.md)
+
+Generate this index from canonical facts and real documents. Replace every placeholder, label every absolute link and pin instructions to the release tag.

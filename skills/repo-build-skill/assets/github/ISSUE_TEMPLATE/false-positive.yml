@@ -25,3 +25,10 @@ body:
       description: Share a small public or synthetic file and explain why it should pass.
     validations:
       required: true
+  - type: textarea
+    id: success
+    attributes:
+      label: Observable success check
+      description: Give the exact command and expected result that would show this is fixed.
+    validations:
+      required: true

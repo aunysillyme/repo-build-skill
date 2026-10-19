@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "stage": "09-maintain",
+  "package_version": "0.1.0",
+  "command": "check . --json",
+  "entrypoint": "package bin declared in package.json",
+  "checked": "2026-10-19T03:03:55.016Z",
+  "checker_exit": 1,
+  "automated": [
+    {
+      "id": "F_PROOF",
+      "reader": "people",
+      "stage": "09-maintain",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A dated command lets a reader reproduce a number.",
+      "learn": "references/stages/09-maintain.md#gate",
+      "status": "PASS",
+      "message": "Each row records value, unit, command, measured, expires, package_version and subject package."
+    },
+    {
+      "id": "C_CREDITS",
+      "reader": "people",
+      "stage": "09-maintain",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A licence and source link preserve the origin of a technique.",
+      "learn": "references/stages/09-maintain.md#gate",
+      "status": "PASS",
+      "message": "Credits rows contain project, link, licence and use, and README links CREDITS.md."
+    },
+    {
+      "id": "S_DRIFT",
+      "reader": "registries",
+      "stage": "09-maintain",
+      "severity": "error",
+      "file": ".repo-build/set.json",
+      "line": 1,
+      "why": "One renderer keeps related repository descriptions aligned.",
+      "learn": "references/stages/09-maintain.md#gate",
+      "status": "FAIL",
+      "message": "Vendored set renderer differs from lock."
+    }
+  ],
+  "manual": []
+}

@@ -1,5 +1,5 @@
 import { readFileSync, readdirSync, lstatSync, readlinkSync, existsSync } from 'node:fs';
-import { resolve, relative, sep, join } from 'node:path';
+import { resolve, relative, sep, join, dirname } from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 export const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -30,7 +30,12 @@ export function walk(root, dir = '') {
 }
 export function git(root, args) { return execFileSync('git', ['-C', root, ...args], {encoding:'utf8', maxBuffer:64*1024*1024,stdio:['ignore','pipe','pipe']}); }
 export function publicFiles(root) {
-  if (!existsSync(join(root,'.git'))) return walk(root);
+  let current = resolve(root);
+  while (!existsSync(join(current,'.git'))) {
+    const parent = dirname(current);
+    if (parent === current) return walk(root);
+    current = parent;
+  }
   return [...new Set(git(root,['ls-files','-z','--cached','--others','--exclude-standard']).split('\0').filter(Boolean))];
 }
 export function textFile(root,file) {

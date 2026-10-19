@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "stage": "01-frame",
+  "package_version": "0.1.0",
+  "command": "check . --json",
+  "entrypoint": "package bin declared in package.json",
+  "checked": "2026-10-19T03:03:55.016Z",
+  "checker_exit": 1,
+  "automated": [
+    {
+      "id": "H_LEAD",
+      "reader": "people",
+      "stage": "01-frame",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "The first screen gives the reader a definition.",
+      "learn": "references/stages/01-frame.md#gate",
+      "status": "PASS",
+      "message": "A bold lead in the first ten lines equals facts.lead."
+    }
+  ],
+  "manual": [
+    {
+      "check": "FR_ACCEPTANCE",
+      "status": "BLOCKED",
+      "evidence": "Owner-quoted acceptance replay requires maintainer confirmation of the final artifact.",
+      "hands": false,
+      "waivable": false
+    }
+  ]
+}

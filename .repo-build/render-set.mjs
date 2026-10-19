@@ -47,7 +47,7 @@ export function renderSet({ root = process.cwd(), check = false } = {}) {
   const outputs = [];
   for (const [file, block] of [['README.md', blocks.readme], ['llms.txt', blocks.llms]]) {
     const full = path.join(root, file);
-    if (!fs.existsSync(full)) throw Error(`Set rendering needs ${file}`);
+    if (!fs.existsSync(full)) continue;
     if (!fs.lstatSync(full).isFile() || fs.lstatSync(full).isSymbolicLink()) throw Error(`Expected regular file: ${file}`);
     const before = fs.readFileSync(full, 'utf8'), after = replaceBlock(before, block);
     if (before !== after) { changed.push(file); outputs.push({ full, after }); }

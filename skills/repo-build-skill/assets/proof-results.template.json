@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "MEASUREMENT_ID",
+    "command": "EXACT_MEASURING_COMMAND",
+    "measured": "UTC_MEASURED_DATE",
+    "expires": "UTC_EXPIRY_DATE",
+    "value": "REAL_COMMAND_RESULT",
+    "unit": "MEASURED_UNIT",
+    "evidence": "OUTPUT_PATH",
+    "package_version": "VERSION",
+    "subject": "package"
+  }
+]

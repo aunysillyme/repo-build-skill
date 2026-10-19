@@ -1,21 +1,16 @@
-## Problem and resulting behavior
+## Result
 
-Describe the trigger and the result a reader can observe.
+[Concrete problem and resulting behavior. Link the issue when one exists.]
 
 ## Evidence
 
-- Commands run:
-- Actual result:
-- Artifact or synthetic reproduction:
-- UNVERIFIED or skipped checks:
+- **Checks:** [exact commands, results and relevant output paths].
+- **Artifact:** [package, installed behavior or rendered document inspected].
+- **Docs:** [instructions, metadata and credits updated with the change].
+- **Manual actions:** [owner action and verifier, or complete].
 
-## Review
+## Contribution terms
 
-- [ ] Generated files reflect their sources.
-- [ ] Local links and privacy checks pass.
-- [ ] Public claims have current evidence.
-- [ ] Upstream techniques have a credit row and licence.
+[Confirm the repository's CLA or DCO requirement.]
 
-## Contributor License Agreement
-
-- [ ] I agree to the Contributor License Agreement in CLA.md
+Use synthetic examples. Keep private identifiers and credentials out of patches and logs.

@@ -1,16 +1,16 @@
 # repo-build-skill
 
-> Skill pack that teaches your AI to build, release and launch a GitHub repo: stack pick, README, AGENTS.md, llms.txt, repo SEO and AEO, trusted publishing.
+> A skill pack that teaches your AI to build, release and launch a repo that people, coding agents and AI search can all read. Your AI does the work.
 
 Install: `npx repo-build-skill`
 
 ## Docs
 
-- [README](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/README.md): README
-- [README](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/README.md): README
-- [INSTALLER](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/INSTALLER.md): INSTALLER
-- [CHECKER](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/CHECKER.md): CHECKER
-- [EVALUATION](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/EVALUATION.md): EVALUATION
+- [repo-build-skill](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/README.md): repo-build-skill
+- [Documentation](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/README.md): Documentation
+- [Installer contract](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/INSTALLER.md): Installer contract
+- [Repository checker](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/CHECKER.md): Repository checker
+- [Evaluation and package proof](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/EVALUATION.md): Evaluation and package proof
 - [Repository checks](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/RULES.md): Repository checks
 - [Stack card](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/STACK.md): Stack card
 
@@ -22,16 +22,16 @@ Install: `npx repo-build-skill`
 - [Discoverability](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/discoverability.md): Discoverability
 - [Installer](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/installer.md): Installer
 - [Launch venues](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/launch-venues.md): Launch venues
-- [Agents](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/readers/agents.md): Agents
-- [Answer Engines](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/readers/answer-engines.md): Answer Engines
+- [Coding agents](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/readers/agents.md): Coding agents
+- [Answer engines](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/readers/answer-engines.md): Answer engines
 - [People](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/readers/people.md): People
 - [Registries](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/readers/registries.md): Registries
-- [Release binaries](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/binaries.md): Release binaries
+- [Binary releases](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/binaries.md): Binary releases
 - [Release contract](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/contract.md): Release contract
-- [Release npm](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/npm.md): Release npm
-- [Release pypi](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/pypi.md): Release pypi
-- [Release skills and plugins](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/skills-and-plugins.md): Release skills and plugins
-- [Release workers](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/workers.md): Release workers
+- [npm release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/npm.md): npm release
+- [PyPI release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/pypi.md): PyPI release
+- [Skills and plugins release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/skills-and-plugins.md): Skills and plugins release
+- [Cloudflare Workers release](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/release/workers.md): Cloudflare Workers release
 - [Frame](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/01-frame.md): Frame
 - [Stack card](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/02-stack.md): Stack card
 - [Scaffold](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/skills/repo-build-skill/references/stages/03-scaffold.md): Scaffold
@@ -44,9 +44,9 @@ Install: `npx repo-build-skill`
 
 ## Optional
 
-- [CREDITS](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/CREDITS.md): CREDITS
-- [CONTRIBUTING](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/CONTRIBUTING.md): CONTRIBUTING
-- [PROVENANCE](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/PROVENANCE.md): PROVENANCE
+- [Credits](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/CREDITS.md): Credits
+- [Contributing](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/CONTRIBUTING.md): Contributing
+- [Provenance](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/PROVENANCE.md): Provenance
 - [repo-build-skill chat bundle](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.0/docs/bundles/chat-upload.md): repo-build-skill chat bundle
 
 <!-- set:start -->

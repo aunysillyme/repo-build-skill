@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "stage": "02-stack",
+  "package_version": "0.1.0",
+  "command": "check . --json",
+  "entrypoint": "package bin declared in package.json",
+  "checked": "2026-10-19T03:03:55.016Z",
+  "checker_exit": 1,
+  "automated": [
+    {
+      "id": "H_UNINSTALL",
+      "reader": "people",
+      "stage": "02-stack",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "People can reverse an install.",
+      "learn": "references/stages/02-stack.md#gate",
+      "status": "PASS",
+      "message": "An installer has an uninstall command in README."
+    }
+  ],
+  "manual": []
+}

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "stage": "08-launch",
+  "package_version": "0.1.0",
+  "command": "check . --json",
+  "entrypoint": "package bin declared in package.json",
+  "checked": "2026-10-19T03:03:55.016Z",
+  "checker_exit": 1,
+  "automated": [],
+  "manual": [
+    {
+      "check": "LA_VENUE",
+      "status": "BLOCKED",
+      "evidence": "Submission or listing awaits owner completion and a public receipt.",
+      "hands": true,
+      "waivable": true
+    },
+    {
+      "check": "LA_LISTING",
+      "status": "BLOCKED",
+      "evidence": "Submission or listing awaits owner completion and a public receipt.",
+      "hands": true,
+      "waivable": false
+    }
+  ]
+}

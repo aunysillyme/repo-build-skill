@@ -102,3 +102,12 @@ test('reference renderer and vendored renderer are byte-identical', () => {
   const root = fileURLToPath(new URL('../', import.meta.url));
   assert.ok(fs.readFileSync(path.join(root, '.repo-build/render-set.mjs')).equals(rendererBytes()));
 });
+
+test('missing output is skipped while an existing unmarked output is drift', t => {
+  const root = fixture(t);
+  renderSet({ root });
+  fs.rmSync(path.join(root, 'llms.txt'));
+  assert.equal(renderSet({ root, check: true }).code, 0);
+  fs.writeFileSync(path.join(root, 'llms.txt'), '# Replaced\n');
+  assert.equal(renderSet({ root, check: true }).code, 1);
+});

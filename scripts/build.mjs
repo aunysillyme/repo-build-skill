@@ -12,7 +12,7 @@ try {
   for(const [file,body]of Object.entries(out)){if(readOptional(root,file)!==body){if(check){console.error(`DRIFT ${file}`);drift=true;}else{const full=owned(root,file,false);mkdirSync(dirname(full),{recursive:true});writeFileSync(full,body);}}}
   if(readOptional(root,'.repo-build/set.json')){const result=renderSet({root,check});if(result.code) {if(check)drift=true;else throw Error(result.message);}}
   if(args.includes('--terms')) {
-    const tokens=s=>s.toLowerCase().split(/[^a-z0-9_.@-]+/).map(x=>x.replace(/^\.+|\.+$/g,'')).filter(Boolean);
+    const tokens=s=>s.toLowerCase().split(/[^a-z0-9_.@~\/\p{L}\p{N}\p{S}-]+/u).map(x=>x.replace(/^\.+|\.+$/g,'')).filter(Boolean);
     const hashes=read(root,'.repo-build/private.local.txt').split(/\r?\n/).map(s=>s.trim()).filter(s=>s&&!s.startsWith('#')&&!s.startsWith('re:')&&!s.startsWith('allow:')).map(s=>digest(tokens(s).join(' ')));
     writeFileSync(owned(root,'test/terms.private.sha256',false),[...new Set(hashes)].sort().join('\n')+'\n');
   }

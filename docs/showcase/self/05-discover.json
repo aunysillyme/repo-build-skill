@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "stage": "05-discover",
+  "package_version": "0.1.0",
+  "command": "check . --json",
+  "entrypoint": "package bin declared in package.json",
+  "checked": "2026-10-19T03:03:55.016Z",
+  "checker_exit": 1,
+  "automated": [
+    {
+      "id": "M_ENTITY",
+      "reader": "answer-engines",
+      "stage": "05-discover",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "One entity name keeps registry and repository answers aligned.",
+      "learn": "references/stages/05-discover.md#gate",
+      "status": "PASS",
+      "message": "README and llms.txt H1 headings equal the manifest product name."
+    },
+    {
+      "id": "R_DESC",
+      "reader": "registries",
+      "stage": "05-discover",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "Search cards use the same definition as the package.",
+      "learn": "references/stages/05-discover.md#gate",
+      "status": "PASS",
+      "message": "Description has at most 160 characters and all declared copies agree."
+    },
+    {
+      "id": "R_TOPICS",
+      "reader": "registries",
+      "stage": "05-discover",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "Topics describe the same package across surfaces.",
+      "learn": "references/stages/05-discover.md#gate",
+      "status": "PASS",
+      "message": "At most twenty slug topics, each also a keyword."
+    }
+  ],
+  "manual": []
+}

@@ -1,14 +1,31 @@
 {
   "stage": "01-frame",
   "status": "BLOCKED",
+  "artifact": "ARTIFACT_PATH",
   "checks": [
     {
-      "check": "FR-1",
+      "check": "FR_ACCEPTANCE",
       "status": "BLOCKED",
-      "evidence": null,
+      "command": "EXACT_VERIFIER",
+      "evidence": "OUTPUT_PATH",
       "owner": null,
-      "reason": null,
+      "reason": "Awaiting the scoped verifier.",
       "date": null
+    }
+  ],
+  "facts": [
+    {
+      "claim": "FACT",
+      "source": "OFFICIAL_URL",
+      "status": "UNVERIFIED",
+      "reason": "Awaiting the ask-date source read."
+    }
+  ],
+  "owner_hands": [
+    {
+      "action": "OWNER_ACTION",
+      "command_or_url": "EXACT_COMMAND_OR_URL",
+      "status": "BLOCKED"
     }
   ],
   "statuses": [

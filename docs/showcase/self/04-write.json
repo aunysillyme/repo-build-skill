@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "stage": "04-write",
+  "package_version": "0.1.0",
+  "command": "check . --json",
+  "entrypoint": "package bin declared in package.json",
+  "checked": "2026-10-19T03:03:55.016Z",
+  "checker_exit": 1,
+  "automated": [
+    {
+      "id": "H_INSTALL",
+      "reader": "people",
+      "stage": "04-write",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A reader can try the project immediately.",
+      "learn": "references/stages/04-write.md#gate",
+      "status": "PASS",
+      "message": "The install command occurs in the first forty lines."
+    },
+    {
+      "id": "H_FENCE",
+      "reader": "people",
+      "stage": "04-write",
+      "severity": "warn",
+      "file": null,
+      "line": null,
+      "why": "Short examples leave room for what the tool gives.",
+      "learn": "references/stages/04-write.md#gate",
+      "status": "PASS",
+      "message": "Fenced README blocks have at most eight lines or a reasoned allow marker."
+    },
+    {
+      "id": "H_FAQ",
+      "reader": "people",
+      "stage": "04-write",
+      "severity": "warn",
+      "file": null,
+      "line": null,
+      "why": "Question headings make answers easy to find.",
+      "learn": "references/stages/04-write.md#gate",
+      "status": "PASS",
+      "message": "Common questions contains four to six H3 headings."
+    },
+    {
+      "id": "H_LINK",
+      "reader": "people",
+      "stage": "04-write",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "Readers can follow the promised next step.",
+      "learn": "references/stages/04-write.md#gate",
+      "status": "PASS",
+      "message": "Relative Markdown links and heading anchors exist."
+    },
+    {
+      "id": "H_ABSENCE",
+      "reader": "people",
+      "stage": "04-write",
+      "severity": "warn",
+      "file": null,
+      "line": null,
+      "why": "Positive headings say what the reader gets.",
+      "learn": "references/stages/04-write.md#gate",
+      "status": "PASS",
+      "message": "Headings describe the content they give."
+    },
+    {
+      "id": "A_AGENTS",
+      "reader": "agents",
+      "stage": "04-write",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "Agents need commands and project context.",
+      "learn": "references/stages/04-write.md#gate",
+      "status": "PASS",
+      "message": "AGENTS.md has use and contribute headings and fewer than 200 lines."
+    },
+    {
+      "id": "A_IMPORT",
+      "reader": "agents",
+      "stage": "04-write",
+      "severity": "warn",
+      "file": null,
+      "line": null,
+      "why": "An import keeps host instructions in sync.",
+      "learn": "references/stages/04-write.md#gate",
+      "status": "PASS",
+      "message": "CLAUDE.md includes the exact line @AGENTS.md."
+    },
+    {
+      "id": "A_CMD",
+      "reader": "agents",
+      "stage": "04-write",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A command should work when copied.",
+      "learn": "references/stages/04-write.md#gate",
+      "status": "PASS",
+      "message": "Every npm run command named in AGENTS.md exists in package scripts."
+    },
+    {
+      "id": "M_LLMS_SHAPE",
+      "reader": "answer-engines",
+      "stage": "04-write",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "Agents and search readers get a labelled map.",
+      "learn": "references/stages/04-write.md#gate",
+      "status": "PASS",
+      "message": "An H1, blockquote and sections with labelled absolute links exist."
+    },
+    {
+      "id": "M_LLMS_LEAD",
+      "reader": "answer-engines",
+      "stage": "04-write",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A shared definition keeps summaries accurate.",
+      "learn": "references/stages/04-write.md#gate",
+      "status": "PASS",
+      "message": "The llms.txt blockquote equals facts.lead."
+    }
+  ],
+  "manual": []
+}

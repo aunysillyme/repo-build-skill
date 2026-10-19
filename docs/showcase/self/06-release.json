@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "stage": "06-release",
+  "package_version": "0.1.0",
+  "command": "check . --json",
+  "entrypoint": "package bin declared in package.json",
+  "checked": "2026-10-19T03:03:55.016Z",
+  "checker_exit": 1,
+  "automated": [
+    {
+      "id": "R_VERSION",
+      "reader": "registries",
+      "stage": "06-release",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "The same release is named on every package surface.",
+      "learn": "references/stages/06-release.md#gate",
+      "status": "PASS",
+      "message": "Manifest, lock and plugin versions equal package version."
+    },
+    {
+      "id": "R_FILES",
+      "reader": "registries",
+      "stage": "06-release",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "An allowlist defines what a user receives.",
+      "learn": "references/stages/06-release.md#gate",
+      "status": "PASS",
+      "message": "A files allowlist covers binary targets and lifecycle install scripts are absent."
+    },
+    {
+      "id": "W_OIDC",
+      "reader": "registries",
+      "stage": "06-release",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "Identity permission belongs to the release step that needs it.",
+      "learn": "references/stages/06-release.md#gate",
+      "status": "PASS",
+      "message": "Only a job named publish declares id-token: write."
+    },
+    {
+      "id": "W_TAG",
+      "reader": "registries",
+      "stage": "06-release",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A tag must identify the artifact version being published.",
+      "learn": "references/stages/06-release.md#gate",
+      "status": "PASS",
+      "message": "A version comparison precedes the publish job or publish command."
+    }
+  ],
+  "manual": [
+    {
+      "check": "RL_FIRST",
+      "status": "BLOCKED",
+      "evidence": "Registry publication and trust identity await owner completion and read-back.",
+      "hands": true,
+      "waivable": false
+    },
+    {
+      "check": "RL_TRUST",
+      "status": "BLOCKED",
+      "evidence": "Registry publication and trust identity await owner completion and read-back.",
+      "hands": true,
+      "waivable": false
+    },
+    {
+      "check": "RL_REVIEW",
+      "status": "BLOCKED",
+      "evidence": "Independent review or a dated owner waiver awaits completion.",
+      "hands": false,
+      "waivable": true
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "stage": "03-scaffold",
+  "package_version": "0.1.0",
+  "command": "check . --json",
+  "entrypoint": "package bin declared in package.json",
+  "checked": "2026-10-19T03:03:55.016Z",
+  "checker_exit": 1,
+  "automated": [
+    {
+      "id": "H_FLOOR",
+      "reader": "people",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "Community files explain use, contribution and maintenance.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "PASS",
+      "message": "Every floor file, issue form and check workflow is present and non-empty."
+    },
+    {
+      "id": "A_SKILL_SPEC",
+      "reader": "agents",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A host can identify a skill from its metadata.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "PASS",
+      "message": "Each SKILL.md has a valid name, description and size."
+    },
+    {
+      "id": "R_META",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "People can find the project, license and support route.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "PASS",
+      "message": "Homepage, repository, bugs and license fields are present."
+    },
+    {
+      "id": "W_PERMS",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A default read token limits a compromised step.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "PASS",
+      "message": "Every workflow declares read-only or empty default permissions."
+    },
+    {
+      "id": "W_PIN",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A commit pin identifies the exact action code.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "PASS",
+      "message": "Every remote action uses forty hex characters and a version comment."
+    },
+    {
+      "id": "W_CREDS",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "Later commands need only their explicit permissions.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "PASS",
+      "message": "Each checkout step sets persist-credentials: false."
+    },
+    {
+      "id": "W_INJECT",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "Untrusted event text must not become shell code.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "PASS",
+      "message": "No github.event interpolation appears in run values."
+    },
+    {
+      "id": "P_PATH",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "Local usernames are private environment details.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "PASS",
+      "message": "Home paths use placeholder usernames in contents and filenames."
+    },
+    {
+      "id": "P_EMAIL",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A contact address should be an explicit public choice.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "PASS",
+      "message": "Email addresses are in the allowlist or a standard example or noreply domain."
+    },
+    {
+      "id": "P_TOKEN",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": null,
+      "line": null,
+      "why": "A public artifact must not carry access credentials.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "PASS",
+      "message": "Token-shaped strings and private key headers are absent."
+    },
+    {
+      "id": "P_LIST",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": "CREDITS.md",
+      "line": 18,
+      "why": "Private names are supplied locally by the maintainer.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "FAIL",
+      "message": "Remove the private-list match."
+    },
+    {
+      "id": "P_LIST",
+      "reader": "registries",
+      "stage": "03-scaffold",
+      "severity": "error",
+      "file": "docs/PROVENANCE.md",
+      "line": 21,
+      "why": "Private names are supplied locally by the maintainer.",
+      "learn": "references/stages/03-scaffold.md#gate",
+      "status": "FAIL",
+      "message": "Remove the private-list match."
+    }
+  ],
+  "manual": [
+    {
+      "check": "SC_PUBLIC",
+      "status": "UNVERIFIED",
+      "evidence": "REPO_SETTINGS.md records targets; the public settings read-back awaits owner action.",
+      "hands": true,
+      "waivable": false
+    }
+  ]
+}

@@ -1,14 +1,18 @@
 {
   "name": "NAME",
-  "lead": "LEAD",
-  "description": "DESCRIPTION",
-  "install": "INSTALL",
-  "uninstall": "UNINSTALL",
+  "lead": "A CATEGORY that gives AUDIENCE a RESULT.",
+  "description": "One accurate description reused across public listings.",
+  "install": "INSTALL_COMMAND",
+  "uninstall": "UNINSTALL_COMMAND",
   "homepage": "https://example.org",
   "repository": "https://github.com/OWNER/NAME",
-  "topics": [],
-  "keywords": [],
+  "topics": [
+    "CATEGORY"
+  ],
+  "keywords": [
+    "CATEGORY"
+  ],
   "emails_allow": [],
-  "registry": "npm",
+  "registry": "REGISTRY",
   "entity": "NAME"
 }
