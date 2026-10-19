@@ -1,5 +1,5 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { realpathSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { ROOT, CORE, BIN, VERSION } from '../src/constants.mjs';
@@ -46,7 +46,11 @@ export function showcase(root = ROOT) {
   return { stages: manifest.routes.length, checker_exit: run.status };
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+const isMain = (() => {
+  try { return !!process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); }
+  catch { return false; }
+})();
+if (isMain) {
   try { console.log(JSON.stringify(showcase(), null, 2)); }
   catch (error) { console.error(error.stack || error.message); process.exitCode = 2; }
 }

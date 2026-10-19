@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdirSync,realpathSync,symlinkSync } from 'node:fs';
 import { join,delimiter } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { check } from '../src/check/index.mjs';
@@ -14,6 +15,19 @@ test('public brand, domains and supported hosts pass the generic classes',async 
 test('contents and filenames are scanned, including runtime token fixtures',async t=>{const root=temporary(t);write(root,'readme.md',home('private-person')+'\n'+token());write(root,'tree/'+home('another-person')+'/f.txt','Content');const r=await check(root,{env:{}});assert.ok(by(r,'P_PATH').some(x=>x.status==='FAIL'&&x.line===0));assert.ok(by(r,'P_TOKEN').some(x=>x.status==='FAIL'));});
 test('email allowlists include explicit, example and provider noreply addresses',async t=>{const root=temporary(t);write(root,'.repo-build/facts.json',{emails_allow:['support@public.invalid']});write(root,'contacts.md','support@public.invalid noreply@anthropic.com noreply@openai.com person@users.noreply.github.com user@example.com user@example.org '+["'noreply",'@',"anthropic.com'"].join(''));assert.equal(by(await check(root,{env:{}}),'P_EMAIL')[0].status,'PASS');write(root,'contacts.md',['private','person','@','private.company'].join(''));assert.equal(by(await check(root,{env:{}}),'P_EMAIL')[0].status,'FAIL');});
 test('multiple lists share allow spans and regex terms',async t=>{const root=temporary(t),external=temporary(t);write(root,'.repo-build/private.local.txt','synthetic-marker\nre:quiet[0-9]+\n');write(external,'allow.txt','allow:public synthetic-marker package\n');write(root,'README.md','Public synthetic-marker package\n');const env={REPO_BUILD_PRIVATE_LISTS:join(external,'allow.txt')};assert.equal(by(await check(root,{env}),'P_LIST')[0].status,'PASS');write(root,'README.md','quiet42');assert.equal(by(await check(root,{env}),'P_LIST')[0].status,'FAIL');});
+test('privacy lists are excluded under a symlinked parent directory',async t=>{
+  const parent=temporary(t),link=join(parent,'link');
+  mkdirSync(join(parent,'real'));
+  symlinkSync(realpathSync(join(parent,'real')),link,'dir');
+  const root=join(link,'repo');
+  write(root,'.repo-build/private.local.txt','synthetic-marker\n');
+  write(root,'extra.txt','synthetic-external-marker\n');
+  write(root,'README.md','Public package.\n');
+  const env={REPO_BUILD_PRIVATE_LISTS:join(root,'extra.txt')};
+  assert.equal(by(await check(root,{env}),'P_LIST')[0].status,'PASS');
+  write(root,'README.md','synthetic-marker\nsynthetic-external-marker\n');
+  assert.equal(by(await check(root,{env}),'P_LIST')[0].status,'FAIL');
+});
 test('a tracked privacy list fails while no list is counted as skipped',async t=>{const root=temporary(t);let r=await check(root,{env:{}});assert.equal(by(r,'P_LIST')[0].status,'SKIPPED');write(root,'.repo-build/private.local.txt','synthetic-marker\n');execFileSync('git',['init',root],{stdio:'pipe'});execFileSync('git',['-C',root,'add','.repo-build/private.local.txt'],{stdio:'pipe'});r=await check(root,{env:{}});assert.equal(by(r,'P_LIST')[0].status,'FAIL');});
 
 test('reserved email domains and file references pass while public contact needs approval',async t=>{const root=temporary(t);write(root,'references.md','person@private.invalid person@private.test person@private.example person@private.localhost '+String.raw`"\n@AGENTS.md"`+' '+['md','txt','json','js','mjs','cjs','ts','yml','yaml','toml','py','sh'].map(ext=>'n@FILE.'+ext).join(' '));assert.equal(by(await check(root,{env:{}}),'P_EMAIL')[0].status,'PASS');write(root,'references.md',['person','@','private.company'].join(''));assert.equal(by(await check(root,{env:{}}),'P_EMAIL')[0].status,'FAIL');});

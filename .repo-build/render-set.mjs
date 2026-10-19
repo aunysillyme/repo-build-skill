@@ -55,7 +55,11 @@ export function renderSet({ root = process.cwd(), check = false } = {}) {
   if (!check) for (const output of outputs) fs.writeFileSync(output.full, output.after);
   return { code: check && changed.length ? 1 : 0, changed, blocks, message: changed.length ? `${check ? 'Set drift' : 'Set rendered'}: ${changed.join(', ')}` : 'Set blocks match.' };
 }
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+const isMain = (() => {
+  try { return !!process.argv[1] && fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url)); }
+  catch { return false; }
+})();
+if (isMain) {
   const args = process.argv.slice(2);
   try {
     if (args.some(arg => arg !== '--check')) throw Error('Usage: node .repo-build/render-set.mjs [--check]');

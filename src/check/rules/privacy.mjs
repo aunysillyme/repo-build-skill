@@ -46,7 +46,7 @@ export function historyItems(root) {
   return items;
 }
 function scan(c,probe,message,history=false) {
-  const items=c.files.filter(f=>!c.privateLists.paths.includes(resolve(c.root,f))).map(file=>({file,name:file,text:c.read(file)}));
+  const items=c.files.filter(f=>{try{return !c.privateLists.paths.includes(realpathSync(resolve(c.root,f)));}catch{return true;}}).map(file=>({file,name:file,text:c.read(file)}));
   if(history&&c.options.history)items.push(...c.history);
   const findings=[];
   for(const item of items){if(item.name&&probe(item.name).length)findings.push(fail(item.file,message+' (filename)',0));if(!item.text.includes('\0'))for(const [i,line]of item.text.split('\n').entries())if(probe(line).length)findings.push(fail(item.file,message,i+1));}

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { pathToFileURL } from 'node:url';
+import { realpathSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 export const version = '0.1.0';
 
 export function parseInteger(text) {
@@ -55,6 +56,10 @@ export function main(args, io = process) {
   }
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
+const isMain = (() => {
+  try { return !!process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); }
+  catch { return false; }
+})();
+if (isMain) {
   process.exitCode = main(process.argv.slice(2));
 }

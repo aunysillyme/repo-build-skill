@@ -56,6 +56,16 @@ test('vendored script runs alone and detects drift', t => {
   fs.writeFileSync(path.join(root, 'llms.txt'), '# Changed\n');
   assert.throws(() => execFileSync(process.execPath, [script, '--check'], { cwd: root, stdio: 'pipe' }), error => error.status === 1);
 });
+test('vendored script runs through a symlinked directory and detects drift', t => {
+  const root = fixture(t), parent = fs.mkdtempSync(path.join(os.tmpdir(), 'skill-set-link-'));
+  t.after(() => fs.rmSync(parent, { recursive: true, force: true }));
+  const link = path.join(parent, 'repo');
+  fs.symlinkSync(fs.realpathSync(root), link, 'dir');
+  const script = path.join(link, '.repo-build/render-set.mjs');
+  assert.throws(() => execFileSync(process.execPath, [script, '--check'], { cwd: link, stdio: 'pipe' }), error => error.status === 1 && /Set drift/.test(error.stdout));
+  assert.match(execFileSync(process.execPath, [script], { cwd: link, encoding: 'utf8' }), /Set rendered/);
+  assert.match(execFileSync(process.execPath, [script, '--check'], { cwd: link, encoding: 'utf8' }), /Set blocks match/);
+});
 test('malformed marker pairs and invalid schemas are refused', () => {
   for (const text of ['<!-- set:start -->', '<!-- set:end -->', '<!-- set:end --><!-- set:start -->', '<!-- set:start --><!-- set:start --><!-- set:end -->']) assert.throws(() => replaceBlock(text, 'replacement'));
   for (const value of [{}, { version: 2, rows }, { version: 1, rows: [{ ...rows[0], line: '' }] }, { version: 1, rows: [rows[0], rows[0]] }, { version: 1, rows: [{ ...rows[0], url: 'file:///tmp/data' }] }]) assert.throws(() => validateSet(value));

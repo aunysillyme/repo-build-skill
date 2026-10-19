@@ -1,8 +1,8 @@
 import { spawnSync } from 'node:child_process';
 import { performance } from 'node:perf_hooks';
-import { readFileSync,writeFileSync,mkdtempSync,rmSync } from 'node:fs';
+import { realpathSync,readFileSync,writeFileSync,mkdtempSync,rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join,resolve } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ROOT,VERSION,BIN } from '../src/constants.mjs';
 import { check } from '../src/check/index.mjs';
@@ -26,4 +26,5 @@ export async function measureProof(root=ROOT,{now=new Date()}={}) {
   return [['packed-size',size.packed,'bytes','npm pack --dry-run --json --ignore-scripts'],['unpacked-size',size.unpacked,'bytes','npm pack --dry-run --json --ignore-scripts'],['help-time',help,'ms','node scripts/proof.mjs --deterministic'],['checker-time',checker,'ms','node scripts/proof.mjs --deterministic']].map(([id,value,unit,command])=>({id,value,unit,command,measured,expires,package_version:p.version,subject:'package'}));
 }
 async function main(){const args=process.argv.slice(2);if(args.some(x=>x!=='--deterministic'))throw Error('Usage: node scripts/proof.mjs [--deterministic]');const file=join(process.cwd(),'proof/results.json');let prior=[];try{const j=JSON.parse(readFileSync(file,'utf8'));prior=Array.isArray(j)?j:j.results;}catch(e){if(e.code!=='ENOENT')throw e;}const rows=await measureProof(process.cwd()),ids=new Set(rows.map(r=>r.id));writeFileSync(file,JSON.stringify([...prior.filter(r=>!ids.has(r.id)),...rows],null,2)+'\n');console.log('Package measurements refreshed.');}
-if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url))main().catch(e=>{console.error(e.stack||e.message);process.exitCode=2;});
+const isMain=(()=>{try{return !!process.argv[1]&&realpathSync(process.argv[1])===realpathSync(fileURLToPath(import.meta.url));}catch{return false;}})();
+if(isMain)main().catch(e=>{console.error(e.stack||e.message);process.exitCode=2;});

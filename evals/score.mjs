@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, readdirSync, mkdtempSync, rmSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { pathToFileURL, fileURLToPath } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 import { VERSION } from '../src/constants.mjs';
@@ -249,6 +249,10 @@ async function main(args) {
   return scored.release_ready ? 0 : 1;
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
+const isMain = (() => {
+  try { return !!process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); }
+  catch { return false; }
+})();
+if (isMain) {
   main(process.argv.slice(2)).then(code => { process.exitCode = code; }).catch(error => { console.error(error.message); process.exitCode = 2; });
 }
