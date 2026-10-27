@@ -63,5 +63,13 @@
       "name": "Auny LLC",
       "url": "https://github.com/aunysillyme"
     }
+  },
+  "scorecard": {
+    "workflow": ".github/workflows/scorecard.yml",
+    "owner": "aunysillyme",
+    "repo": "repo-build-skill",
+    "ask_date": "2026-10-27",
+    "source": "user-supplied reference workflow and publishing constraints",
+    "live_status": "UNVERIFIED"
   }
 }

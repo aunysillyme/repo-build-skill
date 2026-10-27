@@ -6,6 +6,15 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- A pinned OpenSSF Scorecard workflow asset and repository workflow publish weekly security scores and upload SARIF to code scanning, with setup guidance and a README badge.
+
+### Changed
+
+- `W_OIDC` permits Scorecard publishing jobs using only its allowed actions and `publish_results: true`, while keeping install, build and package scripts out of identity jobs.
+- The professional file floor leaves dependency monitoring to the project, matching this repository's Snyk setup.
+
 ## [0.1.2] - 2026-10-19
 
 ### Added

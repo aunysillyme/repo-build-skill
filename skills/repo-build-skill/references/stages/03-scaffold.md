@@ -33,7 +33,7 @@ Record each read in `.repo-build/work/sources.md` with claim, URL, source date, 
 
 ### Professional floor
 
-Create README.md, LICENSE, CREDITS.md, CHANGELOG.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, MAINTAINERS.md, RELEASING.md, AGENTS.md, CLAUDE.md, llms.txt and docs/README.md. Add issue forms, a pull request template, CODEOWNERS, Dependabot and a check workflow under `.github/`.
+Create README.md, LICENSE, CREDITS.md, CHANGELOG.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, MAINTAINERS.md, RELEASING.md, AGENTS.md, CLAUDE.md, llms.txt and docs/README.md. Add issue forms, a pull request template, CODEOWNERS and a check workflow under `.github/`. Choose dependency monitoring for the project. Add Scorecard to every repo using the [workflow assets](../workflows.md#scorecard).
 
 A solo maintainer can defer a governance board, a separate public planning board and release milestones until they serve actual users. Keep ownership, security reporting and contribution instructions concrete.
 

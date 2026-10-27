@@ -1,7 +1,7 @@
 import { posix } from 'node:path';
 import { rule,fail,need } from '../rule.mjs';
 import { headings,links } from '../../readers/markdown.mjs';
-export const FLOOR=['README.md','LICENSE','CHANGELOG.md','CONTRIBUTING.md','CODE_OF_CONDUCT.md','SECURITY.md','MAINTAINERS.md','RELEASING.md','AGENTS.md','CLAUDE.md','llms.txt','.github/CODEOWNERS','.github/dependabot.yml','.github/pull_request_template.md'];
+export const FLOOR=['README.md','LICENSE','CHANGELOG.md','CONTRIBUTING.md','CODE_OF_CONDUCT.md','SECURITY.md','MAINTAINERS.md','RELEASING.md','AGENTS.md','CLAUDE.md','llms.txt','.github/CODEOWNERS','.github/pull_request_template.md'];
 export const absence=/\b(?:limits?|not|missing|risks?|without|cannot|unsupported)\b/i;
 export default [
 rule('H_LEAD','people','01-frame','One clear lead','The first screen gives the reader a definition.','A bold lead in the first ten lines equals facts.lead.',c=>need(c,['lead'],()=>c.read('README.md').split('\n').slice(0,10).some(l=>l.trim()===`**${c.facts.lead}**`)?[]:[fail('README.md','Use the lead from facts in bold within ten lines.')])),

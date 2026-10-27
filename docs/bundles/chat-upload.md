@@ -355,7 +355,7 @@ Record each read in `.repo-build/work/sources.md` with claim, URL, source date, 
 
 ### Professional floor
 
-Create README.md, LICENSE, CREDITS.md, CHANGELOG.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, MAINTAINERS.md, RELEASING.md, AGENTS.md, CLAUDE.md, llms.txt and docs/README.md. Add issue forms, a pull request template, CODEOWNERS, Dependabot and a check workflow under `.github/`.
+Create README.md, LICENSE, CREDITS.md, CHANGELOG.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, MAINTAINERS.md, RELEASING.md, AGENTS.md, CLAUDE.md, llms.txt and docs/README.md. Add issue forms, a pull request template, CODEOWNERS and a check workflow under `.github/`. Choose dependency monitoring for the project. Add Scorecard to every repo using the [workflow assets](../../skills/repo-build-skill/references/workflows.md#scorecard).
 
 A solo maintainer can defer a governance board, a separate public planning board and release milestones until they serve actual users. Keep ownership, security reporting and contribution instructions concrete.
 
@@ -786,7 +786,7 @@ Rows begin BLOCKED. Attach actual output or a dated manual receipt before assign
 |---|---|---|
 | R_VERSION | Unmet requirement: Manifest, lock and plugin versions equal package version. | R_VERSION: checker receipt, initially BLOCKED |
 | R_FILES | Unmet requirement: A files allowlist covers binary targets and lifecycle install scripts are absent. | R_FILES: checker receipt, initially BLOCKED |
-| W_OIDC | Unmet requirement: Only a job named publish declares id-token: write, and it runs no install, build or package script. | W_OIDC: checker receipt, initially BLOCKED |
+| W_OIDC | Unmet requirement: Only publish or a job using only Scorecard-allowed actions with ossf/scorecard-action publish_results: true declares id-token: write; these jobs run no install, build or package script. | W_OIDC: checker receipt, initially BLOCKED |
 | W_TAG | Unmet requirement: A version comparison precedes the publish job or publish command. | W_TAG: checker receipt, initially BLOCKED |
 | O_REGISTRY | Unmet requirement: Version, description, tagged README and attestation agree. | O_REGISTRY: checker receipt, initially BLOCKED |
 | RL_FIRST (HANDS) | The first registry publish awaits owner action. | Registry version response. |
@@ -1305,3 +1305,26 @@ For npm, use `npm pack --dry-run --json` to inspect the allowlist and `npm view 
 Run aun-repo-health weekly to compare public metadata, generated discovery files, homepage response and vendored set lock. A maintainer refreshes set data deliberately; CI checks the vendored copy offline. Keep one issue for current drift and close it after evidence shows parity.
 
 Refresh measurements before their expiry. Expired proof warns and leaves current promotional copy; it keeps the software runnable and updateable. Mark a registry read UNVERIFIED when network access fails, and retain the command for a later probe.
+
+<!-- source:references/workflows.md -->
+
+# Workflow assets
+
+Copy these assets into `.github/workflows/` and adapt project commands before running them.
+`assets/workflows/check-minimal.yml` runs the repository checks; `assets/workflows/repo-health.yml` checks public metadata parity.
+The release cards explain `release-npm.yml` and `release-pypi.yml`.
+
+## Scorecard
+
+Add `assets/workflows/scorecard.yml` to every repository during scaffolding. It grades repository security posture weekly and on push to `main`, publishes the score to the Scorecard API and uploads SARIF to GitHub code scanning. It fixes nothing; review the findings and make changes separately.
+
+Add this README badge, replacing `{owner}` and `{repo}`:
+
+```md
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/{owner}/{repo}/badge)](https://scorecard.dev/viewer/?uri=github.com/{owner}/{repo})
+```
+
+Publishing requires read-only workflow permissions, an Ubuntu runner and `id-token: write` only in the Scorecard job. Keep top-level `env` and `defaults`, job-level `env` and containers absent. Every action in that job must be one of `actions/checkout`, `actions/upload-artifact`, `github/codeql-action/upload-sarif`, `ossf/scorecard-action` or `step-security/harden-runner`. Set `publish_results: true` on the Scorecard step. The API supports only the default branch; adapt `main` to that branch when needed.
+
+Private repositories need GitHub Advanced Security for the code-scanning upload; otherwise run the `scorecard` CLI.
+Re-check the [upstream reference workflow](https://github.com/ossf/scorecard/blob/main/.github/workflows/scorecard.yml) and [Scorecard action publishing restrictions](https://github.com/ossf/scorecard-action#publishing-results) before adapting the pins or permissions. The supplied reference and restrictions are dated 2026-10-27; live verification remains UNVERIFIED in this offline change.

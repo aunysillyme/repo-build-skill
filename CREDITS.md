@@ -14,7 +14,7 @@ The supplied source record checked these licences on 2026-10-18. Live source ref
 | trailofbits/skills | [Repository](https://github.com/trailofbits/skills) | CC-BY-SA-4.0 | Open-sourcing scope comparison and release principles, technique only: `skills/repo-build-skill/references/release/contract.md`; no text copied. |
 | github/opensource.guide | [Repository](https://github.com/github/opensource.guide) | CC-BY-4.0 | Pre-launch checklist idea: `skills/repo-build-skill/references/stages/01-frame.md`. |
 | todogroup/repolinter | [Repository](https://github.com/todogroup/repolinter) | Apache-2.0 | Configurable repository linting idea, fresh implementation: `src/check/index.mjs`. |
-| ossf/scorecard | [Repository](https://github.com/ossf/scorecard) | Apache-2.0 | Workflow permission and pin-check ideas: `src/check/rules/workflows.mjs`. |
+| ossf/scorecard | [Repository](https://github.com/ossf/scorecard) | Apache-2.0 | Workflow permission and pin-check ideas: `src/check/rules/workflows.mjs`; supplied reference workflow: `skills/repo-build-skill/assets/workflows/scorecard.yml` and `.github/workflows/scorecard.yml`. |
 | NVIDIA/SkillEvaluator | [Repository](https://github.com/NVIDIA/SkillEvaluator) | Apache-2.0 | With-and-without skill outcome comparison: `evals/run.mjs`. |
 | publint/publint | [Repository](https://github.com/publint/publint) | MIT | Independent package scorer, invoked when available: `evals/score.mjs`. |
 | rhysd/actionlint | [Repository](https://github.com/rhysd/actionlint) | MIT | Independent workflow scorer, invoked when available: `evals/score.mjs`. |
