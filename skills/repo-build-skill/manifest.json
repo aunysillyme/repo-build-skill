@@ -309,6 +309,11 @@
       "kind": "asset"
     },
     {
+      "path": "assets/workflows/scorecard.yml",
+      "sha256": "12d9c5a79d6165c5079ce74051415a6c6a1c07d4201b438b5860e9e3b21a923d",
+      "kind": "asset"
+    },
+    {
       "path": "references/acceptance-checks.md",
       "sha256": "a29fa192f862f91ad17f17c0e4e13a8a1eb5ee9c0393ee03b871b10e20435494",
       "kind": "card"
@@ -395,7 +400,7 @@
     },
     {
       "path": "references/stages/03-scaffold.md",
-      "sha256": "00e5f342ab228a9299ad75fe8329e356168c740396817e47f2ca7cf930fdfc2b",
+      "sha256": "09237234436e21735dd01aac4990ba59268b6ede9ca89ea28900fced42db9bfa",
       "kind": "stage"
     },
     {
@@ -410,7 +415,7 @@
     },
     {
       "path": "references/stages/06-release.md",
-      "sha256": "613e699706cf2fd8143d241bc3635e965f6fcd3fb134251adb7c195de814ece0",
+      "sha256": "001c01b08e68148c3af4e89de257b901d3108c5d8ca80409be58942a437594ba",
       "kind": "stage"
     },
     {
@@ -427,6 +432,11 @@
       "path": "references/stages/09-maintain.md",
       "sha256": "71e81f4b7d1e814e6d09edfe24e2afce7a12d321d5e8eb0705402ed382d3cfb8",
       "kind": "stage"
+    },
+    {
+      "path": "references/workflows.md",
+      "sha256": "cf9858d23f4eeb0e9b50da21c26abd762e65e8644bf79a7e84ce820e0d8d864a",
+      "kind": "card"
     }
   ]
 }

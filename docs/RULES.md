@@ -210,13 +210,13 @@ Pass: Every workflow declares read-only or empty default permissions.
 
 Learn: [Stage reference](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/03-scaffold.md#gate)
 
-## W_OIDC: Publish identity stays in the publish job
+## W_OIDC: Scope publish identity to publishing jobs
 
 Reader: registries. Stage: 06-release. Severity: error.
 
-Why: Identity permission belongs to the release step that needs it.
+Why: Identity permission belongs to the publishing step that needs it.
 
-Pass: Only a job named publish declares id-token: write, and it runs no install, build or package script.
+Pass: Only publish or a job using only Scorecard-allowed actions with ossf/scorecard-action publish_results: true declares id-token: write; these jobs run no install, build or package script.
 
 Learn: [Stage reference](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/06-release.md#gate)
 

@@ -14,8 +14,8 @@ const workflowFiles = (await fs.readdir(workflowDirectory)).filter(file => /\.ya
 const templateFiles = (await fs.readdir(templateDirectory)).filter(file => /\.ya?ml$/.test(file)).map(file => path.join(templateDirectory, file));
 
 test('the maintained workflows and shipped templates cover the specified jobs', () => {
-  assert.deepEqual(workflowFiles.map(file => path.basename(file)).sort(), ['check.yml', 'cla.yml', 'proof.yml', 'release.yml', 'repo-health.yml']);
-  assert.deepEqual(templateFiles.map(file => path.basename(file)).sort(), ['check-minimal.yml', 'release-npm.yml', 'release-pypi.yml', 'repo-health.yml']);
+  assert.deepEqual(workflowFiles.map(file => path.basename(file)).sort(), ['check.yml', 'cla.yml', 'proof.yml', 'release.yml', 'repo-health.yml', 'scorecard.yml']);
+  assert.deepEqual(templateFiles.map(file => path.basename(file)).sort(), ['check-minimal.yml', 'release-npm.yml', 'release-pypi.yml', 'repo-health.yml', 'scorecard.yml']);
   assert.deepEqual(workflowRules.map(rule => rule.id).sort(), ['W_CREDS', 'W_INJECT', 'W_OIDC', 'W_PERMS', 'W_PIN', 'W_TAG']);
 });
 
@@ -204,6 +204,57 @@ const run=async(id,text)=>ruleById[id].run({workflows:[readWorkflow('w.yml',text
 const wf=(body,head='permissions:\n  contents: read\n')=>`name: t\non: push\n${head}jobs:\n${body}`;
 const job=(steps,name='check',extra='')=>`  ${name}:\n    runs-on: ubuntu-latest\n${extra}    steps:\n${steps}`;
 const pinned=(tail=' # v4.1.2')=>`      - uses: actions/checkout@${sha('a')}${tail}\n        with:\n          persist-credentials: false\n`;
+
+test('W_OIDC accepts the Scorecard template and the repository copy preserves its publishing constraints',async()=>{
+  const text=await fs.readFile(path.join(templateDirectory,'scorecard.yml'),'utf8');
+  assert.equal(await fs.readFile(path.join(workflowDirectory,'scorecard.yml'),'utf8'),text);
+  assert.deepEqual(await run('W_OIDC',text),[]);
+  const {data}=parseWorkflow(text),analysis=data.jobs.analysis;
+  assert.deepEqual(data.on.push.branches,['main']);
+  assert.deepEqual(data.on.schedule,[{cron:'30 1 * * 6'}]);
+  assert.equal(data.permissions,'read-all');
+  assert.equal(data.env,undefined);assert.equal(data.defaults,undefined);
+  assert.deepEqual(Object.keys(data.jobs),['analysis']);
+  assert.equal(analysis['runs-on'],'ubuntu-latest');
+  assert.equal(analysis.env,undefined);assert.equal(analysis.container,undefined);
+  assert.deepEqual(analysis.permissions,{'security-events':'write','id-token':'write'});
+  assert.deepEqual(analysis.steps.map(s=>s.uses),[
+    'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1',
+    'ossf/scorecard-action@fa7117db83c52d787ae5a89f350999701505d78e',
+    'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9',
+    'github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d',
+  ]);
+  assert.ok(analysis.steps.every(s=>s.run===undefined));
+  assert.deepEqual(analysis.steps[1].with,{results_file:'results.sarif',results_format:'sarif',publish_results:true});
+  assert.deepEqual(analysis.steps[2].with,{name:'SARIF file',path:'results.sarif','retention-days':5});
+  assert.deepEqual(analysis.steps[3].with,{sarif_file:'results.sarif'});
+});
+test('W_OIDC rejects a job named scan holding id-token: write with a run: npm install step',async()=>{
+  const text=wf(job('      - run: npm install\n','scan','    permissions:\n      id-token: write\n'));
+  assert.ok((await run('W_OIDC',text)).length>0);
+});
+test('W_OIDC rejects ossf/scorecard-action with publish_results: false',async()=>{
+  const text=wf(job(`      - uses: ossf/scorecard-action@${sha('a')} # v2.5.0\n        with:\n          publish_results: false\n`,'scan','    permissions:\n      id-token: write\n'));
+  assert.equal((await run('W_OIDC',text)).length,1);
+});
+test('W_OIDC checks Scorecard action identity, every uses step and explicit publication',async()=>{
+  const text=await fs.readFile(path.join(templateDirectory,'scorecard.yml'),'utf8');
+  const valid=JSON.parse(JSON.stringify(parseWorkflow(text).data));
+  valid.jobs.scan=valid.jobs.analysis;delete valid.jobs.analysis;
+  valid.jobs.scan.steps.push({uses:`step-security/harden-runner@${sha('b')}`});
+  assert.deepEqual(await run('W_OIDC',JSON.stringify(valid)),[]);
+  for(const uses of [`actions/setup-node@${sha('b')}`,`./ossf/scorecard-action@${sha('b')}`,`ossf/scorecard-action-extra@${sha('b')}`]){
+    const data=structuredClone(valid);data.jobs.scan.steps.push({uses});
+    assert.equal((await run('W_OIDC',JSON.stringify(data))).length,1,uses);
+  }
+  for(const value of [undefined,false,'true','${{ inputs.publish }}']){
+    const data=structuredClone(valid);data.jobs.scan.steps[1].with.publish_results=value;
+    assert.equal((await run('W_OIDC',JSON.stringify(data))).length,1,String(value));
+  }
+  const data=structuredClone(valid);data.jobs.scan.steps.push({run:'npm install'});
+  assert.equal((await run('W_OIDC',JSON.stringify(data))).length,1);
+  assert.equal((await run('W_OIDC',text.replace('permissions: read-all','permissions:\n  id-token: write'))).length,1);
+});
 
 const upload='actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9';
 const download='actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333';

@@ -41,6 +41,7 @@ Install: `npx repo-build-skill`
 - [Product site](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/07-site.md): Product site
 - [Launch venues](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/08-launch.md): Launch venues
 - [Maintenance](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/stages/09-maintain.md): Maintenance
+- [Workflow assets](https://github.com/aunysillyme/repo-build-skill/blob/v0.1.2/skills/repo-build-skill/references/workflows.md): Workflow assets
 
 ## Optional
 

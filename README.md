@@ -1,6 +1,6 @@
 # repo-build-skill
 
-[![npm version](https://img.shields.io/npm/v/repo-build-skill)](https://www.npmjs.com/package/repo-build-skill) [![Repository checks](https://github.com/aunysillyme/repo-build-skill/actions/workflows/check.yml/badge.svg)](https://github.com/aunysillyme/repo-build-skill/actions/workflows/check.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/repo-build-skill)](https://www.npmjs.com/package/repo-build-skill) [![Repository checks](https://github.com/aunysillyme/repo-build-skill/actions/workflows/check.yml/badge.svg)](https://github.com/aunysillyme/repo-build-skill/actions/workflows/check.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/aunysillyme/repo-build-skill/badge)](https://scorecard.dev/viewer/?uri=github.com/aunysillyme/repo-build-skill)
 
 **A skill pack that teaches your AI to build, release and launch a repo that people, coding agents and AI search can all read. Your AI does the work.**
 
