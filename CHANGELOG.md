@@ -6,6 +6,12 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-10-28
+
+### Changed
+
+- The README front page carries the hero trailer under the install command, recorded from the shipped package's own screens.
+
 ## [0.1.3] - 2026-10-27
 
 ### Added
@@ -46,7 +52,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Public synthetic outcome fixtures and dated package measurements make claims reproducible.
 - Release, proof refresh and repository health workflows document the maintenance loop.
 
-[Unreleased]: https://github.com/aunysillyme/repo-build-skill/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/aunysillyme/repo-build-skill/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/aunysillyme/repo-build-skill/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/aunysillyme/repo-build-skill/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/aunysillyme/repo-build-skill/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/aunysillyme/repo-build-skill/compare/b10da76...v0.1.1

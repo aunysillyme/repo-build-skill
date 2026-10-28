@@ -129,10 +129,10 @@ Each row carries its command, measurement date, expiry and package version.
 
 | Measurement | Value | Measured | Expires |
 |---|---|---|---|
-| packed-size | 143173 bytes | 2026-10-28 | 2027-01-26 |
-| unpacked-size | 455335 bytes | 2026-10-28 | 2027-01-26 |
-| help-time | 30.3 ms | 2026-10-28 | 2027-01-26 |
-| checker-time | 30.6 ms | 2026-10-28 | 2027-01-26 |
+| packed-size | 143352 bytes | 2026-10-28 | 2027-01-26 |
+| unpacked-size | 455893 bytes | 2026-10-28 | 2027-01-26 |
+| help-time | 30.9 ms | 2026-10-28 | 2027-01-26 |
+| checker-time | 28 ms | 2026-10-28 | 2027-01-26 |
 
 Run `npm run proof` to refresh deterministic package measurements.
 Show current rows here; expired rows warn while work and releases continue.
