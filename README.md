@@ -12,6 +12,8 @@ What you can do: ask your AI to frame a new repo, bring an existing one to its f
 
 `npx repo-build-skill`
 
+![A 14-second tour: a working repo needs readers, people start with the README, agents get AGENTS.md and llms.txt, AI search gets the description and keywords, and the closing card shows the install command.](docs/trailer.gif)
+
 ## What your AI learns
 
 | Stage | What your AI learns | What each reader gets |
@@ -26,7 +28,6 @@ What you can do: ask your AI to frame a new repo, bring an existing one to its f
 | Launch venues | Check venue rules and prepare complete submissions. | Dated listings and a useful demo. |
 | Maintenance | Refresh proof and compare public surfaces. | Current instructions, package listings and support routes. |
 
-The stage table holds the trailer slot while the owner reviews a real demo and keyframes.
 Read the [method](docs/METHOD.md) for stage inputs, outputs and gate statuses.
 
 ## Who reads a repo
