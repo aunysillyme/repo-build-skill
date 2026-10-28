@@ -5,6 +5,10 @@ Choose the host, inspect the paths and confirm once.
 Then open that host and ask it to read the installed SKILL.md and select the current stage.
 The [compatibility page](COMPATIBILITY.md) links the native-loading check for each host.
 
+![Terminal recording of npx repo-build-skill installing the skill pack and running the checker](demo.gif)
+
+Recorded from the published package with `scripts/record-demo.sh`.
+
 ## Headless installation
 
 ```sh
