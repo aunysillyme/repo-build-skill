@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "stage": "09-maintain",
-  "package_version": "0.1.0",
+  "package_version": "0.1.3",
   "command": "check . --json",
   "entrypoint": "package bin declared in package.json",
-  "checked": "2026-10-19T04:30:32.476Z",
+  "checked": "2026-10-28T00:03:59.902Z",
   "checker_exit": 0,
   "automated": [
     {
@@ -41,7 +41,7 @@
       "why": "One renderer keeps related repository descriptions aligned.",
       "learn": "references/stages/09-maintain.md#gate",
       "status": "PASS",
-      "message": "README, llms.txt and renderer hash equal the vendored contract."
+      "message": "README, llms.txt, renderer and check wrapper hashes equal the vendored contract."
     }
   ],
   "manual": []

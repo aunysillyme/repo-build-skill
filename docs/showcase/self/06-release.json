@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "stage": "06-release",
-  "package_version": "0.1.0",
+  "package_version": "0.1.3",
   "command": "check . --json",
   "entrypoint": "package bin declared in package.json",
-  "checked": "2026-10-19T04:30:32.476Z",
+  "checked": "2026-10-28T00:03:59.902Z",
   "checker_exit": 0,
   "automated": [
     {
@@ -38,10 +38,10 @@
       "severity": "error",
       "file": null,
       "line": null,
-      "why": "Identity permission belongs to the release step that needs it.",
+      "why": "Identity permission belongs to the publishing step that needs it.",
       "learn": "references/stages/06-release.md#gate",
       "status": "PASS",
-      "message": "Only a job named publish declares id-token: write, and it runs no install, build or package script."
+      "message": "Only publish or a job using only Scorecard-allowed actions with ossf/scorecard-action publish_results: true declares id-token: write; these jobs run no install, build or package script."
     },
     {
       "id": "W_TAG",
