@@ -4,7 +4,7 @@ description: "Teaches you to frame, pick a stack for, scaffold, write, release a
 license: MIT
 compatibility: "Web access for each stage's live re-check; without it the work proceeds and marks those facts UNVERIFIED."
 metadata:
-  version: "0.1.2"
+  version: "0.1.3"
 ---
 
 # Repository build skill
