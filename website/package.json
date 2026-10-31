@@ -1,6 +1,6 @@
 {
   "name": "repo-build-skill-website",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "private": true,
   "type": "module",
   "engines": { "node": ">=22" },

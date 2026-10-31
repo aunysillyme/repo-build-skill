@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-export const csp = "default-src 'none'; img-src 'self'; style-src 'self' https://fonts.googleapis.com; style-src-attr 'unsafe-inline'; script-src 'self'; connect-src 'none'; font-src https://fonts.gstatic.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
+export const csp = "default-src 'none'; img-src 'self'; style-src 'self' https://fonts.googleapis.com; script-src 'self'; connect-src 'none'; font-src https://fonts.gstatic.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
 export const vercel = {
   buildCommand: 'node website/build.mjs && node website/check.mjs',
   outputDirectory: 'website/dist',

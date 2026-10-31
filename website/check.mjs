@@ -8,6 +8,10 @@ const pages = ['index.html', 'docs/install/index.html', 'docs/checker/index.html
 execFileSync(process.execPath, [join(root, 'website/security.mjs'), '--check']);
 for (const path of pages) {
   const html = readFileSync(join(dist, path), 'utf8');
+  if (path === 'index.html') {
+    const table = html.match(/<table\s+class="proof-table"[^>]*>([\s\S]*?)<\/table>/)?.[1] || '';
+    if (!/<tbody>\s*<tr[\s>]/.test(table)) throw Error(`${path}: proof table has no rows`);
+  }
   for (const value of ['data-projects-trigger', 'https://aunysillyme.dev/#projects', '/assets/projects-popup.js', '/assets/projects-popup.css', 'aria-current="page"', 'https://github.com/aunysillyme/repo-build-skill', 'https://www.npmjs.com/package/repo-build-skill']) if (!html.includes(value)) throw Error(`${path}: missing ${value}`);
   if (html.includes('<video')) throw Error(`${path}: unexpected video`);
 }

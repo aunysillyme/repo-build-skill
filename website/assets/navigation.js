@@ -8,7 +8,7 @@ export function currentSection(sections, threshold, atEnd) {
 }
 
 export function setupNavigation(doc = document, env = window) {
-  const desktop = [...doc.querySelectorAll('.side-links a[href^="#"]')];
+  const desktop = [...doc.querySelectorAll('.side-links a[href^="#"], .side-links a[href^="/#"]')];
   const links = [...desktop, ...doc.querySelectorAll('.mobile-nav a[href^="#"]')];
   const sections = desktop.map(link => doc.getElementById(link.hash.slice(1))).filter(Boolean);
   if (!sections.length) return;

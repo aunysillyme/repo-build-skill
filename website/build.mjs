@@ -41,7 +41,7 @@ cpSync(join(root, 'website/assets'), join(out, 'assets'), { recursive:true });
 writeFileSync(join(out, 'index.html'), page('/', 'Build, release and launch a repository', body));
 for (const doc of docs) {
   const dir = join(out, doc.route); mkdirSync(dir, { recursive:true });
-  const html = `<nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span>Documentation</span></nav><h1 class="document-title">${esc(doc.title)}</h1><article class="markdown"><p>${esc(doc.text)}</p>${doc.code ? `<pre><code>${esc(doc.code)}</code></pre>` : ''}<p><a href="${repository}/blob/main/${doc.source}">Read the full ${esc(doc.title.toLowerCase())} guide on GitHub ↗</a></p></article>`;
+  const html = `<nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span>Documentation</span></nav><h1 class="document-title">${esc(doc.title)}</h1><article class="markdown"><p>${esc(doc.text)}</p>${doc.code ? `<pre><code>${esc(doc.code)}</code></pre>` : ''}<p><a href="${repository}/blob/main/${doc.source}">Read on GitHub: ${esc(doc.title)} ↗</a></p></article>`;
   writeFileSync(join(dir, 'index.html'), page(doc.route, doc.title, html));
 }
 writeFileSync(join(out, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`);
