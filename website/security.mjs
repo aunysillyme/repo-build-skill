@@ -16,4 +16,6 @@ export const vercel = {
 const path = fileURLToPath(new URL('../vercel.json', import.meta.url));
 const expected = `${JSON.stringify(vercel, null, 2)}\n`;
 if (process.argv.includes('--write')) writeFileSync(path, expected);
-if (process.argv.includes('--check') && readFileSync(path, 'utf8') !== expected) throw Error('vercel.json differs from website/security.mjs');
+// Vercel rewrites vercel.json inside its build container (minified, with name and version added), so compare parsed content, not bytes.
+const parsed = () => { const { name, version, ...rest } = JSON.parse(readFileSync(path, 'utf8')); return rest; };
+if (process.argv.includes('--check') && JSON.stringify(parsed()) !== JSON.stringify(vercel)) throw Error('vercel.json differs from website/security.mjs');
