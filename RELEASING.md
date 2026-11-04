@@ -108,12 +108,13 @@ The owner approves trailer keyframes before a trailer is rendered.
 ## proof.yml
 
 **Trigger:** the schedule in `.github/workflows/proof.yml`, or manual dispatch.
-**Invocation chain:** checkout, setup Node, run `node scripts/proof.mjs --deterministic`, run the proof test and propose one refresh pull request.
+**Invocation chain:** check out the default branch, setup Node, run `node scripts/proof.mjs --deterministic`, run the proof test and call `scripts/refresh-proof-branch.mjs` to propose one refresh pull request.
 **Dependencies:** npm packing, local checker code and the Actions token's contents and pull-request permissions.
 **Reads:** published allowlist, local source, the tiny-tool fixture and existing proof rows.
 **Writes:** deterministic rows in `proof/results.json`, an automation branch and one pull request.
 The workflow preserves model evaluation rows and holds no model key.
 It updates the proof data only; after review the maintainer refreshes the README table from unexpired rows, including measured and expires dates.
+The branch commit uses the measured default branch as its tree base and keeps the previous automation head and current default branch as parents. It refuses a moved default branch, unexpected branch commits or files, and non-fast-forward updates. A pull request permission refusal leaves the branch and logs a comparison link.
 
 **Closed loop:** a maintainer reviews the proposed data and runs required checks before merging.
 A pull request opened by the Actions token does not start another Actions run automatically.
@@ -123,6 +124,7 @@ Expired proof warns and is omitted from displayed claims; expiry never blocks a 
 **Hand verification:** run `node scripts/proof.mjs --deterministic`, inspect the changed rows and run `node --test test/proof.test.mjs`.
 Each row must name its command, package version, measured date and expiry.
 Runtime results belong to the measured machine; package size changes when the contents change.
+After changing the automation, run it in an authorized test repository and inspect the workflow log, branch and Vercel preview. Live behavior is UNVERIFIED until an actual run succeeds. The workflow run is the watcher; notification delivery remains UNVERIFIED.
 
 ## repo-health.yml
 
