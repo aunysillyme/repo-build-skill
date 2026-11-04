@@ -214,3 +214,116 @@ test('the stale-source check fetches the lock source only when it is an https UR
     assert.equal(requests.includes(source), false, source);
   }
 });
+const WRAPPER = 'scripts/check-set.mjs';
+const shippedWrapper = () => fs.readFileSync(fileURLToPath(new URL('../src/check-set.mjs', import.meta.url)));
+const syncNow = new Date('2026-10-19T12:00:00Z');
+test('set sync vendors the drift-check wrapper over an older copy and pins its hash in the lock', async t => {
+  const { root, fetchImpl } = syncFixture(t, { registry: published('Alpha description.', 'git+https://github.com/example/alpha.git') });
+  fs.mkdirSync(path.join(root, 'scripts')); fs.writeFileSync(path.join(root, WRAPPER), '// older hand-kept wrapper\n');
+  const got = await syncSet({ root, fetchImpl, now: syncNow, env: {} });
+  assert.equal(got.code, 0, got.message);
+  const wrapper = fs.readFileSync(path.join(root, WRAPPER));
+  assert.ok(wrapper.equals(shippedWrapper()), 'vendored wrapper equals the shipped bytes');
+  assert.equal(got.lock.check_sha256, sha256(wrapper));
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root, '.repo-build/set.lock.json'), 'utf8')).check_sha256, sha256(wrapper));
+  const checked = checkSet(root);
+  assert.equal(checked.code, 0, checked.message); assert.equal(checked.notice, undefined);
+  assert.match(execFileSync(process.execPath, [path.join(root, WRAPPER)], { cwd: root, encoding: 'utf8' }), /Set blocks and pinned hashes match/);
+});
+test('S_DRIFT fails when the vendored wrapper is edited, missing, symlinked or its pin is not a hash', async t => {
+  const { check } = await import('../src/check/index.mjs');
+  const { root, fetchImpl } = syncFixture(t, { registry: published('x') });
+  assert.equal((await syncSet({ root, fetchImpl, now: syncNow, env: {} })).code, 0);
+  const file = path.join(root, WRAPPER), original = fs.readFileSync(file);
+  fs.appendFileSync(file, '\n// edited\n');
+  const edited = checkSet(root);
+  assert.equal(edited.code, 1); assert.match(edited.message, /wrapper differs from lock/i); assert.ok(edited.changed.includes(WRAPPER));
+  const row = (await check(root, { env: {} })).results.find(item => item.id === 'S_DRIFT');
+  assert.equal(row.status, 'FAIL'); assert.match(row.message, /wrapper differs from lock/i);
+  fs.rmSync(file);
+  const missing = checkSet(root);
+  assert.equal(missing.code, 1); assert.match(missing.message, /Missing file: scripts\/check-set\.mjs/);
+  const outside = path.join(root, '..', `outside-wrapper-${path.basename(root)}`);
+  fs.writeFileSync(outside, original); t.after(() => fs.rmSync(outside, { force: true }));
+  fs.symlinkSync(outside, file);
+  const linked = checkSet(root);
+  assert.equal(linked.code, 1); assert.match(linked.message, /Symlink refused: scripts\/check-set\.mjs/); assert.equal(linked.message.includes(outside), false);
+  fs.rmSync(file); fs.writeFileSync(file, original);
+  const lockFile = path.join(root, '.repo-build/set.lock.json'), pinned = JSON.parse(fs.readFileSync(lockFile, 'utf8'));
+  for (const value of [null, '', 0]) {
+    fs.writeFileSync(lockFile, JSON.stringify({ ...pinned, check_sha256: value }));
+    assert.equal(checkSet(root).code, 1, String(value));
+  }
+});
+test('an older lock without check_sha256 passes S_DRIFT and names the upgrade', async t => {
+  const { check } = await import('../src/check/index.mjs');
+  const root = fixture(t); renderSet({ root });
+  const checked = checkSet(root);
+  assert.equal(checked.code, 0, checked.message);
+  assert.match(checked.notice, /check_sha256/); assert.match(checked.notice, /set sync/); assert.match(checked.notice, /scripts\/check-set\.mjs/);
+  const row = (await check(root, { env: {} })).results.find(item => item.id === 'S_DRIFT');
+  assert.equal(row.status, 'PASS'); assert.equal(row.message, checked.notice);
+});
+test('set sync refuses a symlinked wrapper path and writes nothing', async t => {
+  const { root, fetchImpl } = syncFixture(t, { registry: published('x') });
+  const outside = path.join(root, '..', `outside-scripts-${path.basename(root)}`);
+  fs.mkdirSync(outside); t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+  fs.symlinkSync(outside, path.join(root, 'scripts'), 'dir');
+  const files = ['README.md', 'llms.txt', '.repo-build/set.json', '.repo-build/set.lock.json'], before = files.map(rel => fs.readFileSync(path.join(root, rel)));
+  const got = await syncSet({ root, fetchImpl, now: syncNow, env: {} });
+  assert.notEqual(got.code, 0); assert.match(got.message, /Symlink refused: scripts/);
+  assert.deepEqual(fs.readdirSync(outside), []);
+  files.forEach((rel, index) => assert.ok(fs.readFileSync(path.join(root, rel)).equals(before[index]), rel));
+});
+test('set sync refuses a directory at the wrapper destination before writing and names only the relative path', async t => {
+  const { root, fetchImpl } = syncFixture(t, { registry: published('Updated alpha description.', 'git+https://github.com/example/alpha.git') });
+  fs.mkdirSync(path.join(root, WRAPPER), { recursive: true });
+  fs.appendFileSync(path.join(root, '.repo-build/render-set.mjs'), '\n// older renderer\n');
+  const files = ['README.md', 'llms.txt', '.repo-build/set.json', '.repo-build/render-set.mjs', '.repo-build/set.lock.json'];
+  const before = files.map(rel => fs.readFileSync(path.join(root, rel)));
+  const got = await syncSet({ root, fetchImpl, now: syncNow, env: {} });
+  assert.notEqual(got.code, 0);
+  await t.test('all existing output bytes stay unchanged', () => {
+    files.forEach((rel, index) => assert.ok(fs.readFileSync(path.join(root, rel)).equals(before[index]), rel));
+    assert.deepEqual(fs.readdirSync(path.join(root, WRAPPER)), []);
+  });
+  await t.test('the refusal names the repo-relative path without an absolute path', () => {
+    assert.ok(got.message.includes(WRAPPER), got.message);
+    assert.equal(got.message.includes(root), false, got.message);
+    assert.equal(got.message.includes(fs.realpathSync(root)), false, got.message);
+  });
+});
+test('a facts-only repo synced by set sync passes the vendored wrapper', async t => {
+  const { root, fetchImpl } = syncFixture(t, { registry: published('x') });
+  fs.writeFileSync(path.join(root, '.repo-build/facts.json'), JSON.stringify({ name: 'alpha-tool' }));
+  fs.rmSync(path.join(root, 'package.json'));
+  const got = await syncSet({ root, fetchImpl, now: syncNow, env: {} });
+  assert.equal(got.code, 0, got.message);
+  assert.match(execFileSync(process.execPath, [path.join(root, WRAPPER)], { cwd: root, encoding: 'utf8' }), /Set blocks and pinned hashes match/);
+});
+test('the vendored wrapper refuses each symlinked identity input even when the other identity is valid', async t => {
+  for (const rel of ['package.json', '.repo-build/facts.json']) {
+    for (const dangling of [false, true]) await t.test(`${rel}: ${dangling ? 'dangling' : 'existing'} target`, async t => {
+      const { root, fetchImpl } = syncFixture(t, { registry: published('x') });
+      fs.writeFileSync(path.join(root, '.repo-build/facts.json'), JSON.stringify({ name: 'alpha-tool' }));
+      const got = await syncSet({ root, fetchImpl, now: syncNow, env: {} });
+      assert.equal(got.code, 0, got.message);
+      const target = path.join(root, 'identity.json');
+      if (!dangling) fs.copyFileSync(path.join(root, rel), target);
+      fs.rmSync(path.join(root, rel)); fs.symlinkSync(target, path.join(root, rel));
+      assert.throws(() => execFileSync(process.execPath, [path.join(root, WRAPPER)], { cwd: root, stdio: 'pipe' }), error => {
+        assert.equal(error.status, 2);
+        const message = error.stderr.toString();
+        assert.ok(message.includes(rel), message); assert.match(message, /symlinks are not allowed/);
+        assert.equal(message.includes(root), false, message);
+        return true;
+      });
+    });
+  }
+});
+test('reference wrapper and this repository vendored wrapper are byte-identical and pinned', () => {
+  const root = fileURLToPath(new URL('../', import.meta.url));
+  const vendored = fs.readFileSync(path.join(root, WRAPPER));
+  assert.ok(vendored.equals(shippedWrapper()));
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root, '.repo-build/set.lock.json'), 'utf8')).check_sha256, sha256(vendored));
+});

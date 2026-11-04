@@ -1,6 +1,6 @@
 {
   "name": "repo-build-skill",
-  "packageVersion": "0.1.0",
+  "packageVersion": "0.1.4",
   "budgets": {
     "skillMd": 6144,
     "skillMdLines": 120,
@@ -195,7 +195,7 @@
   "assets": [
     {
       "path": "SKILL.md",
-      "sha256": "26a6721e2b757e928b45f534ec77bc36208dd27f7637a42087a4195633f22549",
+      "sha256": "07829a877307cc6659da5861a1449ad05dc6180208bd65f6cba0abb01c712d82",
       "kind": "asset"
     },
     {
@@ -290,12 +290,12 @@
     },
     {
       "path": "assets/workflows/check-minimal.yml",
-      "sha256": "0de2d4e25b3244164a04d0a44b78ec8d18d3b85bee5458019ebbc07524b39524",
+      "sha256": "cf3c6906d4efc525e7102f7bab0df0d59cce520dfe216d405b761285f631a6f0",
       "kind": "asset"
     },
     {
       "path": "assets/workflows/release-npm.yml",
-      "sha256": "812ce730865ac88c04f9beda66481242a380969cb51a2bd0ef5a57ec795b894a",
+      "sha256": "bd1caf46bf386d299b9648f1151ab38b0f64165b5a7254fe8a9c8d377c7fdbf2",
       "kind": "asset"
     },
     {
@@ -305,7 +305,12 @@
     },
     {
       "path": "assets/workflows/repo-health.yml",
-      "sha256": "86c95f10a68b81593b4cd9b3169e0c4d2c8c255b9b56b0b55998636eb40f33d8",
+      "sha256": "404bc181eb174f1277fe6d5aded964fecc6349b7290da4632725ad0e879c8382",
+      "kind": "asset"
+    },
+    {
+      "path": "assets/workflows/scorecard.yml",
+      "sha256": "12d9c5a79d6165c5079ce74051415a6c6a1c07d4201b438b5860e9e3b21a923d",
       "kind": "asset"
     },
     {
@@ -395,7 +400,7 @@
     },
     {
       "path": "references/stages/03-scaffold.md",
-      "sha256": "73820aa8461aec0bf0b999244fbcacb1e7777cb0fa93ef64e2dd4162c397013e",
+      "sha256": "09237234436e21735dd01aac4990ba59268b6ede9ca89ea28900fced42db9bfa",
       "kind": "stage"
     },
     {
@@ -410,7 +415,7 @@
     },
     {
       "path": "references/stages/06-release.md",
-      "sha256": "613e699706cf2fd8143d241bc3635e965f6fcd3fb134251adb7c195de814ece0",
+      "sha256": "001c01b08e68148c3af4e89de257b901d3108c5d8ca80409be58942a437594ba",
       "kind": "stage"
     },
     {
@@ -425,8 +430,13 @@
     },
     {
       "path": "references/stages/09-maintain.md",
-      "sha256": "affa18a5dcef0a9c7666ffc872a263b6ba1fb4cc71aeb1b1fbf5e8f71a1fd35d",
+      "sha256": "71e81f4b7d1e814e6d09edfe24e2afce7a12d321d5e8eb0705402ed382d3cfb8",
       "kind": "stage"
+    },
+    {
+      "path": "references/workflows.md",
+      "sha256": "cf9858d23f4eeb0e9b50da21c26abd762e65e8644bf79a7e84ce820e0d8d864a",
+      "kind": "card"
     }
   ]
 }

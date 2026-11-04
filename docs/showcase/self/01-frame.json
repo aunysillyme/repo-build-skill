@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "stage": "01-frame",
-  "package_version": "0.1.0",
+  "package_version": "0.1.4",
   "command": "check . --json",
   "entrypoint": "package bin declared in package.json",
-  "checked": "2026-10-19T04:01:51.921Z",
-  "checker_exit": 1,
+  "checked": "2026-10-28T01:45:16.244Z",
+  "checker_exit": 0,
   "automated": [
     {
       "id": "H_LEAD",

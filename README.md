@@ -1,6 +1,6 @@
 # repo-build-skill
 
-[![npm version](https://img.shields.io/npm/v/repo-build-skill)](https://www.npmjs.com/package/repo-build-skill) [![Repository checks](https://github.com/aunysillyme/repo-build-skill/actions/workflows/check.yml/badge.svg)](https://github.com/aunysillyme/repo-build-skill/actions/workflows/check.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/repo-build-skill)](https://www.npmjs.com/package/repo-build-skill) [![Repository checks](https://github.com/aunysillyme/repo-build-skill/actions/workflows/check.yml/badge.svg)](https://github.com/aunysillyme/repo-build-skill/actions/workflows/check.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/aunysillyme/repo-build-skill/badge)](https://scorecard.dev/viewer/?uri=github.com/aunysillyme/repo-build-skill)
 
 **A skill pack that teaches your AI to build, release and launch a repo that people, coding agents and AI search can all read. Your AI does the work.**
 
@@ -11,6 +11,8 @@ What you get: one flow from first idea to launch day, nine stages, each with a g
 What you can do: ask your AI to frame a new repo, bring an existing one to its first release, or plan a launch, then check the result.
 
 `npx repo-build-skill`
+
+![A 14-second tour: a working repo needs readers, people start with the README, agents get AGENTS.md and llms.txt, AI search gets the description and keywords, and the closing card shows the install command.](docs/trailer.gif)
 
 ## What your AI learns
 
@@ -26,7 +28,6 @@ What you can do: ask your AI to frame a new repo, bring an existing one to its f
 | Launch venues | Check venue rules and prepare complete submissions. | Dated listings and a useful demo. |
 | Maintenance | Refresh proof and compare public surfaces. | Current instructions, package listings and support routes. |
 
-The stage table holds the trailer slot while the owner reviews a real demo and keyframes.
 Read the [method](docs/METHOD.md) for stage inputs, outputs and gate statuses.
 
 ## Who reads a repo
@@ -66,7 +67,10 @@ The [compatibility page](docs/COMPATIBILITY.md) links each host's loading check.
 |---|---|
 | [agent-personalizer](https://github.com/aunysillyme/agent-personalizer) | AI custom instructions from approved entries: a profile and rules for Claude Code, Codex, Cursor, Gemini CLI and ChatGPT, kept in sync from one source. |
 | [model-orchestrator](https://github.com/aunysillyme/model-orchestrator) | Model router for AI coding agents: routes routine work to cheaper models with routing rules, 8 subagents, hooks and a CLI runner |
+| **repo-build-skill** | Skill pack that teaches your AI to build, release and launch a GitHub repo: stack pick, README, AGENTS.md, llms.txt, repo SEO and AEO, trusted publishing. |
 | [website-build-skill](https://github.com/aunysillyme/website-build-skill) | A skill pack that turns your AI into an expert website builder: current research, design, code, accessibility, speed, SEO and security, alone or as a team. |
+| [lean-browser-use](https://github.com/aunysillyme/lean-browser-use) | Cut browser use cost by about 25% in Claude Code: fresh runner subagent, bulk reads, three guards and a token meter. One npx command |
+| [lean-computer-use](https://github.com/aunysillyme/lean-computer-use) | Background Mac computer control for AI agents: desk tools, a fresh runner subagent, retry guards and a transcript token meter, installed with one command |
 <!-- set:end -->
 
 ## Check any repo
@@ -127,10 +131,10 @@ Each row carries its command, measurement date, expiry and package version.
 
 | Measurement | Value | Measured | Expires |
 |---|---|---|---|
-| packed-size | 137713 bytes | 2026-10-19 | 2027-01-17 |
-| unpacked-size | 439259 bytes | 2026-10-19 | 2027-01-17 |
-| help-time | 31.6 ms | 2026-10-19 | 2027-01-17 |
-| checker-time | 30.3 ms | 2026-10-19 | 2027-01-17 |
+| packed-size | 143352 bytes | 2026-10-28 | 2027-01-26 |
+| unpacked-size | 455893 bytes | 2026-10-28 | 2027-01-26 |
+| help-time | 30.9 ms | 2026-10-28 | 2027-01-26 |
+| checker-time | 28 ms | 2026-10-28 | 2027-01-26 |
 
 Run `npm run proof` to refresh deterministic package measurements.
 Show current rows here; expired rows warn while work and releases continue.

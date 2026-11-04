@@ -33,7 +33,7 @@ Record each read in `.repo-build/work/sources.md` with claim, URL, source date, 
 
 ### Professional floor
 
-Create README.md, LICENSE, CREDITS.md, CHANGELOG.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, MAINTAINERS.md, RELEASING.md, AGENTS.md, CLAUDE.md, llms.txt and docs/README.md. Add issue forms, a pull request template, CODEOWNERS, Dependabot and a check workflow under `.github/`.
+Create README.md, LICENSE, CREDITS.md, CHANGELOG.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, MAINTAINERS.md, RELEASING.md, AGENTS.md, CLAUDE.md, llms.txt and docs/README.md. Add issue forms, a pull request template, CODEOWNERS and a check workflow under `.github/`. Choose dependency monitoring for the project. Add Scorecard to every repo using the [workflow assets](../workflows.md#scorecard).
 
 A solo maintainer can defer a governance board, a separate public planning board and release milestones until they serve actual users. Keep ownership, security reporting and contribution instructions concrete.
 
@@ -111,7 +111,7 @@ Rows begin BLOCKED. Attach actual output or a dated manual receipt before assign
 | R_META | Unmet requirement: Homepage, repository, bugs and license fields are present. | R_META: checker receipt, initially BLOCKED |
 | W_PERMS | Unmet requirement: Every workflow declares read-only or empty default permissions. | W_PERMS: checker receipt, initially BLOCKED |
 | W_PIN | Unmet requirement: Every remote action uses forty hex characters and a version comment. | W_PIN: checker receipt, initially BLOCKED |
-| W_CREDS | Unmet requirement: Each checkout step sets persist-credentials: false. | W_CREDS: checker receipt, initially BLOCKED |
+| W_CREDS | Unmet requirement: Each checkout step sets persist-credentials: false, and a tag-triggered workflow turns package-manager caching off. | W_CREDS: checker receipt, initially BLOCKED |
 | W_INJECT | Unmet requirement: No event, head_ref or input interpolation appears in run values or github-script bodies. | W_INJECT: checker receipt, initially BLOCKED |
 | P_PATH | Unmet requirement: Home paths use placeholder usernames in contents and filenames. | P_PATH: checker receipt, initially BLOCKED |
 | P_EMAIL | Unmet requirement: Email addresses are in the allowlist or a standard example or noreply domain. | P_EMAIL: checker receipt, initially BLOCKED |

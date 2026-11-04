@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { NAME, VERSION, ROOT, BIN } from '../src/constants.mjs';
+import { npmCall } from '../src/npm.mjs';
 import { SCORER_VERSION, SLICES, calibration, filesBelow, parseAnswer, questionnaire, scoreColdRead, scoreRepository, slices, summarize, median } from './score.mjs';
 
 const HERE = fileURLToPath(new URL('./', import.meta.url));
@@ -15,7 +16,8 @@ export function triggerEvals() {
 }
 
 function execute(command, args, cwd, env = process.env) {
-  const result = spawnSync(command, args, { cwd, env, input: '', encoding: 'utf8', timeout: 120000, maxBuffer: 16 * 1024 * 1024 });
+  const target = command === 'npm' ? npmCall(args) : { command, args, options: {} };
+  const result = spawnSync(target.command, target.args, { ...target.options, cwd, env, input: '', encoding: 'utf8', timeout: 120000, maxBuffer: 16 * 1024 * 1024 });
   if (result.error || result.status !== 0) throw Error(`${command} ${args[0] || ''} failed (${result.status ?? 'spawn'}): ${result.error?.message || result.stderr || result.stdout}`);
   return result.stdout;
 }

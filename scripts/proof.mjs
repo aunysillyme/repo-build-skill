@@ -6,8 +6,10 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ROOT,VERSION,BIN } from '../src/constants.mjs';
 import { check } from '../src/check/index.mjs';
+import { npmCall } from '../src/npm.mjs';
 export function packMetrics(root=ROOT) {
-  const r=spawnSync(process.platform==='win32'?'npm.cmd':'npm',['pack','--dry-run','--json','--ignore-scripts','--offline'],{cwd:root,encoding:'utf8',env:{...process.env,npm_config_cache:join(tmpdir(),'repo-proof-npm-cache'),npm_config_update_notifier:'false'}});
+  const call=npmCall(['pack','--dry-run','--json','--ignore-scripts','--offline']);
+  const r=spawnSync(call.command,call.args,{...call.options,cwd:root,encoding:'utf8',env:{...process.env,npm_config_cache:join(tmpdir(),'repo-proof-npm-cache'),npm_config_update_notifier:'false'}});
   if(r.status!==0)throw Error(r.stderr||'Package inspection failed.');
   const parsed=JSON.parse(r.stdout);const rows=Array.isArray(parsed)?parsed:Object.values(parsed);const p=rows.find(x=>x&&typeof x==='object'&&typeof x.size==='number');
   if(!p)throw Error('Package inspection returned no size receipt.');

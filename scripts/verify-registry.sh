@@ -14,6 +14,7 @@ export REGISTRY_VERIFY_ROOT="$repo_root"
 node --input-type=module - "$@" <<'NODE'
 import { execFileSync } from 'node:child_process';
 import { setTimeout as pause } from 'node:timers/promises';
+import { pathToFileURL } from 'node:url';
 
 const args = process.argv.slice(2);
 const tag = args.shift();
@@ -43,12 +44,15 @@ const metadata = JSON.parse(source('package.json'));
 const expectedReadme = source('README.md');
 const version = tag.slice(1);
 if (metadata.version !== version) throw new Error('The tag and tagged package version differ.');
-const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+const { npmCall } = await import(pathToFileURL(`${root}/src/npm.mjs`).href);
 function view(spec, fields) {
-  const output = execFileSync(npmCommand, ['view', spec, ...fields, '--prefer-online', '--json'], {
-    cwd: root, encoding: 'utf8', timeout: 30000, stdio: ['ignore', 'pipe', 'pipe'],
+  const call = npmCall(['view', spec, ...fields, '--prefer-online', '--json']);
+  const output = execFileSync(call.command, call.args, {
+    ...call.options, cwd: root, encoding: 'utf8', timeout: 30000, stdio: ['ignore', 'pipe', 'pipe'],
   });
-  return JSON.parse(output);
+  const parsed = JSON.parse(output);
+  // npm 12 wraps `npm view --json` output in a one-element array; npm 10 does not.
+  return Array.isArray(parsed) && parsed.length === 1 ? parsed[0] : parsed;
 }
 function sorted(value) {
   if (Array.isArray(value)) return value.map(sorted);

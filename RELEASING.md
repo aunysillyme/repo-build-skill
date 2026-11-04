@@ -133,7 +133,7 @@ This is aun-repo-health: public parity checks that open, update or close one hea
 **Reads:** facts, package metadata, GitHub About, registry data, llms.txt and the local set lock.
 **Writes:** one `repo-health` issue while findings remain; closes open health issues after a clean observation.
 It neither fetches nor synchronizes the canonical set source in CI.
-The maintainer refreshes set data with `npx repo-build-skill set sync` and reviews the diff.
+The maintainer refreshes set data with `npx repo-build-skill set sync`, which also vendors `scripts/check-set.mjs` and pins its hash, and reviews the diff.
 
 **Closed loop:** the issue carries current findings and the reproduce command.
 The next scheduled or manual run observes the repair and closes the issue after parity is restored.
@@ -153,7 +153,7 @@ Keep credentials outside command arguments and logs.
 | Registry still serves earlier data | Query the explicit version and poll the listing before declaring completion. |
 | Packed install or uninstall fails | Keep publication blocked, preserve the fixture evidence and fix the artifact. |
 | Generated output drifts | Change its source and rerun the build and affected asset rehash. |
-| Set renderer hash drifts | Maintainer runs set sync and reviews the lock and renderer together. |
+| Set renderer or check wrapper hash drifts | Maintainer runs set sync and reviews the lock, renderer and `scripts/check-set.mjs` together. |
 | Health request fails | Retain UNVERIFIED evidence, inspect service reachability and rerun the read-only probe. |
 | Proof refresh PR fails | Inspect the workflow log, reproduce deterministic measurements locally and repair the source. |
 

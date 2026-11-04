@@ -117,6 +117,7 @@ test('a renamed copy keeps the real package code and skill, rebuilds and checks 
   lock.sha256 = hash(setBytes);
   lock.vendored_sha256 = hash(setBytes);
   lock.renderer_sha256 = hash(fs.readFileSync(path.join(root, '.repo-build', 'render-set.mjs')));
+  lock.check_sha256 = hash(fs.readFileSync(path.join(root, 'scripts', 'check-set.mjs')));
   fs.writeFileSync(lockFile, JSON.stringify(lock, null, 2) + '\n');
   const manifest = JSON.parse(fs.readFileSync(path.join(skillRoot, 'manifest.json'), 'utf8'));
   assert.equal(manifest.name, renamed);

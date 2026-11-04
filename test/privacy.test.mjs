@@ -44,7 +44,8 @@ test('an unreadable tracked path becomes its own failure and the other files are
   assert.ok(by(r,'P_TOKEN').some(x=>x.status==='FAIL'&&x.file==='leak.txt'),JSON.stringify(by(r,'P_TOKEN')));
   for(const id of ['P_PATH','P_EMAIL','P_TOKEN'])assert.ok(by(r,id).every(x=>x.status!=='SKIPPED'),id);
 });
-test('a tracked path the reader cannot open is named in a failure and does not hide a token elsewhere',async t=>{
+// Windows cannot create a file whose name holds a backslash, so this case needs a POSIX filesystem; the gitlink case above runs everywhere.
+test('a tracked path the reader cannot open is named in a failure and does not hide a token elsewhere',{skip:process.platform==='win32'&&'file names with a backslash cannot exist on Windows'},async t=>{
   const root=temporary(t);gitIn(root,'init','-q','.');
   write(root,'leak.txt',token()+'\n');
   write(root,'odd\\name.txt','x\n');

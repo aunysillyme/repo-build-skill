@@ -61,6 +61,6 @@ Rows begin BLOCKED. Attach actual output or a dated manual receipt before assign
 |---|---|---|
 | F_PROOF | Unmet requirement: Each row records value, unit, command, measured, expires, package_version and subject package. | F_PROOF: checker receipt, initially BLOCKED |
 | C_CREDITS | Unmet requirement: Credits rows contain project, link, licence and use, and README links CREDITS.md. | C_CREDITS: checker receipt, initially BLOCKED |
-| S_DRIFT | Unmet requirement: README, llms.txt and renderer hash equal the vendored contract. | S_DRIFT: checker receipt, initially BLOCKED |
+| S_DRIFT | Unmet requirement: README, llms.txt, renderer and check wrapper hashes equal the vendored contract. | S_DRIFT: checker receipt, initially BLOCKED |
 | S_STALE | Unmet requirement: The fetched source hash equals the lock hash. | S_STALE: checker receipt, initially BLOCKED |
 <!-- gate:end -->
