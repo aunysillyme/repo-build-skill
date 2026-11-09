@@ -4,8 +4,8 @@
     "value": 143879,
     "unit": "bytes",
     "command": "npm pack --dry-run --json --ignore-scripts",
-    "measured": "2026-11-04T20:33:40.032Z",
-    "expires": "2027-02-02T20:33:40.032Z",
+    "measured": "2026-11-09T19:55:08.486Z",
+    "expires": "2027-02-07T19:55:08.486Z",
     "package_version": "0.1.4",
     "subject": "package"
   },
@@ -14,28 +14,28 @@
     "value": 457410,
     "unit": "bytes",
     "command": "npm pack --dry-run --json --ignore-scripts",
-    "measured": "2026-11-04T20:33:40.032Z",
-    "expires": "2027-02-02T20:33:40.032Z",
+    "measured": "2026-11-09T19:55:08.486Z",
+    "expires": "2027-02-07T19:55:08.486Z",
     "package_version": "0.1.4",
     "subject": "package"
   },
   {
     "id": "help-time",
-    "value": 34.4,
+    "value": 20.2,
     "unit": "ms",
     "command": "node scripts/proof.mjs --deterministic",
-    "measured": "2026-11-04T20:33:40.032Z",
-    "expires": "2027-02-02T20:33:40.032Z",
+    "measured": "2026-11-09T19:55:08.486Z",
+    "expires": "2027-02-07T19:55:08.486Z",
     "package_version": "0.1.4",
     "subject": "package"
   },
   {
     "id": "checker-time",
-    "value": 15.5,
+    "value": 9.1,
     "unit": "ms",
     "command": "node scripts/proof.mjs --deterministic",
-    "measured": "2026-11-04T20:33:40.032Z",
-    "expires": "2027-02-02T20:33:40.032Z",
+    "measured": "2026-11-09T19:55:08.486Z",
+    "expires": "2027-02-07T19:55:08.486Z",
     "package_version": "0.1.4",
     "subject": "package"
   }
