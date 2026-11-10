@@ -16,7 +16,7 @@ export function rebase(text,source,target) {
   });
 }
 export function gateTable(m,stage) {
-  const cell=s=>String(s).replace(/\|/g,'\\|').replace(/\n/g,' ');
+  const cell=s=>String(s).replace(/\\/g,'\\\\').replace(/\|/g,'\\|').replace(/\n/g,' ');
   const rows=rules.filter(r=>r.stage===stage).map(r=>[r.id,`Unmet requirement: ${r.pass}`,`${r.id}: checker receipt, initially BLOCKED`]);
   for(const r of m.gates[stage]?.manual||[])rows.push([r.check+(r.hands?' (HANDS)':''),r.reject,r.evidence+(r.waivable?' Status WAIVED needs owner, reason and date.':'')]);
   return '| Check | Reject condition | Evidence |\n|---|---|---|\n'+rows.map(row=>'| '+row.map(cell).join(' | ')+' |').join('\n')+'\n';
