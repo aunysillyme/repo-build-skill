@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "stage": "03-scaffold",
-  "package_version": "0.1.4",
+  "package_version": "0.1.5",
   "command": "check . --json",
   "entrypoint": "package bin declared in package.json",
-  "checked": "2026-10-28T01:45:16.244Z",
+  "checked": "2026-11-10T17:27:20.770Z",
   "checker_exit": 0,
   "automated": [
     {
@@ -136,8 +136,8 @@
       "line": null,
       "why": "Private names are supplied locally by the maintainer.",
       "learn": "references/stages/03-scaffold.md#gate",
-      "status": "PASS",
-      "message": "Untracked list files contain no matches in the public tree or history."
+      "status": "SKIPPED",
+      "message": "No maintainer private list supplied."
     }
   ],
   "manual": [

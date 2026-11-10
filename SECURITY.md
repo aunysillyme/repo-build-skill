@@ -3,8 +3,7 @@
 ## Report a vulnerability
 
 Use the repository's [Security tab](https://github.com/aunysillyme/repo-build-skill/security) and select **Report a vulnerability** for a private report.
-The owner enables private vulnerability reporting when the repository becomes public.
-Its live enabled state is UNVERIFIED until the public settings read-back in [REPO_SETTINGS.md](REPO_SETTINGS.md).
+The enabled state is recorded in [REPO_SETTINGS.md](REPO_SETTINGS.md).
 
 Include the affected version, host, command, expected behavior, actual behavior and a minimal reproduction.
 Keep credentials and personal data out of attachments.
@@ -13,9 +12,11 @@ Please keep vulnerability details private while maintainers investigate.
 
 ## Supported releases
 
+The latest published minor line, 0.1.x, is supported.
 Report against the current published release and include whether the latest checkout reproduces it.
-Maintainers triage reports on a best-effort basis and coordinate a fix and disclosure with the reporter.
-Release notes identify the corrected version.
+Maintainers aim to acknowledge reports within 7 days and provide a fix or status update within 30 days.
+Maintainers investigate privately, agree on a disclosure timeline with the reporter and prepare a fix.
+After a fix is available, maintainers coordinate disclosure with the reporter and identify the corrected version in release notes.
 
 ## Scope
 

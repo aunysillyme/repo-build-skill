@@ -1,4 +1,8 @@
-export const slug = s => s.toLowerCase().replace(/<[^>]*>/g,'').replace(/[^\p{L}\p{N}_\s-]/gu,'').trim().replace(/\s/g,'-');
+export const slug = s => {
+  let text=s.toLowerCase(), previous;
+  do { previous=text; text=text.replace(/<[^<>]*>/g,''); } while(text!==previous);
+  return text.replace(/[^\p{L}\p{N}_\s-]/gu,'').trim().replace(/\s/g,'-');
+};
 // One forward scan: 1-6 hashes, a space, then the text without its trailing whitespace and closing hashes.
 function heading(line) {
   let level = 0; while (level < line.length && line[level] === '#') level++;
