@@ -3,12 +3,16 @@ import assert from 'node:assert/strict';
 import { performance } from 'node:perf_hooks';
 import { check } from '../src/check/index.mjs';
 import { parseWorkflow,readWorkflow } from '../src/readers/workflow.mjs';
-import { headings,links } from '../src/readers/markdown.mjs';
+import { headings,links,slug } from '../src/readers/markdown.mjs';
 import { parseToml } from '../src/readers/toml-narrow.mjs';
 import { temporary,write } from './support.mjs';
 import { workflow } from './helpers.mjs';
 const by=(r,id)=>r.results.filter(x=>x.id===id);
 const timed=fn=>{const start=performance.now(),value=fn();return {value,ms:performance.now()-start};};
+test('heading slugs remove nested tags until stable',()=>{
+  assert.equal(slug('Before <scr<script>ipt> After'),'before--after');
+  assert.equal(slug('A <b>bold</b> heading'),'a-bold-heading');
+});
 test('a long run of spaces parses in a single pass in a workflow value and a Markdown heading',()=>{
   const gap=' '.repeat(80000);
   const wf=timed(()=>parseWorkflow(`name: a${gap}b\njobs:\n  x:\n    runs-on: ubuntu-latest\n`));

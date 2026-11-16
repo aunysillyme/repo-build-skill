@@ -1,42 +1,42 @@
 [
   {
     "id": "packed-size",
-    "value": 143879,
+    "value": 144238,
     "unit": "bytes",
     "command": "npm pack --dry-run --json --ignore-scripts",
-    "measured": "2026-11-09T19:55:08.486Z",
-    "expires": "2027-02-07T19:55:08.486Z",
-    "package_version": "0.1.4",
+    "measured": "2026-11-16T19:43:12.256Z",
+    "expires": "2027-02-14T19:43:12.256Z",
+    "package_version": "0.1.5",
     "subject": "package"
   },
   {
     "id": "unpacked-size",
-    "value": 457410,
+    "value": 458429,
     "unit": "bytes",
     "command": "npm pack --dry-run --json --ignore-scripts",
-    "measured": "2026-11-09T19:55:08.486Z",
-    "expires": "2027-02-07T19:55:08.486Z",
-    "package_version": "0.1.4",
+    "measured": "2026-11-16T19:43:12.256Z",
+    "expires": "2027-02-14T19:43:12.256Z",
+    "package_version": "0.1.5",
     "subject": "package"
   },
   {
     "id": "help-time",
-    "value": 20.2,
+    "value": 34.9,
     "unit": "ms",
     "command": "node scripts/proof.mjs --deterministic",
-    "measured": "2026-11-09T19:55:08.486Z",
-    "expires": "2027-02-07T19:55:08.486Z",
-    "package_version": "0.1.4",
+    "measured": "2026-11-16T19:43:12.256Z",
+    "expires": "2027-02-14T19:43:12.256Z",
+    "package_version": "0.1.5",
     "subject": "package"
   },
   {
     "id": "checker-time",
-    "value": 9.1,
+    "value": 15.7,
     "unit": "ms",
     "command": "node scripts/proof.mjs --deterministic",
-    "measured": "2026-11-09T19:55:08.486Z",
-    "expires": "2027-02-07T19:55:08.486Z",
-    "package_version": "0.1.4",
+    "measured": "2026-11-16T19:43:12.256Z",
+    "expires": "2027-02-14T19:43:12.256Z",
+    "package_version": "0.1.5",
     "subject": "package"
   }
 ]

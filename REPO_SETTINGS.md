@@ -1,6 +1,6 @@
 # Repository settings
 
-These values were set and read back with `gh api` in the public flip pass on 2026-10-19.
+The security and Actions settings below were read back on 2026-11-10. Other values were read back with `gh api` in the public flip pass on 2026-10-19.
 The npm row was read back after 0.1.2 published from GitHub Actions on 2026-10-19.
 
 ## Metadata
@@ -16,22 +16,28 @@ Topics: agent-skills, skill-pack, claude-skills, claude-code, codex, agents-md, 
 Source of truth: [.repo-build/facts.json](.repo-build/facts.json) and [package.json](package.json).
 Use GitHub's default repository link preview.
 
-## Settings at the public flip
+## Repository settings read-back
 
-| Setting | Target | Read-back (2026-10-19) |
+| Setting | Target | Read-back |
 |---|---|---|
 | Visibility | Public, after owner authorization and privacy checks | `public` |
 | Private vulnerability reporting | Enabled | `{"enabled": true}` |
 | Secret scanning | Enabled | `enabled` |
 | Secret scanning push protection | Enabled | `enabled` |
 | Dependabot alerts and security updates | Enabled | alerts `204`, security updates `enabled` |
-| CodeQL default setup | Enabled for the supported language | `configured`; languages fill in after the first analysis run |
+| CodeQL default setup | Enabled for the supported language | `configured` |
+| Actions pinning | Require full commit SHAs | required |
+| Actions pull request approvals | Disabled | disabled |
+| Default workflow token permissions | Read-only | read-only |
+| Release tag ruleset | Protect release tags | active on `refs/tags/v*`; tag updates and deletions blocked |
 | Main branch protection | Force pushes and branch deletion disabled | force pushes `false`, deletions `false` |
 | Required check | Repository checks | `["Repository checks"]` |
 | Administrator enforcement | Disabled for maintainer-reviewed automation PRs | `false` |
 | Sponsorships | Enabled with account-default funding links | `hasSponsorshipsEnabled: true` |
 | Description and topics | Match package.json and facts.json | description equal, 20 topics |
 | npm listing | Version, description, README, bin, funding and homepage match the tag | `0.1.2` equals tag `v0.1.2` (`scripts/verify-registry.sh` PASS), provenance and publish attestations present |
+
+The security, Actions, release tag and main branch protection rows reflect the 2026-11-10 read-back. The remaining rows retain their earlier read-back date.
 
 The [Scaffold settings instructions](skills/repo-build-skill/references/stages/03-scaffold.md#settings-at-the-public-flip) provide the exact API commands.
 Run `npx repo-build-skill check . --online` after setting the public values.
