@@ -47,6 +47,8 @@ jobs:
         run: |
           npm ci --ignore-scripts --no-audit --no-fund
           npm run typecheck
+          npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund @types/node@22.20.5
+          npm run typecheck
 
   lint:
     name: Workflow lint
