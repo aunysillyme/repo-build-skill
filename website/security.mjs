@@ -5,13 +5,24 @@ export const csp = "default-src 'none'; img-src 'self'; style-src 'self' https:/
 export const vercel = {
   buildCommand: 'node website/build.mjs && node website/check.mjs',
   outputDirectory: 'website/dist',
-  headers: [{ source: '/(.*)', headers: [
-    { key: 'Content-Security-Policy', value: csp },
-    { key: 'X-Content-Type-Options', value: 'nosniff' },
-    { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-    { key: 'X-Frame-Options', value: 'DENY' },
-    { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' }
-  ] }]
+  headers: [
+    {
+      source: '/(.*)',
+      headers: [
+        { key: 'Content-Security-Policy', value: csp },
+        { key: 'X-Content-Type-Options', value: 'nosniff' },
+        { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        { key: 'X-Frame-Options', value: 'DENY' },
+        { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' }
+      ]
+    },
+    {
+      source: '/(.*\\.md)',
+      headers: [
+        { key: 'Content-Type', value: 'text/markdown; charset=utf-8' }
+      ]
+    }
+  ]
 };
 const path = fileURLToPath(new URL('../vercel.json', import.meta.url));
 const expected = `${JSON.stringify(vercel, null, 2)}\n`;
